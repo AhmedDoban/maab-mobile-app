@@ -1,14 +1,14 @@
 import { requireOptionalNativeModule } from "expo";
 import { Platform } from "react-native";
 
-export type WidgetPrayer = {
+type WidgetPrayer = {
   label: string;
   at: number;
   time: string;
   icon: string;
 };
 
-export type WidgetDate = { at: number; text: string };
+type WidgetDate = { at: number; text: string };
 
 export type WidgetPayload = {
   rtl: boolean;

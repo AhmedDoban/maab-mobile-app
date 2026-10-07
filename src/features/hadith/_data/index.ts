@@ -2,7 +2,7 @@ import { normalize } from "@/features/azkar/_data";
 import hadithIds from "./hadithIds";
 import { LocalHadith } from "./types";
 
-export type { HadithContent, LocalHadith } from "./types";
+export type { LocalHadith } from "./types";
 
 const PART_SIZE = 50;
 
@@ -26,7 +26,7 @@ function getPart(part: number) {
   return (loaded[part] ??= parts[part]().default);
 }
 
-export function getHadithAt(index: number) {
+function getHadithAt(index: number) {
   return getPart(Math.floor(index / PART_SIZE))[index % PART_SIZE];
 }
 

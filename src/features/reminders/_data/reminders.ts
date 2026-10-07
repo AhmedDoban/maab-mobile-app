@@ -3,8 +3,8 @@ import { getItems } from "@/features/azkar/_data";
 import { Locale } from "@/i18n/config";
 import { ReminderKind } from "@/store/Slices/SettingsSlice";
 
-export const FIRST_HOUR = 7;
-export const LAST_HOUR = 22;
+const FIRST_HOUR = 7;
+const LAST_HOUR = 22;
 
 const MINUTE: Record<ReminderKind, number> = { dhikr: 0, quran: 30 };
 

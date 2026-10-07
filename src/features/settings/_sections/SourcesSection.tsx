@@ -1,3 +1,4 @@
+import { DEVELOPER } from "@/constants/developer";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import useSettingsColors from "../_components/useSettingsColors";
@@ -28,6 +29,14 @@ export default function SourcesSection() {
             />
           </View>
         ))}
+      </SettingsGroup>
+      <SettingsGroup title={t("privacy.title")}>
+        <SourceRow
+          icon="data"
+          name={t("privacy.policy")}
+          usage={t("privacy.hint")}
+          url={DEVELOPER.privacyPolicy}
+        />
       </SettingsGroup>
     </>
   );

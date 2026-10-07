@@ -1,6 +1,6 @@
 import { Locale } from "@/i18n/config";
 
-export interface HadithContent {
+interface HadithContent {
   source: string;
   chapter: string;
   text: string;

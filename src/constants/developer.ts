@@ -8,6 +8,7 @@ export type DeveloperLink = {
 };
 
 export const DEVELOPER = {
+  privacyPolicy: "https://ahmeddoban.vercel.app/maab/privacy-policy",
   links: [
     {
       label: "Website",

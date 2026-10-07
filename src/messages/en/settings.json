@@ -168,6 +168,11 @@
       "usage": "Your city name for prayer times"
     }
   },
+  "privacy": {
+    "title": "Privacy",
+    "policy": "Privacy policy",
+    "hint": "What the app stores and which services it contacts"
+  },
   "dataHint": "Clear saved progress, downloaded recitations and settings. Each option asks for confirmation first, and cleared data can't be restored.",
   "resetOptions": "Reset options",
   "followDeveloper": "Follow the developer",
@@ -197,5 +202,5 @@
   },
   "paletteApplying": "Applying color…",
   "paletteApplyingHint": "Just a moment while the app updates its colors",
-  "paletteIconHint": "The app icon updates when you leave the app, which may close it from your recent apps. This is normal and your color is saved."
+  "paletteIconHint": "The home screen icon updates after you leave the app and your phone's screen turns off."
 }

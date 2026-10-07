@@ -1,7 +1,10 @@
 package expo.modules.appicon
 
+import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
@@ -10,6 +13,28 @@ object AppIconSwitcher {
   private const val PREFS = "maab_app_icon"
   private const val KEY_TARGET = "target"
   private const val KEY_NAMES = "names"
+
+  @Volatile
+  var foreground = false
+
+  private var watching = false
+
+  private val screenOff = object : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+      if (!foreground) applyPending(context.applicationContext)
+    }
+  }
+
+  fun watchScreen(context: Context) {
+    if (watching) return
+    watching = true
+    val filter = IntentFilter(Intent.ACTION_SCREEN_OFF)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      context.registerReceiver(screenOff, filter, Context.RECEIVER_NOT_EXPORTED)
+    } else {
+      context.registerReceiver(screenOff, filter)
+    }
+  }
 
   private fun prefs(context: Context) =
     context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
@@ -47,7 +72,7 @@ object AppIconSwitcher {
     editor.commit()
   }
 
-  fun applyPending(context: Context) {
+  private fun applyPending(context: Context) {
     val prefs = prefs(context)
     val target = prefs.getString(KEY_TARGET, null) ?: return
     val names = prefs.getString(KEY_NAMES, null)?.split(",").orEmpty()
@@ -57,26 +82,20 @@ object AppIconSwitcher {
     if (pending.isEmpty()) return
     val manager = context.packageManager
     val flags = PackageManager.DONT_KILL_APP
+    val state = { enable: Boolean ->
+      if (enable) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+      else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+    }
     try {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         manager.setComponentEnabledSettings(
           pending.map { (name, enable) ->
-            PackageManager.ComponentEnabledSetting(
-              alias(context, name),
-              if (enable) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-              else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-              flags
-            )
+            PackageManager.ComponentEnabledSetting(alias(context, name), state(enable), flags)
           }
         )
       } else {
         pending.forEach { (name, enable) ->
-          manager.setComponentEnabledSetting(
-            alias(context, name),
-            if (enable) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-            else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-            flags
-          )
+          manager.setComponentEnabledSetting(alias(context, name), state(enable), flags)
         }
       }
     } catch (error: Exception) {

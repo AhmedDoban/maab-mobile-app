@@ -3,6 +3,7 @@ import AnimatedSplash from "@/components/splash/AnimatedSplash";
 import ThemeProvider from "@/components/theme/ThemeProvider";
 import "@/css/global.css";
 import useAppFonts from "@/hooks/useAppFonts";
+import usePhonePortraitLock from "@/hooks/usePhonePortraitLock";
 import "@/i18n";
 import StoreProvider from "@/store/StoreProvider";
 import * as SplashScreen from "expo-splash-screen";
@@ -16,6 +17,7 @@ export const unstable_settings = { initialRouteName: "(azkar)" };
 
 export default function RootLayout() {
   const fontsReady = useAppFonts();
+  usePhonePortraitLock();
   const [splashDone, setSplashDone] = useState(false);
   const onStoreReady = useCallback(() => SplashScreen.hideAsync(), []);
   const onSplashDone = useCallback(() => setSplashDone(true), []);

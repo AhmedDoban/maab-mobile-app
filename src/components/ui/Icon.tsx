@@ -89,7 +89,6 @@ const Icons = {
   linkedin: Linkedin01Icon,
   location: Location01Icon,
   maghrib: SunsetIcon,
-  moon: Moon02Icon,
   paint: PaintBoardIcon,
   pause: PauseIcon,
   personPraying: PrayerRug01Icon,

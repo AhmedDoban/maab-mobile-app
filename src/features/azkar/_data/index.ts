@@ -1,7 +1,7 @@
 import categories from "./categories";
 import { Zikr } from "./types";
 
-export type { AzkarCategory, Zikr, ZikrContent, ZikrGoal } from "./types";
+export type { AzkarCategory, Zikr, ZikrContent } from "./types";
 export { categories };
 
 const loaders: Record<string, () => { default: Zikr[] }> = {

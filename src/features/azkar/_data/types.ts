@@ -14,7 +14,7 @@ export interface Zikr extends Record<Locale, ZikrContent> {
   count: number;
 }
 
-export interface ZikrGoal {
+interface ZikrGoal {
   id: number;
   count: number;
 }
