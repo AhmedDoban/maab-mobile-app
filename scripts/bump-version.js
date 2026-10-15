@@ -90,10 +90,6 @@ function main() {
   const app = readJson("app.json");
   const next = bump(app.expo.version, level);
   app.expo.version = next;
-  app.expo.android = app.expo.android ?? {};
-  app.expo.android.versionCode = (app.expo.android.versionCode ?? 1) + 1;
-  app.expo.ios = app.expo.ios ?? {};
-  app.expo.ios.buildNumber = String(Number(app.expo.ios.buildNumber ?? 1) + 1);
   writeJson("app.json", app);
 
   const pkg = readJson("package.json");
@@ -110,9 +106,7 @@ function main() {
   }
 
   git(`add ${files.join(" ")}`);
-  console.log(
-    `version ${level}: ${next} (android ${app.expo.android.versionCode}, ios ${app.expo.ios.buildNumber})`,
-  );
+  console.log(`version ${level}: ${next}`);
 }
 
 main();

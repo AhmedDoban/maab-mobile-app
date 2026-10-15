@@ -1,56 +1,80 @@
-# Welcome to your Expo app 👋
+# Maab — مآب
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+An Arabic/English Islamic app for Android and iOS: daily azkar, hadith, the Madinah mushaf, prayer times with adhan, and qibla. Most of it works without an internet connection.
 
-## Get started
+![Maab screenshots](google-play-screenshots/panorama-preview.jpg)
 
-1. Install dependencies
+## Features
 
-   ```bash
-   npm install
-   ```
+- **Azkar:** morning, evening, sleep, after-prayer and more, with a tap counter, daily progress and reminders.
+- **Hadith:** a hadith of the day, a local collection, and online search on Dorar.net with authenticity grades.
+- **Quran:** the Madinah mushaf page by page, surah and juz lists, search, the Muyassar tafsir, recitation audio, bookmarks, saved ayahs and a khatma plan.
+- **Prayer times:** calculated on the device for your location, several calculation methods, and adhan alerts with a choice of muezzin or your own sound.
+- **Widgets:** next-prayer and prayer-times widgets on Android and iOS, plus a next-prayer countdown on the lock screen.
+- **Qibla:** a compass that points to the Kaaba.
+- **Made for both languages:** Arabic (right-to-left) and English, light and dark themes, several color palettes, matching app icons, and portrait and landscape on phones and tablets.
 
-2. Start the app
+## Offline first
 
-   ```bash
-   npx expo start
-   ```
+The Quran text, tafsir, search, azkar, local hadiths and prayer times are bundled with the app. Only three things use the network:
 
-In the output, you'll find options to open the app in a
+| Source | Used for |
+| --- | --- |
+| [EveryAyah](https://everyayah.com) | Quran recitation audio, saved on the device after the first play |
+| [Dorar.net](https://dorar.net) | Online hadith search with authenticity grades |
+| [OpenStreetMap](https://www.openstreetmap.org) | Your city name for prayer times |
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Tech stack
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Expo SDK 57 · React Native 0.86 · expo-router · TypeScript · Reanimated 4 · react-native-svg · Redux Toolkit · NativeWind · i18next.
+Native parts are local Expo modules in [`modules/`](modules) (Android exact adhan alarms and playback, prayer widgets, app icon switching) and an iOS widget target in [`targets/widget`](targets/widget).
 
-## Get a fresh project
+## Getting started
 
-When you're ready, run:
+You need Node.js, and either Android Studio tools (JDK 17 and the Android SDK) or Xcode.
 
 ```bash
-npm run reset-project
+npm install
+npm run android   # build and run on a connected Android phone
+npm run ios       # build and run on the iOS simulator
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+For the full app (native adhan playback and widgets) use a development build.
+After the first build, start the dev server for it with `npm run start:dev`. `npm start` opens the app in Expo Go instead, without the native adhan and widgets.
 
-### Other setup steps
+## Scripts
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+| Command | What it does |
+| --- | --- |
+| `npm start` | Start the dev server for Expo Go |
+| `npm run start:clear` | Same, with a clean cache |
+| `npm run start:dev` | Start the dev server for the development build |
+| `npm run android` | Build a debug app and run it on a connected Android device |
+| `npm run ios` | Build and run on iOS |
+| `npm run build:android` | Release APK in `android/app/build/outputs/apk/release/` |
+| `npm run build:aab` | Signed Google Play bundle (local EAS build) |
+| `npx tsc --noEmit` | Typecheck |
 
-## Learn more
+The version number goes up by itself on every commit, through a git hook that `npm install` sets up.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Project structure
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
+src/app/            routes (expo-router), thin files that render a screen
+src/features/       one folder per feature: azkar, hadith, quran, prayer-times, qibla, settings, favorites
+src/components/     shared UI
+src/store/          Redux store and slices
+src/messages/       Arabic and English translations
+modules/            local native modules
+assets/             fonts, images, mushaf page images, adhan audio
+```
 
-## Join the community
+[AGENTS.md](AGENTS.md) has the full conventions: where code goes, component rules, styling, performance and data notes.
 
-Join our community of developers creating universal apps.
+## Privacy
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Maab has no accounts, ads or analytics. Your settings and progress stay on your device. See the [privacy policy](https://ahmeddoban.vercel.app/maab/privacy-policy).
+
+## Author
+
+Built by [Ahmed Doban](https://ahmeddoban.vercel.app).

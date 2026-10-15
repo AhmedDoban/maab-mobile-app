@@ -178,7 +178,12 @@ export default function SurahReader({
 
       <View
         className="flex-1"
-        style={{ marginTop: insets.top, marginBottom: insets.bottom }}
+        style={{
+          marginTop: insets.top,
+          marginBottom: insets.bottom,
+          marginLeft: insets.left,
+          marginRight: insets.right,
+        }}
         onLayout={(e) => {
           const { width, height } = e.nativeEvent.layout;
           if (width !== area?.width || height !== area?.height) {
@@ -203,9 +208,15 @@ export default function SurahReader({
 
       <Animated.View
         pointerEvents={chrome ? "box-none" : "none"}
-        className="absolute inset-x-0 top-0 flex-row items-center gap-3 px-3 pb-2"
+        className="absolute inset-x-0 top-0 flex-row items-center gap-3 pb-2"
         style={[
-          { paddingTop: insets.top + 6, backgroundColor: c.page, direction },
+          {
+            paddingTop: insets.top + 6,
+            paddingLeft: insets.left + 12,
+            paddingRight: insets.right + 12,
+            backgroundColor: c.page,
+            direction,
+          },
           chromeStyle,
         ]}
       >
@@ -236,9 +247,14 @@ export default function SurahReader({
 
       <Animated.View
         pointerEvents={chrome ? "box-none" : "none"}
-        className="absolute inset-x-0 bottom-0 gap-3 px-4 pt-3"
+        className="absolute inset-x-0 bottom-0 gap-3 pt-3"
         style={[
-          { paddingBottom: insets.bottom + 8, backgroundColor: c.page },
+          {
+            paddingBottom: insets.bottom + 8,
+            paddingLeft: insets.left + 16,
+            paddingRight: insets.right + 16,
+            backgroundColor: c.page,
+          },
           chromeStyle,
         ]}
       >

@@ -1,7 +1,7 @@
 {
   "name": "maab",
   "main": "expo-router/entry",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "dependencies": {
     "@bacons/apple-targets": "^5.0.0",
     "@hugeicons/core-free-icons": "^4.3.5",
@@ -18,6 +18,7 @@
     "expo-build-properties": "~57.0.22",
     "expo-clipboard": "~57.0.2",
     "expo-constants": "~57.0.19",
+    "expo-dev-client": "~57.0.20",
     "expo-document-picker": "~57.0.3",
     "expo-file-system": "~57.0.7",
     "expo-font": "~57.0.4",
@@ -27,11 +28,11 @@
     "expo-keep-awake": "~57.0.2",
     "expo-linking": "~57.0.11",
     "expo-localization": "~57.0.2",
-    "expo-location": "~57.0.20",
+    "expo-location": "~57.0.21",
     "expo-network": "~57.0.2",
-    "expo-notifications": "~57.0.22",
+    "expo-notifications": "~57.0.23",
     "expo-router": "~57.0.24",
-    "expo-splash-screen": "~57.0.9",
+    "expo-splash-screen": "~57.0.10",
     "expo-status-bar": "~57.0.1",
     "expo-system-ui": "~57.0.4",
     "i18next": "^26.4.2",
@@ -63,20 +64,24 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
-    "start": "expo start",
-    "start:clear": "expo start --clear",
-    "android": "expo run:android",
+    "start": "expo start --go",
+    "start:clear": "expo start --go --clear",
+    "android": "sh scripts/run-android.sh",
     "ios": "expo run:ios",
     "prebuild:ios": "expo prebuild --platform ios",
     "web": "expo start --web",
     "lint": "expo lint",
     "build:android": "sh scripts/build-android.sh",
     "build:aab": "sh scripts/build-aab.sh",
-    "prepare": "git config core.hooksPath .githooks || true"
+    "prepare": "git config core.hooksPath .githooks || true",
+    "start:dev": "expo start --dev-client"
   },
   "overrides": {
     "lightningcss": "1.30.1",
-    "uuid": "^11.1.1"
+    "uuid": "^11.1.1",
+    "@bacons/xcode": {
+      "@xmldom/xmldom": "^0.8.15"
+    }
   },
   "private": true
 }

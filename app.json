@@ -2,7 +2,7 @@
   "expo": {
     "name": "Maab",
     "slug": "maab",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "maab",
@@ -22,7 +22,6 @@
           "en"
         ]
       },
-      "buildNumber": "8",
       "entitlements": {
         "com.apple.security.application-groups": [
           "group.com.ahmeddoban.maab"
@@ -49,8 +48,7 @@
       ],
       "blockedPermissions": [
         "android.permission.RECORD_AUDIO"
-      ],
-      "versionCode": 8
+      ]
     },
     "web": {
       "output": "single",

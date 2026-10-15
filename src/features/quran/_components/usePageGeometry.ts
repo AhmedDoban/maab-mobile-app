@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { PAGE } from "./pageLayout";
 
 const PAGE_RATIO = 550 / 345;
-const MAX_STRETCH = 0.15;
 
 type PageGeometry = {
   scroll: boolean;
@@ -36,10 +35,7 @@ export default function usePageGeometry(
       PAGE.gap * 2;
     const scroll = width > height;
     const textH = scroll ? textW * (vbH / vbW || PAGE_RATIO) : fitH;
-    const stretch =
-      !scroll &&
-      page > 2 &&
-      Math.abs(textW / textH / (vbW / vbH) - 1) <= MAX_STRETCH;
+    const stretch = !scroll && page > 2;
     const s = Math.min(textW / vbW, textH / vbH);
     const offX = PAGE.paddingX;
     const offY = PAGE.paddingTop + PAGE.topRow + PAGE.gap;

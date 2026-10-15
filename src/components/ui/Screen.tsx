@@ -1,4 +1,3 @@
-import useContentColumn from "@/hooks/useContentColumn";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useDirection from "@/hooks/useDirection";
 import usePageInsets from "@/hooks/usePageInsets";
@@ -6,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { PropsWithChildren, ReactNode } from "react";
 import StatusBarBackdrop from "@/components/StatusBarBackdrop";
 import { ScrollView, ScrollViewProps, View } from "react-native";
+import ContentColumn from "./ContentColumn";
 import PageHeader from "./PageHeader";
 
 type Props = PropsWithChildren<
@@ -29,7 +29,6 @@ export default function Screen({
 }: Props) {
   const { direction } = useDirection();
   const insets = usePageInsets();
-  const column = useContentColumn();
   const { left, right } = useSafeAreaInsets();
   const header =
     customHeader ??
@@ -56,18 +55,16 @@ export default function Screen({
     <ScrollView
       className="flex-1 bg-main-bg"
       style={{ direction }}
-      contentContainerClassName={cn(
-        "w-full max-w-3xl self-center gap-6 px-4 pt-4 pb-8",
-        className,
-      )}
-      contentContainerStyle={[title ? insets : undefined, column]}
+      contentContainerStyle={title ? insets : undefined}
       contentInsetAdjustmentBehavior={title ? "never" : "automatic"}
       keyboardDismissMode="on-drag"
       keyboardShouldPersistTaps="handled"
       {...props}
     >
-      {header}
-      {children}
+      <ContentColumn className={cn("gap-6 px-4 pt-4 pb-8", className)}>
+        {header}
+        {children}
+      </ContentColumn>
     </ScrollView>
   );
 

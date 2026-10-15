@@ -7,7 +7,8 @@ Expo SDK 57, expo-router, React Native 0.86, Reanimated 4, react-native-svg, Red
 
 - Typecheck (the required check after every change): `npx tsc --noEmit`
 - Format touched files: `npx prettier --write <files>`
-- Dev server: `npm start`
+- Dev server for Expo Go: `npm start` (`npm run start:clear` clears the cache). The local native modules are optional, so in Expo Go the native adhan, widgets and Android icon switching are simply off. Dev server for the development build installed by `npm run android`: `npm run start:dev`
+- Run on a connected Android phone: `npm run android` (sets JAVA_HOME/ANDROID_HOME, lists devices with adb, then builds a debug app with `expo run:android --device`)
 - Android release APK: `npm run build:android` (output: `android/app/build/outputs/apk/release/maab.apk`)
   - If `android/` is missing it runs `expo prebuild` first. `npm run build:android -- --clean` regenerates it from scratch (needed after changing `app.json`, plugins or native modules).
 - Google Play bundle: `npm run build:aab` (EAS local build signed with the EAS upload key, output: `android/app/build/outputs/bundle/release/maab-<version>.aab`). Upload this one to Play, never the `build:android` output (debug-signed).
@@ -37,7 +38,7 @@ src/
   lib/                 generic utilities
 modules/               local Expo native modules (adhan-alarm: Android exact alarms + full-screen adhan)
 plugins/               Expo config plugins (referenced from app.json)
-scripts/               build scripts (Android APK, Play bundle, version bump, mushaf page images)
+scripts/               build scripts (Android run/APK, Play bundle, version bump, mushaf page images)
 .githooks/             git hooks (pre-commit runs the version bump)
 assets/                fonts, images, mushaf page images (assets/images/mushaf), surah frames
 ```
@@ -101,7 +102,7 @@ Shared hooks live in `src/hooks` (`useThemeColors`, `useDirection`, `useCompactH
 
 ## Versioning
 
-- The version bumps automatically on every commit through `.githooks/pre-commit` → `scripts/bump-version.js`. It updates `app.json` (`version`, `android.versionCode`, `ios.buildNumber`), `package.json` and `package-lock.json`, and stages them.
+- The version bumps automatically on every commit through `.githooks/pre-commit` → `scripts/bump-version.js`. It updates `version` in `app.json`, `package.json` and `package-lock.json`, and stages them. Build numbers (`android.versionCode`, `ios.buildNumber`) are not in `app.json`: EAS keeps them remotely (`appVersionSource: "remote"`) and increments them on every production build.
 - Level is chosen from the staged changes:
   - **none:** only docs, `.gitignore`, editor/hook files or the lockfile changed.
   - **minor:** a new route in `src/app`, a new feature screen (`src/features/<feature>/<Screen>.tsx`), a new native module, or a new dependency.
