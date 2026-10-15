@@ -1,108 +1,75 @@
-import AppText from "@/components/ui/AppText";
-import {
-  AyahRef,
-  getPage,
-  getSurah,
-  pageOf,
-  toArabicDigits,
-} from "@/features/azkar/_data/quran";
-import { memo, useEffect, useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { ActivityIndicator, Pressable, View } from "react-native";
-import Svg, { G, Path } from "react-native-svg";
-import { PAGE } from "../_components/pageLayout";
-import useMushafColors from "../_components/useMushafColors";
-import { useAppSelector } from "@/store/Store";
 import Icon from "@/components/ui/Icon";
-import { AYAH_COLORS } from "../_data/ayahColors";
-import { todayWirdBounds } from "../_data/khatma";
+import { AyahRef, pageOf } from "@/features/azkar/_data/quran";
+import { useAppSelector } from "@/store/Store";
+import { Image } from "expo-image";
+import {
+  memo,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { PAGE } from "../_components/pageLayout";
 import { registerHitTest } from "../_components/pageHitTest";
-import usePageSvg, { paintMarkers } from "../_components/usePageSvg";
-import SurahFrame from "./SurahFrame";
+import usePageGeometry from "../_components/usePageGeometry";
+import useMushafColors from "../_components/useMushafColors";
+import { ayahAt, getPageAyahs } from "../_data/pageAyahs";
+import { PAGE_IMAGES } from "../_data/pageImages";
+import { getPageMeta } from "../_data/pageMeta";
+import MushafPageFooter from "./MushafPageFooter";
+import MushafPageHeader from "./MushafPageHeader";
+import PageMarkers from "./PageMarkers";
+import PageUnderlay from "./PageUnderlay";
+
+const VISIBLE = { ...StyleSheet.absoluteFill, opacity: 1 };
+const HIDDEN = { ...StyleSheet.absoluteFill, opacity: 0 };
 
 export default memo(function MushafPage({
   page,
   width,
   height,
   active,
+  priority,
 }: {
   page: number;
   width: number;
   height: number;
   active: AyahRef | null;
+  priority: "high" | "normal";
 }) {
-  const { t } = useTranslation("azkar");
   const c = useMushafColors();
-  const info = getPage(page);
-  const firstSurah = getSurah(info.start.surah);
-  const { svg, failed, retry } = usePageSvg(page);
-  const content = useMemo(
-    () => (svg ? paintMarkers(svg.content, c.accent) : null),
-    [svg, c.accent],
+  const meta = getPageMeta(page);
+  const ayahs = getPageAyahs(page);
+  const geometry = usePageGeometry(page, width, height, meta.viewBox);
+  const scrollY = useRef(0);
+  const [shown, setShown] = useState(false);
+  const onShown = useCallback(() => setShown(true), []);
+  const layer = shown ? VISIBLE : HIDDEN;
+  const fit = geometry.stretch ? "none" : "xMidYMid meet";
+  const bookmarked = useAppSelector((s) =>
+    s.settings.quranBookmark
+      ? pageOf(
+          s.settings.quranBookmark.surah,
+          s.settings.quranBookmark.ayah,
+        ) === page
+      : false,
   );
-  const saved = useAppSelector((s) => s.settings.ayahColors);
-  const bookmark = useAppSelector((s) => s.settings.quranBookmark);
-  const khatma = useAppSelector((s) => s.settings.khatma);
-  const wird = useMemo(() => todayWirdBounds(khatma), [khatma]);
-  const isWirdEdge = (surah: number, ayah: number) =>
-    !!wird &&
-    ((wird.first.surah === surah && wird.first.ayah === ayah) ||
-      (wird.last.surah === surah && wird.last.ayah === ayah));
 
-  const bookmarked = bookmark
-    ? pageOf(bookmark.surah, bookmark.ayah) === page
-    : false;
+  useEffect(
+    () =>
+      registerHitTest(page, (x, y) => {
+        const [vx, vy] = geometry.toViewBox(x, y, scrollY.current);
+        const hit = ayahAt(page, vx, vy);
+        return hit ? { surah: hit.surah, ayah: hit.ayah } : null;
+      }),
+    [page, geometry],
+  );
 
-  const areaW = width - PAGE.paddingX * 2;
-  const areaH =
-    height - PAGE.paddingTop - PAGE.paddingBottom - PAGE.topRow - PAGE.gap;
-
-  useEffect(() => {
-    if (!svg) return;
-    const [, , vbW, vbH] = svg.viewBox.split(/\s+/).map(Number);
-    const offX = PAGE.paddingX;
-    const offY = PAGE.paddingTop + PAGE.topRow + PAGE.gap;
-    const stretch = page > 2;
-    const s = Math.min(areaW / vbW, areaH / vbH);
-    const ox = stretch ? offX : offX + (areaW - vbW * s) / 2;
-    const oy = stretch ? offY : offY + (areaH - vbH * s) / 2;
-    const sx = stretch ? areaW / vbW : s;
-    const sy = stretch ? areaH / vbH : s;
-    return registerHitTest(page, (x, y) => {
-      const vx = (x - ox) / sx;
-      const vy = (y - oy) / sy;
-      const hit = svg.hits.find(({ boxes }) =>
-        boxes.some(
-          ([x0, y0, x1, y1]) => vx >= x0 && vx <= x1 && vy >= y0 && vy <= y1,
-        ),
-      );
-      return hit ? { surah: hit.surah, ayah: hit.ayah } : null;
-    });
-  }, [svg, page, areaW, areaH]);
-
-  return (
-    <View
-      style={{
-        width,
-        height,
-        direction: "rtl",
-        backgroundColor: c.page,
-        paddingHorizontal: PAGE.paddingX,
-        paddingTop: PAGE.paddingTop,
-        paddingBottom: PAGE.paddingBottom,
-      }}
-    >
-      <View
-        className="flex-row items-center justify-between"
-        style={{ height: PAGE.topRow, marginBottom: PAGE.gap }}
-      >
-        <AppText arabic className="text-xs" style={{ color: c.gold }}>
-          {`الجزء ${toArabicDigits(info.juz)}`}
-        </AppText>
-        <AppText variant="quran" className="text-sm" style={{ color: c.gold }}>
-          {firstSurah ? `سورة ${firstSurah.name}` : ""}
-        </AppText>
-      </View>
+  const body: ReactNode = (
+    <>
+      <MushafPageHeader page={page} />
 
       {bookmarked ? (
         <View
@@ -114,86 +81,68 @@ export default memo(function MushafPage({
         </View>
       ) : null}
 
-      <View
-        style={{ width: areaW, height: areaH }}
-        className="items-center justify-center"
-      >
-        {svg ? (
-          <Svg
-            width={areaW}
-            height={areaH}
-            viewBox={svg.viewBox}
-            preserveAspectRatio={page <= 2 ? "xMidYMid meet" : "none"}
-          >
-            {svg.ayahs.map((shape, i) => {
-              const color = saved[`${shape.surah}:${shape.ayah}`];
-              return color !== undefined ? (
-                <Path
-                  key={`c${i}`}
-                  d={shape.d}
-                  fill={AYAH_COLORS[color]}
-                  fillOpacity={0.45}
-                />
-              ) : null;
-            })}
-            {svg.ayahs.map((shape, i) =>
-              isWirdEdge(shape.surah, shape.ayah) ? (
-                <Path
-                  key={`w${i}`}
-                  d={shape.d}
-                  fill={c.gold}
-                  fillOpacity={0.22}
-                />
-              ) : null,
-            )}
-            {svg.ayahs.map((shape, i) =>
-              bookmark?.surah === shape.surah &&
-              bookmark.ayah === shape.ayah ? (
-                <Path
-                  key={`b${i}`}
-                  d={shape.d}
-                  fill={c.accent}
-                  fillOpacity={0.12}
-                />
-              ) : null,
-            )}
-            {svg.ayahs.map((shape, i) =>
-              active?.surah === shape.surah && active.ayah === shape.ayah ? (
-                <Path key={`h${i}`} d={shape.d} fill={c.highlight} />
-              ) : null,
-            )}
-            {svg.titles.map((title, i) => (
-              <SurahFrame
-                key={`f${i}`}
-                x={title.x}
-                y={title.y}
-                width={title.width}
-                height={title.height}
-              />
-            ))}
-            <G color={c.ink}>{content}</G>
-          </Svg>
-        ) : failed ? (
-          <Pressable
-            onPress={retry}
-            className="items-center gap-2 rounded-2xl px-5 py-3"
-            style={{ backgroundColor: c.frameFill }}
-          >
-            <AppText weight="bold" style={{ color: c.accent }}>
-              {t("retry")}
-            </AppText>
-            <AppText
-              className="text-center text-[10px]"
-              style={{ color: c.gold }}
-              selectable
-            >
-              {failed}
-            </AppText>
-          </Pressable>
-        ) : (
-          <ActivityIndicator color={c.gold} />
-        )}
+      <View style={{ width: geometry.textW, height: geometry.textH }}>
+        <View style={layer}>
+          <PageUnderlay
+            meta={meta}
+            ayahs={ayahs}
+            active={active}
+            preserveAspectRatio={fit}
+          />
+        </View>
+        <Image
+          source={PAGE_IMAGES[page - 1]}
+          style={StyleSheet.absoluteFill}
+          contentFit={geometry.stretch ? "fill" : "contain"}
+          tintColor={c.ink}
+          priority={priority}
+          transition={0}
+          recyclingKey={String(page)}
+          onDisplay={onShown}
+          onError={onShown}
+        />
+        <View style={layer}>
+          <PageMarkers meta={meta} preserveAspectRatio={fit} />
+        </View>
       </View>
+
+      <MushafPageFooter page={page} />
+    </>
+  );
+
+  const padding = {
+    paddingHorizontal: PAGE.paddingX,
+    paddingTop: PAGE.paddingTop,
+    paddingBottom: PAGE.paddingBottom,
+  };
+
+  if (geometry.scroll) {
+    return (
+      <ScrollView
+        style={{ width, height, direction: "rtl", backgroundColor: c.page }}
+        contentContainerStyle={padding}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={(e) => {
+          scrollY.current = e.nativeEvent.contentOffset.y;
+        }}
+      >
+        {body}
+      </ScrollView>
+    );
+  }
+
+  return (
+    <View
+      style={{
+        width,
+        height,
+        direction: "rtl",
+        backgroundColor: c.page,
+        ...padding,
+      }}
+    >
+      {body}
     </View>
   );
 });

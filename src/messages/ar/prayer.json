@@ -29,7 +29,10 @@
   "notificationsTitle": "فعّل الإشعارات",
   "notNow": "ليس الآن",
   "reminderHint": "اضغط على أي صلاة لتشغيل تنبيه الأذان أو إيقافه",
+  "playbackChannel": "الأذان",
+  "stopAdhan": "إيقاف",
   "widget": {
+    "lockChannel": "الصلاة القادمة",
     "next": "الصلاة القادمة",
     "today": "مواقيت الصلاة",
     "dhikr": "ذكر اليوم",

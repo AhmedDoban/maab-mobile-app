@@ -173,6 +173,10 @@
     "policy": "Privacy policy",
     "hint": "What the app stores and which services it contacts"
   },
+  "lockScreenPrayer": {
+    "title": "Next prayer on lock screen",
+    "hint": "A quiet notification with a live countdown to the next prayer"
+  },
   "dataHint": "Clear saved progress, downloaded recitations and settings. Each option asks for confirmation first, and cleared data can't be restored.",
   "resetOptions": "Reset options",
   "followDeveloper": "Follow the developer",

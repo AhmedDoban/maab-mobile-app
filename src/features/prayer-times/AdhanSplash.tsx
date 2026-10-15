@@ -1,3 +1,4 @@
+import { ALL_ORIENTATIONS } from "@/constants/orientations";
 import ThemeScope from "@/components/theme/ThemeScope";
 import AppText from "@/components/ui/AppText";
 import PressableScale from "@/components/ui/PressableScale";
@@ -20,10 +21,12 @@ export default function AdhanSplash({
   prayer,
   time,
   sound,
+  nativeAudio,
   onClose,
 }: {
   prayer: PrayerName | null;
   sound: AdhanSoundId;
+  nativeAudio: boolean;
   time?: string;
   onClose: () => void;
 }) {
@@ -36,12 +39,15 @@ export default function AdhanSplash({
 
   return (
     <>
-      {prayer ? <AdhanAudio key={prayer} sound={sound} /> : null}
+      {prayer && !nativeAudio ? (
+        <AdhanAudio key={prayer} sound={sound} onEnd={onClose} />
+      ) : null}
       <Modal
         visible={prayer !== null}
         animationType="fade"
         statusBarTranslucent
         navigationBarTranslucent
+        supportedOrientations={ALL_ORIENTATIONS}
         onRequestClose={onClose}
       >
         <ThemeScope>

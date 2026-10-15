@@ -26,7 +26,7 @@ import {
   ReciterId,
 } from "@/features/quran/_data/reciters";
 
-export type AyahBookmark = { surah: number; ayah: number };
+type AyahBookmark = { surah: number; ayah: number };
 
 const isAyahBookmark = (value: unknown): value is AyahBookmark =>
   typeof value === "object" &&
@@ -49,7 +49,7 @@ const isKhatmaPlan = (value: unknown): value is KhatmaPlan =>
   typeof (value as KhatmaPlan).done === "number";
 
 export type ThemePreference = "system" | "light" | "dark";
-export type TextSize = number;
+type TextSize = number;
 export const TEXT_SIZE = { min: 18, max: 40, step: 2, default: 24 } as const;
 
 const LEGACY_TEXT_SIZES: Record<string, number> = { sm: 20, md: 24, lg: 30 };
@@ -87,7 +87,7 @@ export const REMINDER_INTERVALS = [1, 2, 3, 4, 6, 12] as const;
 
 export type ReminderInterval = (typeof REMINDER_INTERVALS)[number];
 
-export interface ReminderSetting {
+interface ReminderSetting {
   enabled: boolean;
   every: ReminderInterval;
 }
@@ -119,6 +119,7 @@ export interface SettingsState {
   reciter: ReciterId;
   prayerReminders: Partial<Record<PrayerName, boolean>>;
   reminderHintSeen: boolean;
+  lockScreenPrayer: boolean;
   adhanSound: AdhanSoundId;
   customAdhan: CustomAdhan | null;
   prayerLocation: PrayerLocation | null;
@@ -141,6 +142,7 @@ const defaultSettings = (locale: Locale = defaultLocale): SettingsState => ({
   reciter: DEFAULT_RECITER,
   prayerReminders: Object.fromEntries(REMINDER_PRAYERS.map((p) => [p, true])),
   reminderHintSeen: false,
+  lockScreenPrayer: false,
   adhanSound: DEFAULT_ADHAN,
   customAdhan: null,
   prayerLocation: null,
@@ -249,6 +251,9 @@ export const SettingsSlice = createSlice({
     setAsrMethod(state, action: PayloadAction<AsrMethod>) {
       state.asrMethod = action.payload;
     },
+    setLockScreenPrayer(state, action: PayloadAction<boolean>) {
+      state.lockScreenPrayer = action.payload;
+    },
     resetQuranData(state) {
       state.quranBookmark = null;
       state.savedAyahs = [];
@@ -292,6 +297,10 @@ export const SettingsSlice = createSlice({
         asrMethod: isAsrMethod(action.payload.asrMethod)
           ? action.payload.asrMethod
           : state.asrMethod,
+        lockScreenPrayer:
+          typeof action.payload.lockScreenPrayer === "boolean"
+            ? action.payload.lockScreenPrayer
+            : state.lockScreenPrayer,
         prayerReminders: {
           ...state.prayerReminders,
           ...action.payload.prayerReminders,
@@ -353,4 +362,5 @@ export const {
   resetSettings,
   resetQuranData,
   hydrateSettings,
+  setLockScreenPrayer,
 } = SettingsSlice.actions;

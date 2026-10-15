@@ -27,6 +27,7 @@ export default function usePrayerWidgets(
   const { t, i18n } = useTranslation("prayer");
   const { label } = usePrayerLabels();
   const palette = useAppSelector((s) => s.settings.palette);
+  const lockScreen = useAppSelector((s) => s.settings.lockScreenPrayer);
   const city = useCityName(day?.city);
 
   useEffect(() => {
@@ -74,6 +75,8 @@ export default function usePrayerWidgets(
       prayers,
       dhikr: t("widget.dhikrList", { returnObjects: true }) as string[],
       dates,
+      lockScreen,
+      lockChannel: t("widget.lockChannel"),
     });
-  }, [config, day, palette, city, i18n.language]);
+  }, [config, day, palette, city, lockScreen, i18n.language]);
 }

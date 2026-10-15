@@ -1,7 +1,8 @@
 import BrandCardBackground from "@/components/ui/BrandCardBackground";
 import { PAGE_MOSQUES } from "@/constants/mosques";
+import useThemeColors from "@/hooks/useThemeColors";
 import { useAppSelector } from "@/store/Store";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { LayoutChangeEvent, View } from "react-native";
 import useCityName from "./_components/useCityName";
 import usePrayerLabels from "./_components/usePrayerLabels";
@@ -19,13 +20,18 @@ import ReminderHint from "./_ui/ReminderHint";
 
 const WINDOW = 0.26;
 const CARD_STYLE = { boxShadow: "0 10px 24px rgba(14, 58, 51, 0.25)" };
-const STRIP_STYLE = {
-  backgroundColor: "rgba(255, 255, 255, 0.1)",
-  borderColor: "rgba(255, 255, 255, 0.16)",
-};
+const STRIP_BORDER = "rgba(255, 255, 255, 0.16)";
 
 export default function PrayerTimesCard() {
   const { label } = usePrayerLabels();
+  const colors = useThemeColors();
+  const stripStyle = useMemo(
+    () => ({
+      backgroundColor: `${colors.brand.deep.slice(0, 7)}E0`,
+      borderColor: STRIP_BORDER,
+    }),
+    [colors.brand.deep],
+  );
   const { day, prayers, next, now, isFriday, status, retry } =
     usePrayerSchedule();
   const [size, setSize] = useState({ w: 0, h: 0 });
@@ -91,7 +97,7 @@ export default function PrayerTimesCard() {
         <View className="flex-row">
           <View
             className="flex-1 flex-row rounded-3xl border p-1"
-            style={STRIP_STYLE}
+            style={stripStyle}
           >
             {prayers.map(({ name, time, status }) => (
               <PrayerCell

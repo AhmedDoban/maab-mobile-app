@@ -21,5 +21,5 @@ export default function useHadithPagination() {
     }, 400);
   }, [loading, hasMore]);
 
-  return { visible, hasMore, loadMore };
+  return { visible, hasMore, loading, loadMore };
 }

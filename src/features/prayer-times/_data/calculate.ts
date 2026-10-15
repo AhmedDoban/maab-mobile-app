@@ -21,7 +21,7 @@ export type PrayerConfig = {
   asr: AsrMethod;
 };
 
-export type PrayerDates = Record<PrayerName, Date>;
+type PrayerDates = Record<PrayerName, Date>;
 
 const pad = (n: number) => String(n).padStart(2, "0");
 const toHHMM = (date: Date) =>

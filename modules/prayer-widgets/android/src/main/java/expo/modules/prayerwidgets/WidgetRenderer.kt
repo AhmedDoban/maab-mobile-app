@@ -43,7 +43,9 @@ object WidgetRenderer {
     next.forEach { manager.updateAppWidget(it, nextPrayer(context, manager, it, payload, now)) }
     times.forEach { manager.updateAppWidget(it, prayerTimes(context, payload, now)) }
     dhikr.forEach { manager.updateAppWidget(it, dhikr(context, payload, now)) }
-    if (next.isNotEmpty() || times.isNotEmpty() || dhikr.isNotEmpty()) {
+    LockScreenPrayer.update(context, payload, now)
+    val lockScreen = payload?.lockScreen == true
+    if (next.isNotEmpty() || times.isNotEmpty() || dhikr.isNotEmpty() || lockScreen) {
       WidgetScheduler.schedule(context, payload, now, next.isNotEmpty() || times.isNotEmpty())
     } else {
       WidgetScheduler.cancel(context)

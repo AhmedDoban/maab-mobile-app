@@ -1,3 +1,6 @@
+import TEXT_CHUNKS from "@/features/quran/_data/chunks/text";
+import TRANSLATION_CHUNKS from "@/features/quran/_data/chunks/translation";
+
 export type SurahSummary = {
   id: number;
   name: string;
@@ -8,7 +11,7 @@ export type SurahSummary = {
   page: number;
 };
 
-export type Verse = {
+type Verse = {
   text: string;
   translation: string;
   surah: string;
@@ -18,7 +21,7 @@ export type Verse = {
 
 export type AyahRef = { surah: number; ayah: number };
 
-export type MushafPageInfo = {
+type MushafPageInfo = {
   number: number;
   start: AyahRef;
   end: AyahRef;
@@ -42,8 +45,8 @@ export const PAGE_COUNT = 604;
 
 let surahs: SurahSummary[] | null = null;
 let pages: RawPage[] | null = null;
-let texts: string[][] | null = null;
-let translations: string[][] | null = null;
+const texts: string[][] = [];
+const translations: string[][] = [];
 
 export const getSurahList = (): SurahSummary[] =>
   (surahs ??= (require("@/features/quran/_data/surahs.json") as RawSurah[]).map(
@@ -64,18 +67,20 @@ export const getSurah = (id: number): SurahSummary | undefined =>
 const loadPages = () =>
   (pages ??= require("@/features/quran/_data/pages.json") as RawPage[]);
 
-const loadTexts = () =>
-  (texts ??= require("@/features/quran/_data/text.json") as string[][]);
+const textOf = (surah: number) =>
+  (texts[surah - 1] ??= TEXT_CHUNKS[surah - 1]?.() ?? []);
+
+const translationOf = (surah: number) =>
+  (translations[surah - 1] ??= TRANSLATION_CHUNKS[surah - 1]?.() ?? []);
 
 const loadTranslations = () =>
-  (translations ??=
-    require("@/features/quran/_data/translation.json") as string[][]);
+  TRANSLATION_CHUNKS.map((_, i) => translationOf(i + 1));
 
 export const ayahText = (surah: number, ayah: number) =>
-  loadTexts()[surah - 1]?.[ayah - 1] ?? "";
+  textOf(surah)[ayah - 1] ?? "";
 
 export const ayahTranslation = (surah: number, ayah: number) =>
-  loadTranslations()[surah - 1]?.[ayah - 1] ?? "";
+  translationOf(surah)[ayah - 1] ?? "";
 
 export function getPage(number: number): MushafPageInfo {
   const [s1, a1, s2, a2, juz, hizb] = loadPages()[number - 1];
@@ -293,13 +298,3 @@ export const JUZ_STARTS: AyahRef[] = [
   [67, 1],
   [78, 1],
 ].map(([surah, ayah]) => ({ surah, ayah }));
-
-export function juzOf(surah: number, ayah = 1) {
-  let juz = 1;
-  JUZ_STARTS.forEach((start, i) => {
-    if (surah > start.surah || (surah === start.surah && ayah >= start.ayah)) {
-      juz = i + 1;
-    }
-  });
-  return juz;
-}

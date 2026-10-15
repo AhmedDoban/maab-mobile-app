@@ -29,7 +29,10 @@
   "notificationsTitle": "Turn on notifications",
   "notNow": "Not now",
   "reminderHint": "Tap any prayer to turn its adhan reminder on or off",
+  "playbackChannel": "Adhan",
+  "stopAdhan": "Stop",
   "widget": {
+    "lockChannel": "Next prayer",
     "next": "Next prayer",
     "today": "Prayer times",
     "dhikr": "Dhikr of the day",

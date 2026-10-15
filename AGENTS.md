@@ -10,6 +10,7 @@ Expo SDK 57, expo-router, React Native 0.86, Reanimated 4, react-native-svg, Red
 - Dev server: `npm start`
 - Android release APK: `npm run build:android` (output: `android/app/build/outputs/apk/release/maab.apk`)
   - If `android/` is missing it runs `expo prebuild` first. `npm run build:android -- --clean` regenerates it from scratch (needed after changing `app.json`, plugins or native modules).
+- Google Play bundle: `npm run build:aab` (EAS local build signed with the EAS upload key, output: `android/app/build/outputs/bundle/release/maab-<version>.aab`). Upload this one to Play, never the `build:android` output (debug-signed).
 - Don't run web exports or screenshot checks unless asked.
 - Never run `git commit`, `git push` or anything else that creates commits or sends code to GitHub, even when asked with a short "git commit". The owner commits and pushes themselves. Every time a commit is requested, reply with a summary of the uncommitted changes (grouped by feature/fix, with the main files) and a ready-to-paste commit message, and leave the actual commit to the owner.
 - Packages: install with `npm install <pkg>` (Expo packages with `npx expo install <pkg>`). Run `npm audit` after changing dependencies and fix with `npm audit fix` only. Never `npm audit fix --force` — it downgrades Expo. Pin patched transitive versions through `overrides` in package.json, and only after checking the dependent still loads (ESM-only versions break `require()` callers).
@@ -36,9 +37,9 @@ src/
   lib/                 generic utilities
 modules/               local Expo native modules (adhan-alarm: Android exact alarms + full-screen adhan)
 plugins/               Expo config plugins (referenced from app.json)
-scripts/               build/data scripts (Android build, version bump, mushaf ayah boxes, surah titles)
+scripts/               build scripts (Android APK, Play bundle, version bump, mushaf page images)
 .githooks/             git hooks (pre-commit runs the version bump)
-assets/                fonts, images, Quran SVG pages (assets/images/Qoran), surah frames
+assets/                fonts, images, mushaf page images (assets/images/mushaf), surah frames
 ```
 
 ### Where new code goes
@@ -64,6 +65,7 @@ assets/                fonts, images, Quran SVG pages (assets/images/Qoran), sur
 | `ContentActions` | Share / copy / save row on zikr and hadith cards |
 | `IconCircle` | Round icon badge |
 | `BrandCardBackground` | Palette gradient background for hero-style cards |
+| `ContentColumn` | The centered, width-capped content column (`max-w-3xl`) that also keeps clear of the notch in landscape. Use it (or `useContentColumn()` as a style) instead of a raw `w-full max-w-3xl self-center` view |
 | `EmptyState`, `Skeleton`, `SectionTitle`, `OrnamentHeading`, `Screen`, `PageHeader` | Empty lists, loading placeholders, headings, screen shells |
 
 Shared hooks live in `src/hooks` (`useThemeColors`, `useDirection`, `useCompactHero`, `useStatusBarStyle`, `useTabBarSpace`...). Feature-level reusable pieces stay in the feature (e.g. `settings/_ui/SelectableCard`, `settings/_ui/SettingsCard`, `quran/_components/useLocalDigits`).
@@ -110,7 +112,7 @@ Shared hooks live in `src/hooks` (`useThemeColors`, `useDirection`, `useCompactH
 
 ## Feature notes
 
-- **Mushaf:** pages are the bundled SVGs in `assets/images/Qoran` (do not edit them). They're read with `readAssetText` (needed for Android release builds) and parsed once in `usePageSvg`. The ink `#231f20` becomes `currentColor`. Ayah highlight and long-press hit testing use `src/features/quran/_data/ayahBoxes.json`; regenerate it with `scripts/build-ayah-boxes.py` if pages change.
+- **Mushaf:** the source pages are SVGs kept outside the repo in `~/Desktop/maab-unused-assets/mushaf-source` (`pages/NNN.svg` plus `titles.json`; set `MUSHAF_SOURCE` to use another folder; do not edit them). `node scripts/render-mushaf-pages.mjs` (needs `cwebp`) renders each page's text to a transparent lossless WebP in `assets/images/mushaf/NNN.webp` and writes `_data/chunks/pageMeta/NNN.json` (viewBox, ayah markers, title frames) plus `_data/pageImages.ts`; run it again only if the SVGs change. The reader draws three layers per page: `PageUnderlay` (ayah colors, wird, bookmark, highlight, surah frames), the text image through `expo-image` tinted with the mushaf ink color, and `PageMarkers` (ayah markers in the accent color). Ayah highlight and long-press hit testing use the per-page ayah boxes in `src/features/quran/_data/chunks/ayahBoxes/NNN.json`. The large Quran data lives in chunks under `_data/chunks/`: ayah text, English translation and the Muyassar tafsir per surah (`text/`, `translation/`, `muyassar/`, `001`–`114`), ayah boxes per page (`ayahBoxes/`, `001`–`604`). Each folder has an `index.ts` of lazy loaders (`() => require("./NNN.json")`); load only the chunk you need and cache it, never the whole folder (except English search, which needs every translation chunk). The page footer's hizb-quarter label reads `_data/pageQuarters.json` (one number per page, the quarter that starts on the page).
 - **Azkar data:** one file per category in `src/features/azkar/_data/adhkar/<categoryId>.ts`, loaded on demand by `getItems` in `_data/index.ts`. Each item has `ar` and `en` blocks (`title?`, `prefix`, `text`, `suffix`, `virtue`, `source`) and a `count`. Category metadata and progress goals (`{ id, count }` per item) live in `_data/categories.ts` so the home screen never loads the texts — when adding, removing or changing the count of an item, update its goal there too. A new category needs a loader line in `_data/index.ts`.
 - **Hadith data:** `src/features/hadith/_data/hadiths/partN.ts` (50 per file, `ar`/`en` blocks), with the ordered ids in `hadithIds.ts`. Parts load on demand (`getHadithAt`, `getHadith`, `getHadiths`).
 - **Language:** Arabic mode shows only Arabic and English mode only English. Only the mushaf pages stay Arabic in both; elsewhere an ayah shows its English translation in English mode.

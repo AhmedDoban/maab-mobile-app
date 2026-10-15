@@ -4,15 +4,15 @@ import { DAY_MINUTES, minutesOfDay, toMinutes } from "./time";
 import { PrayerName, REMINDER_PRAYERS } from "./types";
 
 export type PrayerStatus = "passed" | "next" | "upcoming";
-export type PrayerClock = Record<PrayerName, string>;
+type PrayerClock = Record<PrayerName, string>;
 
-export interface ScheduledPrayer {
+interface ScheduledPrayer {
   name: PrayerName;
   time: string;
   status: PrayerStatus;
 }
 
-export interface NextPrayer {
+interface NextPrayer {
   name: PrayerName;
   time: string;
   minutesLeft: number;

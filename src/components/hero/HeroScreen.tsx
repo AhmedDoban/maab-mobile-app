@@ -1,3 +1,4 @@
+import ContentColumn from "@/components/ui/ContentColumn";
 import useCompactHero from "@/hooks/useCompactHero";
 import useDirection from "@/hooks/useDirection";
 import useTabBarSpace from "@/hooks/useTabBarSpace";
@@ -29,7 +30,7 @@ export default function HeroScreen({
         onScroll={onScroll}
       >
         <PageHero {...hero} />
-        <View className="gap-6 px-4 pt-2">{children}</View>
+        <ContentColumn className="gap-6 px-4 pt-2">{children}</ContentColumn>
       </Animated.ScrollView>
       <CompactHeroBar hero={hero} visible={compact} />
     </View>

@@ -1,6 +1,6 @@
 import { normalize } from "@/features/azkar/_data";
 
-export type GradeLevel = "sahih" | "hasan" | "daif" | "mawdu";
+type GradeLevel = "sahih" | "hasan" | "daif" | "mawdu";
 
 const TERMS: Record<GradeLevel, string[]> = {
   mawdu: [

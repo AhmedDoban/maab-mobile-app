@@ -23,7 +23,9 @@ data class WidgetPayload(
   val city: String,
   val prayers: List<WidgetPrayer>,
   val dhikr: List<String>,
-  val dates: List<WidgetDate>
+  val dates: List<WidgetDate>,
+  val lockScreen: Boolean,
+  val lockChannel: String
 ) {
   fun next(now: Long) = prayers.firstOrNull { it.at > now }
 
@@ -94,7 +96,9 @@ data class WidgetPayload(
         dates = if (dates == null) emptyList() else (0 until dates.length()).map {
           val item = dates.getJSONObject(it)
           WidgetDate(item.getLong("at"), item.getString("text"))
-        }.sortedBy { it.at }
+        }.sortedBy { it.at },
+        lockScreen = json.optBoolean("lockScreen"),
+        lockChannel = json.optString("lockChannel", json.getString("nextTitle"))
       )
     }
   }

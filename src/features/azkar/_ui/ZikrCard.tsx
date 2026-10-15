@@ -1,4 +1,3 @@
-import AppText from "@/components/ui/AppText";
 import ContentActions from "@/components/ui/ContentActions";
 import PressableScale from "@/components/ui/PressableScale";
 import useHadithColors from "@/features/hadith/_components/useHadithColors";

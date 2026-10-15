@@ -1,7 +1,7 @@
 type Brand =
   "website" | "linkedin" | "github" | "whatsapp" | "facebook" | "instagram";
 
-export type DeveloperLink = {
+type DeveloperLink = {
   label: string;
   url: string;
   brand: Brand;

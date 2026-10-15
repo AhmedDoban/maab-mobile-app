@@ -16,7 +16,7 @@ export const PRAYER_METHODS = [
   "Tehran",
 ] as const satisfies readonly (keyof typeof CalculationMethod)[];
 
-export type PrayerMethod = (typeof PRAYER_METHODS)[number];
+type PrayerMethod = (typeof PRAYER_METHODS)[number];
 export type PrayerMethodSetting = PrayerMethod | "auto";
 export type AsrMethod = "auto" | "shafi" | "hanafi";
 

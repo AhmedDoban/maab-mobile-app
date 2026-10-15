@@ -6,7 +6,8 @@ import { resolveAsr } from "@/features/prayer-times/_data/methods";
 import { setAsrMethod, setPrayerMethod } from "@/store/Slices/SettingsSlice";
 import { useAppDispatch, useAppSelector } from "@/store/Store";
 import { useTranslation } from "react-i18next";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
+import useLockScreenPrayer from "../_components/useLockScreenPrayer";
 import useSettingsColors from "../_components/useSettingsColors";
 import PrayerMethodList from "./PrayerMethodList";
 import SettingsCard from "./SettingsCard";
@@ -19,6 +20,7 @@ export default function PrayerSettings() {
   const palette = useSettingsColors();
   const method = useAppSelector((s) => s.settings.prayerMethod);
   const asr = useAppSelector((s) => s.settings.asrMethod);
+  const lockScreen = useLockScreenPrayer();
   const { location, status, retry } = usePrayerLocation();
   const city = useCityName(location?.city);
   const loading = status === "loading";
@@ -62,6 +64,17 @@ export default function PrayerSettings() {
           />
         </View>
       </SettingsCard>
+
+      {Platform.OS === "android" ? (
+        <SettingsCard>
+          <SettingsSwitchRow
+            title={t("lockScreenPrayer.title")}
+            subtitle={t("lockScreenPrayer.hint")}
+            value={lockScreen.enabled}
+            onValueChange={lockScreen.toggle}
+          />
+        </SettingsCard>
+      ) : null}
 
       <AppText
         weight="bold"

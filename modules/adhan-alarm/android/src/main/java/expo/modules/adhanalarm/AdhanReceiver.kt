@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 
 class AdhanReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
@@ -25,6 +26,7 @@ class AdhanReceiver : BroadcastReceiver() {
       return
     }
 
+    launch.putExtra(AdhanStore.EXTRA_NATIVE, true)
     val open = PendingIntent.getActivity(
       context,
       alarm.id.hashCode(),
@@ -32,9 +34,32 @@ class AdhanReceiver : BroadcastReceiver() {
       PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
+    try {
+      ContextCompat.startForegroundService(
+        context,
+        Intent(context, AdhanService::class.java)
+          .putExtra(AdhanStore.EXTRA_ID, alarm.id)
+          .putExtra(AdhanService.EXTRA_ALARM, alarm.toJson().toString())
+          .putExtra(AdhanService.EXTRA_OPEN, open)
+      )
+    } catch (_: Exception) {
+      launch.putExtra(AdhanStore.EXTRA_NATIVE, false)
+      fallback(
+        context,
+        alarm,
+        PendingIntent.getActivity(
+          context,
+          alarm.id.hashCode(),
+          launch,
+          PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+      )
+    }
+  }
+
+  private fun fallback(context: Context, alarm: AdhanAlarm, open: PendingIntent) {
     val icon = context.resources.getIdentifier("notification_icon", "drawable", context.packageName)
       .takeIf { it != 0 } ?: context.applicationInfo.icon
-
     val notification = NotificationCompat.Builder(context, alarm.channelId)
       .setSmallIcon(icon)
       .setContentTitle(alarm.title)
@@ -46,7 +71,6 @@ class AdhanReceiver : BroadcastReceiver() {
       .setContentIntent(open)
       .setFullScreenIntent(open, true)
       .build()
-
     val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     manager.notify(alarm.id.hashCode(), notification)
   }

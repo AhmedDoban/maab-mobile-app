@@ -1,3 +1,5 @@
+import useContentColumn from "@/hooks/useContentColumn";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useDirection from "@/hooks/useDirection";
 import usePageInsets from "@/hooks/usePageInsets";
 import { cn } from "@/lib/utils";
@@ -27,6 +29,8 @@ export default function Screen({
 }: Props) {
   const { direction } = useDirection();
   const insets = usePageInsets();
+  const column = useContentColumn();
+  const { left, right } = useSafeAreaInsets();
   const header =
     customHeader ??
     (title ? <PageHeader title={title} trailing={headerTrailing} /> : null);
@@ -35,7 +39,12 @@ export default function Screen({
     return (
       <View
         className={cn("flex-1 bg-main-bg", className)}
-        style={{ direction, paddingTop: title ? insets.paddingTop : 0 }}
+        style={{
+          direction,
+          paddingTop: title ? insets.paddingTop : 0,
+          paddingLeft: left,
+          paddingRight: right,
+        }}
       >
         {header}
         {children}
@@ -47,8 +56,11 @@ export default function Screen({
     <ScrollView
       className="flex-1 bg-main-bg"
       style={{ direction }}
-      contentContainerClassName={cn("gap-6 px-4 pt-4 pb-8", className)}
-      contentContainerStyle={title ? insets : undefined}
+      contentContainerClassName={cn(
+        "w-full max-w-3xl self-center gap-6 px-4 pt-4 pb-8",
+        className,
+      )}
+      contentContainerStyle={[title ? insets : undefined, column]}
       contentInsetAdjustmentBehavior={title ? "never" : "automatic"}
       keyboardDismissMode="on-drag"
       keyboardShouldPersistTaps="handled"

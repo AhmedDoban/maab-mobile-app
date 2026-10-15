@@ -2,7 +2,7 @@ import { Colors, ThemeColors } from "@/constants/Colors";
 import { Brand, brandFor } from "@/constants/palettes";
 import { createContext, useContext } from "react";
 
-export type Theme = ThemeColors & { isDark: boolean; brand: Brand };
+type Theme = ThemeColors & { isDark: boolean; brand: Brand };
 
 export const ThemeContext = createContext<Theme>({
   ...Colors.light,

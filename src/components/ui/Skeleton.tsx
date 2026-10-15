@@ -1,5 +1,7 @@
-import { useEffect } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback } from "react";
 import Animated, {
+  cancelAnimation,
   Easing,
   useAnimatedStyle,
   useSharedValue,
@@ -11,15 +13,21 @@ import { cn } from "@/lib/utils";
 export default function Skeleton({ className }: { className?: string }) {
   const pulse = useSharedValue(0);
 
-  useEffect(() => {
-    pulse.set(
-      withRepeat(
-        withTiming(1, { duration: 850, easing: Easing.inOut(Easing.quad) }),
-        -1,
-        true,
-      ),
-    );
-  }, [pulse]);
+  useFocusEffect(
+    useCallback(() => {
+      pulse.set(
+        withRepeat(
+          withTiming(1, { duration: 850, easing: Easing.inOut(Easing.quad) }),
+          -1,
+          true,
+        ),
+      );
+      return () => {
+        cancelAnimation(pulse);
+        pulse.set(0);
+      };
+    }, [pulse]),
+  );
 
   const style = useAnimatedStyle(() => ({
     opacity: 0.45 + pulse.get() * 0.55,

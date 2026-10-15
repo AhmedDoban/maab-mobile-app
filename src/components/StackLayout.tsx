@@ -1,24 +1,34 @@
+import useDirection from "@/hooks/useDirection";
 import useThemeColors from "@/hooks/useThemeColors";
+import useTransitionGuard from "@/hooks/useTransitionGuard";
 import { Stack } from "expo-router";
+import { useMemo } from "react";
 import { Platform, View } from "react-native";
-import HeaderTitle from "./ui/HeaderTitle";
 
 const TAB_ROOTS = ["index", "hadith", "quran", "qibla", "settings"];
 
-const renderHeaderTitle = ({ children }: { children: string }) => (
-  <HeaderTitle>{children}</HeaderTitle>
-);
-
 export default function StackLayout() {
   const colors = useThemeColors();
+  const { isRTL } = useDirection();
+  const screenListeners = useTransitionGuard();
+
+  const titleStyle = useMemo(
+    () => ({
+      fontFamily: isRTL ? "LamaSans-ExtraBold" : "SpaceGrotesk-Bold",
+      fontSize: 18,
+      color: colors.ink,
+    }),
+    [isRTL, colors.ink],
+  );
 
   const stack = (
     <Stack
+      screenListeners={screenListeners}
       screenOptions={({ route }) => ({
         headerShown: !TAB_ROOTS.includes(route.name),
         headerShadowVisible: false,
         headerTintColor: colors.isDark ? "#ffffff" : colors.main,
-        headerTitle: renderHeaderTitle,
+        headerTitleStyle: titleStyle,
         headerStyle: { backgroundColor: colors.bg },
         headerBackButtonDisplayMode: "minimal",
         contentStyle: { backgroundColor: colors.bg },

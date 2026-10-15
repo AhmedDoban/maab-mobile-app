@@ -8,7 +8,7 @@ import {
 import type { KhatmaPlan } from "@/store/Slices/SettingsSlice";
 import { localDigits } from "./localDigits";
 
-export type Wird = { index: number; from: number; to: number };
+type Wird = { index: number; from: number; to: number };
 
 function juzPages(fromJuz: number, toJuz: number) {
   const start = JUZ_STARTS[fromJuz - 1];

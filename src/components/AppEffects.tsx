@@ -4,12 +4,13 @@ import useAppIconSync from "@/hooks/useAppIconSync";
 import useDailyReset from "@/hooks/useDailyReset";
 import usePrayerReset from "@/hooks/usePrayerReset";
 import useSettingsSync from "@/hooks/useSettingsSync";
+import { memo } from "react";
 
-export default function AppEffects() {
+export default memo(function AppEffects() {
   useSettingsSync();
   useAppIconSync();
   useReminderSync();
   useDailyReset();
   usePrayerReset();
   return <AdhanReminder />;
-}
+});

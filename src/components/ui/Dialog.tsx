@@ -1,3 +1,4 @@
+import { ALL_ORIENTATIONS } from "@/constants/orientations";
 import useSettingsColors from "@/features/settings/_components/useSettingsColors";
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
@@ -34,6 +35,7 @@ export default function Dialog({
       animationType="fade"
       statusBarTranslucent
       navigationBarTranslucent
+      supportedOrientations={ALL_ORIENTATIONS}
       onRequestClose={onClose}
     >
       <View className={cn("flex-1 items-center justify-center", className)}>

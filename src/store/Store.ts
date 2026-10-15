@@ -13,12 +13,15 @@ export const Store = configureStore({
     [DorarSlice.reducerPath]: DorarSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
+    getDefaultMiddleware({
+      serializableCheck: { ignoredPaths: [DorarSlice.reducerPath] },
+      immutableCheck: { ignoredPaths: [DorarSlice.reducerPath] },
+    })
       .prepend(persistMiddleware.middleware)
       .concat([DorarSlice.middleware]),
 });
 
-export type RootState = ReturnType<typeof Store.getState>;
+type RootState = ReturnType<typeof Store.getState>;
 export type AppDispatch = typeof Store.dispatch;
 
 export function clearApiCache(dispatch: AppDispatch) {

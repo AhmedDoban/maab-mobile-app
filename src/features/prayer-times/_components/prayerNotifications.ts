@@ -1,5 +1,5 @@
 import { isRunningInExpoGo } from "expo";
-import { Platform } from "react-native";
+import { AppState, Platform } from "react-native";
 import {
   AdhanSoundId,
   BUNDLED_SOUNDS,
@@ -9,10 +9,12 @@ import {
 import { PrayerName } from "../_data/types";
 import {
   adhanAlarmAvailable,
+  addAdhanEndListener,
   addAdhanListener,
   consumeAdhanLaunch,
   dismissAdhanAlarm,
   scheduleAdhanAlarms,
+  stopAdhanAlarm,
 } from "../../../../modules/adhan-alarm";
 
 const ID_PREFIX = "prayer-";
@@ -86,7 +88,10 @@ type PrayerAlert = { prayer: PrayerName; date: Date };
 type SyncOptions = {
   alerts: PrayerAlert[];
   sound: AdhanSoundId;
+  customUri: string | null;
   channelName: (id: AdhanSoundId) => string;
+  playbackChannel: string;
+  stopLabel: string;
   title: (prayer: PrayerName, date: Date) => string;
   body: string;
 };
@@ -113,7 +118,16 @@ export function syncPrayerNotifications(options: SyncOptions) {
 }
 
 async function reschedule(
-  { alerts, sound, channelName, title, body }: SyncOptions,
+  {
+    alerts,
+    sound,
+    customUri,
+    channelName,
+    playbackChannel,
+    stopLabel,
+    title,
+    body,
+  }: SyncOptions,
   run: number,
 ) {
   if (!Notifications) return;
@@ -157,6 +171,10 @@ async function reschedule(
         title: text,
         body,
         channelId: channelId(sound),
+        sound: channelId(sound),
+        soundUri: sound === "custom" ? (customUri ?? "") : "",
+        channelName: playbackChannel,
+        stopLabel,
       })),
     );
     return;
@@ -196,15 +214,32 @@ async function reschedule(
   }
 }
 
-export function onPrayerNotificationOpened(onOpen: (prayer: unknown) => void) {
+export const stopAdhan = () => stopAdhanAlarm();
+
+export const adhanPlaysNatively = () =>
+  adhanAlarmAvailable && AppState.currentState !== "active";
+
+export function onAdhanEnded(onEnd: () => void) {
+  const sub = addAdhanEndListener(onEnd);
+  return () => sub?.remove();
+}
+
+export function onPrayerNotificationOpened(
+  onOpen: (prayer: unknown, nativeAudio: boolean) => void,
+) {
   if (adhanAlarmAvailable) {
     const open = (
-      launch: { prayer: string; id: string; at: number } | null,
+      launch: {
+        prayer: string;
+        id: string;
+        at: number;
+        native: boolean;
+      } | null,
     ) => {
       if (!launch) return;
-      dismissAdhanAlarm(launch.id);
+      if (!launch.native) dismissAdhanAlarm(launch.id);
       if (Date.now() - launch.at > 30 * 60 * 1000) return;
-      onOpen(launch.prayer);
+      onOpen(launch.prayer, launch.native);
     };
     open(consumeAdhanLaunch());
     const sub = addAdhanListener(open);
@@ -217,11 +252,12 @@ export function onPrayerNotificationOpened(onOpen: (prayer: unknown) => void) {
       const opened = response.notification.request;
       if (!opened.identifier.startsWith(ID_PREFIX)) return;
       if (Date.now() - response.notification.date > 30 * 60 * 1000) return;
-      onOpen(opened.content.data?.prayer);
+      onOpen(opened.content.data?.prayer, false);
     })
     .catch(() => {});
   const sub = Notifications.addNotificationResponseReceivedListener(
-    (response) => onOpen(response.notification.request.content.data?.prayer),
+    (response) =>
+      onOpen(response.notification.request.content.data?.prayer, false),
   );
   return () => sub.remove();
 }

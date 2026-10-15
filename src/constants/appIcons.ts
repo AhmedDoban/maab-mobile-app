@@ -2,16 +2,16 @@ import type { ImageSourcePropType } from "react-native";
 import { DEFAULT_PALETTE, PALETTE_IDS, PaletteId } from "./palettes";
 
 export const APP_ICONS: Record<PaletteId, ImageSourcePropType> = {
-  emerald: require("@/assets/images/app-icons/emerald.png"),
-  teal: require("@/assets/images/app-icons/teal.png"),
-  ocean: require("@/assets/images/app-icons/ocean.png"),
-  indigo: require("@/assets/images/app-icons/indigo.png"),
-  violet: require("@/assets/images/app-icons/violet.png"),
-  rose: require("@/assets/images/app-icons/rose.png"),
-  ruby: require("@/assets/images/app-icons/ruby.png"),
-  amber: require("@/assets/images/app-icons/amber.png"),
-  olive: require("@/assets/images/app-icons/olive.png"),
-  slate: require("@/assets/images/app-icons/slate.png"),
+  emerald: require("@/assets/images/app-icons/thumbs/emerald.png"),
+  teal: require("@/assets/images/app-icons/thumbs/teal.png"),
+  ocean: require("@/assets/images/app-icons/thumbs/ocean.png"),
+  indigo: require("@/assets/images/app-icons/thumbs/indigo.png"),
+  violet: require("@/assets/images/app-icons/thumbs/violet.png"),
+  rose: require("@/assets/images/app-icons/thumbs/rose.png"),
+  ruby: require("@/assets/images/app-icons/thumbs/ruby.png"),
+  amber: require("@/assets/images/app-icons/thumbs/amber.png"),
+  olive: require("@/assets/images/app-icons/thumbs/olive.png"),
+  slate: require("@/assets/images/app-icons/thumbs/slate.png"),
 };
 
 export const iconAlias = (id: PaletteId) => id[0].toUpperCase() + id.slice(1);

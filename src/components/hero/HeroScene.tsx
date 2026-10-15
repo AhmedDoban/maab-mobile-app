@@ -11,8 +11,6 @@ export default function HeroScene({ source }: { source: ImageSourcePropType }) {
         accessibilityIgnoresInvertColors
       />
       <Svg
-        width="100%"
-        height="100%"
         style={StyleSheet.absoluteFill}
         preserveAspectRatio="none"
         viewBox="0 0 1 1"

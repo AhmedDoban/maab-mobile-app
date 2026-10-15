@@ -15,6 +15,10 @@ class AlarmRecord : Record {
   @Field var title: String = ""
   @Field var body: String = ""
   @Field var channelId: String = ""
+  @Field var sound: String = ""
+  @Field var soundUri: String = ""
+  @Field var channelName: String = ""
+  @Field var stopLabel: String = ""
 }
 
 class AdhanAlarmModule : Module() {
@@ -24,26 +28,42 @@ class AdhanAlarmModule : Module() {
   private fun payload(intent: Intent) = mapOf(
     "prayer" to intent.getStringExtra(AdhanStore.EXTRA_PRAYER),
     "id" to intent.getStringExtra(AdhanStore.EXTRA_ID),
-    "at" to intent.getLongExtra(AdhanStore.EXTRA_AT, 0L).toDouble()
+    "at" to intent.getLongExtra(AdhanStore.EXTRA_AT, 0L).toDouble(),
+    "native" to intent.getBooleanExtra(AdhanStore.EXTRA_NATIVE, false)
   )
 
   override fun definition() = ModuleDefinition {
     Name("AdhanAlarm")
 
-    Events("onAdhan")
+    Events("onAdhan", "onAdhanEnd")
 
     OnCreate {
       AdhanLaunch.listener = { intent -> sendEvent("onAdhan", payload(intent)) }
+      AdhanLaunch.endListener = { id -> sendEvent("onAdhanEnd", mapOf("id" to id)) }
     }
 
     OnDestroy {
       AdhanLaunch.listener = null
+      AdhanLaunch.endListener = null
     }
 
     Function("schedule") { alarms: List<AlarmRecord> ->
       AdhanStore.replace(
         context,
-        alarms.map { AdhanAlarm(it.id, it.at.toLong(), it.prayer, it.title, it.body, it.channelId) }
+        alarms.map {
+          AdhanAlarm(
+            it.id,
+            it.at.toLong(),
+            it.prayer,
+            it.title,
+            it.body,
+            it.channelId,
+            it.sound,
+            it.soundUri,
+            it.channelName,
+            it.stopLabel
+          )
+        }
       )
     }
 
@@ -56,6 +76,11 @@ class AdhanAlarmModule : Module() {
     Function("dismiss") { id: String ->
       val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
       manager.cancel(id.hashCode())
+    }
+
+    Function("stop") {
+      AdhanService.stop(context)
+      AdhanLaunch.release()
     }
   }
 }

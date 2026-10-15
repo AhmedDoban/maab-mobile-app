@@ -3,7 +3,7 @@ import { parse } from "react-native-svg";
 import { FRAME_SVGS } from "../_data/frameSvgs";
 import readAssetText from "./readAssetText";
 
-export type FrameSvg = {
+type FrameSvg = {
   x: number;
   y: number;
   width: number;

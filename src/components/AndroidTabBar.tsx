@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-export type TabDef = {
+type TabDef = {
   name: string;
   label: string;
   icon: IconKey;
@@ -21,8 +21,12 @@ export default function AndroidTabBar({
 
   return (
     <View
-      className="bg-main-bg px-3 pt-2"
-      style={{ paddingBottom: insets.bottom + 8 }}
+      className="bg-main-bg pt-2"
+      style={{
+        paddingBottom: insets.bottom + 8,
+        paddingLeft: insets.left + 12,
+        paddingRight: insets.right + 12,
+      }}
     >
       <View
         className="h-[68px] flex-row rounded-3xl border border-line bg-surface"

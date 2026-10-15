@@ -1,3 +1,4 @@
+import ContentColumn from "@/components/ui/ContentColumn";
 import { FlatList, ListRenderItem } from "react-native";
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
@@ -18,7 +19,9 @@ const CONTENT_STYLE = {
 const keyExtractor = (row: FavoriteRowData) => row.key;
 
 const renderRow: ListRenderItem<FavoriteRowData> = ({ item, index }) => (
-  <FavoriteRow row={item} index={index} />
+  <ContentColumn>
+    <FavoriteRow row={item} index={index} />
+  </ContentColumn>
 );
 
 export default function Favorites() {

@@ -1,15 +1,16 @@
 import { AyahRef, ayahTranslation } from "@/features/azkar/_data/quran";
 import { useTranslation } from "react-i18next";
+import MUYASSAR_CHUNKS from "../_data/chunks/muyassar";
 
-export type Tafsir = { text: string; source: string; arabic: boolean };
+type Tafsir = { text: string; source: string; arabic: boolean };
 
-let muyassar: string[][] | null = null;
+const muyassar: string[][] = [];
 
-const loadMuyassar = () =>
-  (muyassar ??= require("../_data/muyassar.json") as string[][]);
+const tafsirOf = (surah: number) =>
+  (muyassar[surah - 1] ??= MUYASSAR_CHUNKS[surah - 1]?.() ?? []);
 
-export const preloadTafsir = (ar: boolean) =>
-  ar ? loadMuyassar() : ayahTranslation(1, 1);
+export const preloadTafsir = (ar: boolean, surah: number) =>
+  ar ? tafsirOf(surah) : ayahTranslation(surah, 1);
 
 export default function useTafsir(ref: AyahRef | null): Tafsir | null {
   const { t, i18n } = useTranslation("azkar");
@@ -20,6 +21,6 @@ export default function useTafsir(ref: AyahRef | null): Tafsir | null {
       ? { text, source: t("translationSource"), arabic: false }
       : null;
   }
-  const text = loadMuyassar()[ref.surah - 1]?.[ref.ayah - 1];
+  const text = tafsirOf(ref.surah)[ref.ayah - 1];
   return text ? { text, source: t("tafsirSource"), arabic: true } : null;
 }

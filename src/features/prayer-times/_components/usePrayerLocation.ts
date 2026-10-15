@@ -11,7 +11,7 @@ import type { PrayerLocation } from "../_data/calculate";
 import { lookupCityName } from "../_data/cityName";
 import { distanceKm } from "../_data/geo";
 
-export type LocationStatus = "loading" | "ready" | "denied" | "error";
+type LocationStatus = "loading" | "ready" | "denied" | "error";
 
 const MOVED_KM = 5;
 const LOOKUP_RETRY = 7 * 24 * 60 * 60 * 1000;

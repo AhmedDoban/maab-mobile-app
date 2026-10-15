@@ -25,14 +25,16 @@ export type WidgetPayload = {
   prayers: WidgetPrayer[];
   dhikr: string[];
   dates: WidgetDate[];
+  lockScreen: boolean;
+  lockChannel: string;
 };
 
 type NativePrayerWidgets = { update(payload: string): void };
 
 const native =
-  Platform.OS === "android"
-    ? requireOptionalNativeModule<NativePrayerWidgets>("PrayerWidgets")
-    : null;
+  Platform.OS === "web"
+    ? null
+    : requireOptionalNativeModule<NativePrayerWidgets>("PrayerWidgets");
 
 export function updatePrayerWidgets(payload: WidgetPayload) {
   try {

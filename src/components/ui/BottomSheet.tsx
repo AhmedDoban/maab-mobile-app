@@ -1,3 +1,4 @@
+import { ALL_ORIENTATIONS } from "@/constants/orientations";
 import useSettingsColors from "@/features/settings/_components/useSettingsColors";
 import { cn } from "@/lib/utils";
 import { ReactNode, useEffect, useMemo, useState } from "react";
@@ -102,6 +103,7 @@ export default function BottomSheet({
       animationType="none"
       statusBarTranslucent
       navigationBarTranslucent
+      supportedOrientations={ALL_ORIENTATIONS}
       onRequestClose={onClose}
     >
       <GestureHandlerRootView style={rootStyle}>
@@ -113,7 +115,10 @@ export default function BottomSheet({
           />
         </Animated.View>
         <Animated.View
-          className={cn("rounded-t-3xl px-4 pt-4", className)}
+          className={cn(
+            "w-full max-w-2xl self-center rounded-t-3xl px-4 pt-4",
+            className,
+          )}
           style={[
             {
               backgroundColor: palette.card,

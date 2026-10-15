@@ -7,10 +7,12 @@ import {
   CityName,
   lookupCityName,
 } from "@/features/prayer-times/_data/cityName";
+import { Store } from "@/store/Store";
 import { distanceToKaaba, normalize180, qiblaBearing } from "../_data/qibla";
 
 type Status = "loading" | "denied" | "error" | "ready";
 type Reading = { offset: number; aligned: boolean };
+type Coords = { latitude: number; longitude: number };
 
 const ALIGNED_WITHIN = 5;
 const THROTTLE_MS = 100;
@@ -19,12 +21,11 @@ const sameReading = (a: Reading, b: Reading) =>
   a.offset === b.offset && a.aligned === b.aligned;
 
 export default function useQibla() {
-  const [status, setStatus] = useState<Status>("loading");
+  const [saved] = useState(() => Store.getState().settings.prayerLocation);
+  const [status, setStatus] = useState<Status>(saved ? "ready" : "loading");
   const [canAskAgain, setCanAskAgain] = useState(true);
-  const [coords, setCoords] = useState<Location.LocationObjectCoords | null>(
-    null,
-  );
-  const [city, setCity] = useState<CityName | null>(null);
+  const [coords, setCoords] = useState<Coords | null>(saved);
+  const [city, setCity] = useState<CityName | null>(saved?.city ?? null);
   const heading = useSharedValue(0);
   const [reading, setReading] = useState<Reading | null>(null);
   const [accuracy, setAccuracy] = useState(3);
@@ -50,7 +51,7 @@ export default function useQibla() {
     let cancelled = false;
 
     (async () => {
-      setStatus("loading");
+      if (!saved) setStatus("loading");
       let Location: typeof import("expo-location");
       try {
         Location = await import("expo-location");
@@ -66,7 +67,7 @@ export default function useQibla() {
         return;
       }
 
-      let fix: Location.LocationObjectCoords | null = null;
+      let fix: Coords | null = saved;
       try {
         const last = await Location.getLastKnownPositionAsync();
         if (last && !cancelled) {
@@ -88,9 +89,9 @@ export default function useQibla() {
         if (!cancelled && !fix) setStatus("error");
       }
 
-      if (fix) {
+      if (fix && (fix !== saved || !saved?.city)) {
         const name = await lookupCityName(fix, Location);
-        if (!cancelled) setCity(name);
+        if (!cancelled) setCity((old) => name ?? old);
       }
     })();
 

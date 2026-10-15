@@ -2,7 +2,7 @@
   "expo": {
     "name": "Maab",
     "slug": "maab",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "maab",
@@ -22,7 +22,12 @@
           "en"
         ]
       },
-      "buildNumber": "7"
+      "buildNumber": "8",
+      "entitlements": {
+        "com.apple.security.application-groups": [
+          "group.com.ahmeddoban.maab"
+        ]
+      }
     },
     "android": {
       "package": "com.ahmeddoban.maab",
@@ -45,7 +50,7 @@
       "blockedPermissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "versionCode": 7
+      "versionCode": 8
     },
     "web": {
       "output": "single",
@@ -198,7 +203,9 @@
             "enableMinifyInReleaseBuilds": true
           }
         }
-      ]
+      ],
+      "@bacons/apple-targets",
+      "expo-image"
     ],
     "experiments": {
       "typedRoutes": true,

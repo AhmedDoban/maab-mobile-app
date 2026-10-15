@@ -1,3 +1,4 @@
+import useContentColumn from "@/hooks/useContentColumn";
 import useThemeColors from "@/hooks/useThemeColors";
 import { ListRenderItem, Platform } from "react-native";
 import { useCallback, useMemo } from "react";
@@ -82,16 +83,19 @@ export default function CategoryContent({
     [colors.bg, direction],
   );
 
+  const column = useContentColumn();
   const renderItem = useCallback<ListRenderItem<Zikr>>(
     ({ item: zikr }) => (
       <Animated.View
+        className="w-full max-w-3xl self-center"
+        style={column}
         entering={hideCompleted ? ENTERING : undefined}
         exiting={hideCompleted ? EXITING : undefined}
       >
         <ZikrCard categoryId={categoryId} zikr={zikr} />
       </Animated.View>
     ),
-    [hideCompleted, categoryId],
+    [hideCompleted, categoryId, column],
   );
 
   return (

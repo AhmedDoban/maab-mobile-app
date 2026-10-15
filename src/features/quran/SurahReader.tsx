@@ -13,7 +13,7 @@ import * as Haptics from "expo-haptics";
 import { router, Stack } from "expo-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { InteractionManager, View } from "react-native";
+import { View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -27,7 +27,8 @@ import useDirection from "@/hooks/useDirection";
 import useRecitation from "./_components/useRecitation";
 import useSurahName from "./_components/useSurahName";
 import { preloadTafsir } from "./_components/useTafsir";
-import { loadPageSvg } from "./_components/usePageSvg";
+import { useKeepAwake } from "expo-keep-awake";
+import usePageFade from "./_components/usePageFade";
 import MushafPage from "./_ui/MushafPage";
 import MushafPager from "./_ui/MushafPager";
 import { hitTest } from "./_components/pageHitTest";
@@ -35,6 +36,8 @@ import PageSlider from "./_ui/PageSlider";
 import RecitationPlayer from "./_ui/RecitationPlayer";
 import NoInternetDialog from "@/components/ui/NoInternetDialog";
 import AyahSheet from "./_ui/AyahSheet";
+
+const TAFSIR_DELAY_MS = 800;
 
 export default function SurahReader({
   id,
@@ -49,6 +52,15 @@ export default function SurahReader({
   const ar = i18n.language === "ar";
   const surahName = useSurahName();
   const c = useMushafColors();
+  const screenOptions = useMemo(
+    () => ({
+      headerShown: false,
+      gestureEnabled: false,
+      fullScreenGestureEnabled: false,
+      contentStyle: { backgroundColor: c.page },
+    }),
+    [c.page],
+  );
   const theme = useThemeColors();
   const { isRTL, direction } = useDirection();
   const dispatch = useAppDispatch();
@@ -70,21 +82,12 @@ export default function SurahReader({
   const active = recitation.current ?? selected;
   const [chrome, setChrome] = useState(true);
 
-  useEffect(() => {
-    const task = InteractionManager.runAfterInteractions(() => {
-      for (const p of [page + 2, page - 2]) {
-        if (p >= 1 && p <= PAGE_COUNT) loadPageSvg(p).catch(() => {});
-      }
-    });
-    return () => task.cancel();
-  }, [page]);
+  useKeepAwake();
 
   useEffect(() => {
-    const task = InteractionManager.runAfterInteractions(() => {
-      preloadTafsir(ar);
-    });
-    return () => task.cancel();
-  }, [ar]);
+    const timer = setTimeout(() => preloadTafsir(ar, id), TAFSIR_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, [ar, id]);
   const [sheetAyah, setSheetAyah] = useState<AyahRef | null>(null);
   const fade = useSharedValue(1);
 
@@ -98,6 +101,15 @@ export default function SurahReader({
   const jump = useCallback((target: number) => {
     setPage(Math.min(PAGE_COUNT, Math.max(1, target)));
   }, []);
+
+  const pageFade = usePageFade();
+  const slideTo = useCallback(
+    (target: number) => {
+      pageFade.fadeIn();
+      jump(target);
+    },
+    [jump, pageFade.fadeIn],
+  );
 
   useEffect(() => {
     const current = recitation.current;
@@ -137,9 +149,10 @@ export default function SurahReader({
           width={area.width}
           height={area.height}
           active={p === activePage ? active : null}
+          priority={p === page ? "high" : "normal"}
         />
       ) : null,
-    [area, activePage, active],
+    [area, activePage, active, page],
   );
 
   const play = () => {
@@ -161,12 +174,7 @@ export default function SurahReader({
       className="flex-1"
       style={{ direction: "rtl", backgroundColor: c.page }}
     >
-      <Stack.Screen
-        options={{
-          headerShown: false,
-          contentStyle: { backgroundColor: c.page },
-        }}
-      />
+      <Stack.Screen options={screenOptions} />
 
       <View
         className="flex-1"
@@ -179,15 +187,17 @@ export default function SurahReader({
         }}
       >
         {area ? (
-          <MushafPager
-            page={page}
-            width={area.width}
-            height={area.height}
-            onChange={setPage}
-            onTap={toggleChrome}
-            onLongPress={onPageLongPress}
-            renderPage={renderPage}
-          />
+          <Animated.View style={pageFade.style}>
+            <MushafPager
+              page={page}
+              width={area.width}
+              height={area.height}
+              onChange={setPage}
+              onTap={toggleChrome}
+              onLongPress={onPageLongPress}
+              renderPage={renderPage}
+            />
+          </Animated.View>
         ) : null}
       </View>
 
@@ -257,7 +267,7 @@ export default function SurahReader({
               tintColor={c.accent}
             />
           </PressableScale>
-          <PageSlider page={page} onChange={jump} />
+          <PageSlider page={page} onChange={slideTo} />
           <PressableScale
             onPress={() => bookmarkPage && jump(bookmarkPage)}
             disabled={!bookmark || bookmarked}

@@ -5,8 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { InteractionManager } from "react-native";
 import {
+  adhanPlaysNatively,
   configurePrayerNotifications,
+  onAdhanEnded,
   onPrayerNotificationOpened,
+  stopAdhan,
   syncPrayerNotifications,
 } from "./_components/prayerNotifications";
 import usePrayerLabels from "./_components/usePrayerLabels";
@@ -37,15 +40,31 @@ export default function AdhanReminder() {
   );
   const reminders = useAppSelector((s) => s.settings.prayerReminders);
   const sound = useAppSelector((s) => s.settings.adhanSound);
-  const [active, setActive] = useState<PrayerName | null>(null);
+  const customUri = useAppSelector((s) => s.settings.customAdhan?.uri ?? null);
+  const [active, setActive] = useState<{
+    prayer: PrayerName;
+    nativeAudio: boolean;
+  } | null>(null);
   const shown = useRef(new Set<string>());
 
-  const show = (prayer: PrayerName) => {
+  const show = (prayer: PrayerName, nativeAudio = false) => {
     const key = `${today()}:${prayer}`;
-    if (shown.current.has(key)) return;
+    if (shown.current.has(key)) {
+      if (nativeAudio) {
+        setActive((current) =>
+          current?.prayer === prayer ? { prayer, nativeAudio } : current,
+        );
+      }
+      return;
+    }
     shown.current.add(key);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-    setActive(prayer);
+    setActive({ prayer, nativeAudio });
+  };
+
+  const close = () => {
+    stopAdhan();
+    setActive(null);
   };
 
   const channelName = (id: AdhanSoundId) =>
@@ -59,20 +78,28 @@ export default function AdhanReminder() {
   }, [i18n.language]);
 
   useEffect(() => {
-    if (startingNow && reminders[startingNow] !== false) show(startingNow);
+    if (
+      startingNow &&
+      reminders[startingNow] !== false &&
+      !adhanPlaysNatively()
+    ) {
+      show(startingNow);
+    }
   }, [startingNow, reminders]);
 
   useEffect(
     () =>
-      onPrayerNotificationOpened((prayer) => {
+      onPrayerNotificationOpened((prayer, nativeAudio) => {
         if (
           REMINDER_PRAYERS.includes(prayer as (typeof REMINDER_PRAYERS)[number])
         ) {
-          show(prayer as PrayerName);
+          show(prayer as PrayerName, nativeAudio);
         }
       }),
     [],
   );
+
+  useEffect(() => onAdhanEnded(() => setActive(null)), []);
 
   useEffect(() => {
     if (!config) return;
@@ -87,19 +114,23 @@ export default function AdhanReminder() {
     syncPrayerNotifications({
       alerts,
       sound,
+      customUri,
       channelName,
+      playbackChannel: t("playbackChannel"),
+      stopLabel: t("stopAdhan"),
       title: (prayer, date) =>
         t("notificationTitle", { prayer: label(prayer, date.getDay() === 5) }),
       body: t("notificationBody"),
     });
-  }, [config, day, reminders, sound, i18n.language]);
+  }, [config, day, reminders, sound, customUri, i18n.language]);
 
   return (
     <AdhanSplash
-      prayer={active}
+      prayer={active?.prayer ?? null}
       sound={sound}
-      time={active && day ? day.times[active] : undefined}
-      onClose={() => setActive(null)}
+      nativeAudio={active?.nativeAudio ?? false}
+      time={active && day ? day.times[active.prayer] : undefined}
+      onClose={close}
     />
   );
 }

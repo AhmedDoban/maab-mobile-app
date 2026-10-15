@@ -23,7 +23,7 @@ export const SETTINGS_SECTIONS = [
 }[];
 
 export type SettingsSectionId = (typeof SETTINGS_SECTIONS)[number]["id"];
-export type SettingsGroupId = (typeof SETTINGS_SECTIONS)[number]["group"];
+type SettingsGroupId = (typeof SETTINGS_SECTIONS)[number]["group"];
 
 export const SETTINGS_GROUPS: SettingsGroupId[] = [
   "general",

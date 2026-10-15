@@ -29,7 +29,7 @@ export default function HadithHome() {
   const { direction } = useDirection();
   const tabBarSpace = useTabBarSpace();
   const { compact, onScroll } = useCompactHero(HERO);
-  const { visible, hasMore, loadMore } = useHadithPagination();
+  const { visible, hasMore, loading, loadMore } = useHadithPagination();
   const [draft, setDraft] = useState("");
   const [query, setQuery] = useState("");
   const searching = query.length > 0;
@@ -85,7 +85,9 @@ export default function HadithHome() {
         renderItem={renderHadith}
         onEndReached={searching ? undefined : loadMore}
         onEndReachedThreshold={0.6}
-        ListFooterComponent={!searching && hasMore ? HadithListFooter : null}
+        ListFooterComponent={
+          !searching && hasMore && loading ? HadithListFooter : null
+        }
         ListHeaderComponent={header}
       />
       <CompactHeroBar hero={hero} visible={compact} />

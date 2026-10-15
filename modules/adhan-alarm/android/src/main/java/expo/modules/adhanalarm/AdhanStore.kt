@@ -14,7 +14,11 @@ data class AdhanAlarm(
   val prayer: String,
   val title: String,
   val body: String,
-  val channelId: String
+  val channelId: String,
+  val sound: String,
+  val soundUri: String,
+  val channelName: String,
+  val stopLabel: String
 ) {
   fun toJson(): JSONObject = JSONObject()
     .put("id", id)
@@ -23,6 +27,10 @@ data class AdhanAlarm(
     .put("title", title)
     .put("body", body)
     .put("channelId", channelId)
+    .put("sound", sound)
+    .put("soundUri", soundUri)
+    .put("channelName", channelName)
+    .put("stopLabel", stopLabel)
 
   companion object {
     fun fromJson(json: JSONObject) = AdhanAlarm(
@@ -31,7 +39,11 @@ data class AdhanAlarm(
       json.getString("prayer"),
       json.getString("title"),
       json.getString("body"),
-      json.getString("channelId")
+      json.getString("channelId"),
+      json.optString("sound", "adhan_other"),
+      json.optString("soundUri", ""),
+      json.optString("channelName", json.getString("title")),
+      json.optString("stopLabel", "Stop")
     )
   }
 }
@@ -42,6 +54,7 @@ object AdhanStore {
   const val EXTRA_PRAYER = "adhanPrayer"
   const val EXTRA_ID = "adhanId"
   const val EXTRA_AT = "adhanAt"
+  const val EXTRA_NATIVE = "adhanNative"
 
   fun load(context: Context): List<AdhanAlarm> {
     val raw = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(KEY, null)
