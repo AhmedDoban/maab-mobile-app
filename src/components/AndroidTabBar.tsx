@@ -13,7 +13,8 @@ type TabDef = {
 
 export default function AndroidTabBar({
   state,
-  navigation,
+  emitter,
+  navigateToTab,
   tabs,
 }: BottomTabBarProps & { tabs: readonly TabDef[] }) {
   const { t } = useTranslation();
@@ -44,13 +45,13 @@ export default function AndroidTabBar({
               label={t(tab.label as never)}
               focused={focused}
               onPress={() => {
-                const event = navigation.emit({
+                const event = emitter.emit({
                   type: "tabPress",
                   target: route.key,
                   canPreventDefault: true,
                 });
                 if (!focused && !event.defaultPrevented) {
-                  navigation.navigate(route.name, route.params);
+                  navigateToTab(route.key);
                 }
               }}
             />

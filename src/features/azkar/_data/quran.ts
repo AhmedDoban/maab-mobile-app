@@ -16,6 +16,7 @@ type Verse = {
   translation: string;
   surah: string;
   surahEn: string;
+  surahId: number;
   ayah: number;
 };
 
@@ -153,6 +154,7 @@ export function getRandomVerse(): Verse {
     translation,
     surah: info?.name ?? "",
     surahEn: info?.transliteration ?? "",
+    surahId: surah,
     ayah,
   };
   return picked;

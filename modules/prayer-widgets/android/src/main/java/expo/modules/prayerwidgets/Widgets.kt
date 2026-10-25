@@ -32,6 +32,12 @@ class PrayerTimesWidget : PrayerWidgetProvider()
 
 class DhikrWidget : PrayerWidgetProvider()
 
+class NextPrayerSmallWidget : PrayerWidgetProvider()
+
+class TodayWidget : PrayerWidgetProvider()
+
+class ModernPrayerWidget : PrayerWidgetProvider()
+
 class WidgetRefreshReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {
     WidgetRenderer.renderAll(context)

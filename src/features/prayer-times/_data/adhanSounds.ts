@@ -1,8 +1,26 @@
 import { isRunningInExpoGo } from "expo";
+import type { PrayerName } from "./types";
 
 export type AdhanSoundId = "other" | "qassas" | "qatami" | "sobhi" | "custom";
 
 export type CustomAdhan = { uri: string; name: string };
+
+export type AdhanChoice = { sound: AdhanSoundId; custom: CustomAdhan | null };
+
+export type AdhanSettings = {
+  adhanSound: AdhanSoundId;
+  customAdhan: CustomAdhan | null;
+  adhanPerPrayer: boolean;
+  prayerAdhans: Partial<Record<PrayerName, AdhanChoice>>;
+};
+
+export const adhanFor = (
+  settings: AdhanSettings,
+  prayer: PrayerName,
+): AdhanChoice => {
+  const own = settings.adhanPerPrayer ? settings.prayerAdhans[prayer] : null;
+  return own ?? { sound: settings.adhanSound, custom: settings.customAdhan };
+};
 
 export const DEFAULT_ADHAN: AdhanSoundId = "other";
 

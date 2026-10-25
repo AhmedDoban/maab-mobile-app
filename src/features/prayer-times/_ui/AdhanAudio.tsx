@@ -1,19 +1,19 @@
 import { useEffect, useRef } from "react";
 import useAdhanPlayer from "../_components/useAdhanPlayer";
-import { AdhanSoundId } from "../_data/adhanSounds";
+import { AdhanChoice } from "../_data/adhanSounds";
 
 export default function AdhanAudio({
-  sound,
+  adhan,
   onEnd,
 }: {
-  sound: AdhanSoundId;
+  adhan: AdhanChoice;
   onEnd: () => void;
 }) {
   const { current, play, stop } = useAdhanPlayer();
   const started = useRef(false);
 
   useEffect(() => {
-    play(sound);
+    play(adhan.sound, adhan.custom);
     return stop;
   }, []);
 

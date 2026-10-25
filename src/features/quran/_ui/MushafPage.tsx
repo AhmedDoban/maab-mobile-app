@@ -22,9 +22,11 @@ import MushafPageFooter from "./MushafPageFooter";
 import MushafPageHeader from "./MushafPageHeader";
 import PageMarkers from "./PageMarkers";
 import PageUnderlay from "./PageUnderlay";
+import SurahFrames from "./SurahFrames";
 
-const VISIBLE = { ...StyleSheet.absoluteFill, opacity: 1 };
-const HIDDEN = { ...StyleSheet.absoluteFill, opacity: 0 };
+const SHOW_FALLBACK_MS = 2000;
+const VISIBLE = { opacity: 1 };
+const HIDDEN = { opacity: 0 };
 
 export default memo(function MushafPage({
   page,
@@ -47,6 +49,12 @@ export default memo(function MushafPage({
   const [shown, setShown] = useState(false);
   const onShown = useCallback(() => setShown(true), []);
   const layer = shown ? VISIBLE : HIDDEN;
+
+  useEffect(() => {
+    if (shown) return;
+    const timer = setTimeout(onShown, SHOW_FALLBACK_MS);
+    return () => clearTimeout(timer);
+  }, [shown, onShown]);
   const fit = geometry.stretch ? "none" : "xMidYMid meet";
   const bookmarked = useAppSelector((s) =>
     s.settings.quranBookmark
@@ -68,7 +76,7 @@ export default memo(function MushafPage({
   );
 
   const body: ReactNode = (
-    <>
+    <View style={layer}>
       <MushafPageHeader page={page} />
 
       {bookmarked ? (
@@ -82,14 +90,15 @@ export default memo(function MushafPage({
       ) : null}
 
       <View style={{ width: geometry.textW, height: geometry.textH }}>
-        <View style={layer}>
-          <PageUnderlay
-            meta={meta}
-            ayahs={ayahs}
-            active={active}
-            preserveAspectRatio={fit}
-          />
-        </View>
+        <PageUnderlay
+          meta={meta}
+          ayahs={ayahs}
+          active={active}
+          preserveAspectRatio={fit}
+        />
+        {meta.titles.length ? (
+          <SurahFrames titles={meta.titles} toBox={geometry.toBox} />
+        ) : null}
         <Image
           source={PAGE_IMAGES[page - 1]}
           style={StyleSheet.absoluteFill}
@@ -101,13 +110,11 @@ export default memo(function MushafPage({
           onDisplay={onShown}
           onError={onShown}
         />
-        <View style={layer}>
-          <PageMarkers meta={meta} preserveAspectRatio={fit} />
-        </View>
+        <PageMarkers meta={meta} preserveAspectRatio={fit} />
       </View>
 
       <MushafPageFooter page={page} />
-    </>
+    </View>
   );
 
   const padding = {

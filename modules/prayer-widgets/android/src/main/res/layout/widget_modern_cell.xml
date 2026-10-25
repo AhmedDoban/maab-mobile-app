@@ -1,0 +1,47 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="0dp"
+  android:layout_height="match_parent"
+  android:layout_marginStart="2dp"
+  android:layout_marginEnd="2dp"
+  android:layout_weight="1">
+
+  <ImageView
+    android:id="@+id/cellBg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scaleType="fitXY"
+    android:src="@drawable/widget_cell"
+    android:visibility="gone" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <ImageView
+      android:id="@+id/cellIcon"
+      android:layout_width="20dp"
+      android:layout_height="20dp" />
+
+    <TextView
+      android:id="@+id/cellName"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="4dp"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:textColor="@color/widget_card_ink"
+      android:textSize="12sp"
+      android:textStyle="bold" />
+
+    <TextView
+      android:id="@+id/cellTime"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:maxLines="1"
+      android:textColor="@color/widget_card_ink"
+      android:textSize="12sp" />
+  </LinearLayout>
+</FrameLayout>

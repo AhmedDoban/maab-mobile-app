@@ -8,12 +8,12 @@ import {
   useRef,
   useState,
 } from "react";
-import { View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import PagerView, {
   type PagerViewOnPageSelectedEvent,
 } from "react-native-pager-view";
 import { scheduleOnRN } from "react-native-worklets";
+import MushafPagerSlot from "./MushafPagerSlot";
 
 const WINDOW = 2;
 const PAGES = Array.from({ length: PAGE_COUNT }, (_, i) => i + 1);
@@ -53,6 +53,24 @@ export default memo(function MushafPager({
     return () => cancelAnimationFrame(frame);
   }, [page]);
 
+  const size = useRef({ width, height });
+
+  useEffect(() => {
+    const before = size.current;
+    size.current = { width, height };
+    if (before.width === width && before.height === height) return;
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() =>
+        pager.current?.setPageWithoutAnimation(shown.current - 1),
+      );
+    });
+    return () => {
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, [width, height]);
+
   const onPageSelected = useCallback(
     (e: PagerViewOnPageSelectedEvent) => {
       const next = e.nativeEvent.position + 1;
@@ -81,9 +99,15 @@ export default memo(function MushafPager({
   const pages = useMemo(
     () =>
       PAGES.map((p) => (
-        <View key={p} style={{ width, height }}>
-          {Math.abs(p - page) <= (wide ? WINDOW : 0) ? renderPage(p) : null}
-        </View>
+        <MushafPagerSlot
+          key={p}
+          page={p}
+          width={width}
+          height={height}
+          renderPage={
+            Math.abs(p - page) <= (wide ? WINDOW : 0) ? renderPage : undefined
+          }
+        />
       )),
     [page, wide, width, height, renderPage],
   );

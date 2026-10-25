@@ -1,2 +1,9 @@
 "widget.name" = "الصلاة القادمة";
 "widget.description" = "الصلاة القادمة مع عدّاد تنازلي";
+"widget.times.name" = "مواقيت الصلاة";
+"widget.times.description" = "صلوات اليوم مع إبراز الصلاة القادمة";
+"widget.dhikr.name" = "ذكر اليوم";
+"widget.dhikr.description" = "ذكر قصير يتغير كل يوم";
+"widget.openApp" = "افتح مآب لتحميل المواقيت";
+"widget.modern.name" = "مواقيت الصلاة (التصميم الجديد)";
+"widget.modern.description" = "بطاقة فاتحة بالصلاة القادمة والوقت المتبقي والصلوات الخمس";

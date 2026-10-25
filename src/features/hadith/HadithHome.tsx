@@ -1,6 +1,9 @@
+import { router } from "expo-router";
+import HijriDateChip from "@/features/prayer-times/_ui/HijriDateChip";
 import CompactHeroBar from "@/components/hero/CompactHeroBar";
-import PageHero, { PageHeroProps } from "@/components/hero/PageHero";
-import { PAGE_MOSQUES } from "@/constants/mosques";
+import HadithArt from "@/components/art/HadithArt";
+import IllustratedHero from "@/components/hero/IllustratedHero";
+import type { HeroBar } from "@/components/hero/heroTypes";
 import useCompactHero from "@/hooks/useCompactHero";
 import useDirection from "@/hooks/useDirection";
 import useTabBarSpace from "@/hooks/useTabBarSpace";
@@ -24,8 +27,10 @@ const keyExtractor = (item: LocalHadith) => item.id;
 
 const NONE: LocalHadith[] = [];
 
+const openFavorites = () => router.push("/hadith-favorites");
+
 export default function HadithHome() {
-  const { t } = useTranslation(["common", "hadith"]);
+  const { t } = useTranslation(["common", "hadith", "azkar"]);
   const { direction } = useDirection();
   const tabBarSpace = useTabBarSpace();
   const { compact, onScroll } = useCompactHero(HERO);
@@ -39,12 +44,15 @@ export default function HadithHome() {
     if (!text.trim()) setQuery("");
   }, []);
 
-  const hero = useMemo<PageHeroProps>(
+  const hero = useMemo<HeroBar>(
     () => ({
+      action: {
+        icon: "heart",
+        label: t("azkar:openFavorites"),
+        onPress: openFavorites,
+      },
       title: t("tabs.hadith"),
       subtitle: t("hadith:tagline"),
-      source: PAGE_MOSQUES.hadith,
-      height: HERO,
       search: {
         value: draft,
         onChangeText,
@@ -58,7 +66,14 @@ export default function HadithHome() {
   const header = useMemo(
     () => (
       <>
-        <PageHero {...hero} />
+        <IllustratedHero
+          title={hero.title}
+          subtitle={hero.subtitle}
+          art={<HadithArt />}
+          leading={<HijriDateChip />}
+          search={hero.search}
+          action={hero.action}
+        />
         <HadithIntro query={query} />
       </>
     ),
@@ -86,11 +101,11 @@ export default function HadithHome() {
         onEndReached={searching ? undefined : loadMore}
         onEndReachedThreshold={0.6}
         ListFooterComponent={
-          !searching && hasMore && loading ? HadithListFooter : null
+          !searching && hasMore && loading ? HadithListFooter : undefined
         }
         ListHeaderComponent={header}
       />
-      <CompactHeroBar hero={hero} visible={compact} />
+      <CompactHeroBar hero={hero} visible={compact} overImage={false} />
     </View>
   );
 }

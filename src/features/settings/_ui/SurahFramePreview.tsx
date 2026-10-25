@@ -1,10 +1,10 @@
 import PressableScale from "@/components/ui/PressableScale";
-import useFrameSvg from "@/features/quran/_components/useFrameSvg";
 import useMushafColors from "@/features/quran/_components/useMushafColors";
 import useThemeColors from "@/hooks/useThemeColors";
+import { FRAME_IMAGES } from "@/features/quran/_data/frameImages";
+import { Image } from "expo-image";
 import { memo } from "react";
-import { ActivityIndicator, View } from "react-native";
-import Svg, { G } from "react-native-svg";
+import { StyleSheet, View } from "react-native";
 
 export default memo(function SurahFramePreview({
   id,
@@ -17,7 +17,6 @@ export default memo(function SurahFramePreview({
 }) {
   const colors = useThemeColors();
   const mushaf = useMushafColors();
-  const frame = useFrameSvg(id);
 
   return (
     <PressableScale
@@ -34,17 +33,12 @@ export default memo(function SurahFramePreview({
         style={{ aspectRatio: 6.4 }}
         className="items-center justify-center"
       >
-        {frame ? (
-          <Svg
-            width="100%"
-            height="100%"
-            viewBox={`${frame.x} ${frame.y} ${frame.width} ${frame.height}`}
-          >
-            <G>{frame.content}</G>
-          </Svg>
-        ) : (
-          <ActivityIndicator color={mushaf.gold} />
-        )}
+        <Image
+          source={FRAME_IMAGES[id - 1]}
+          style={StyleSheet.absoluteFill}
+          contentFit="contain"
+          transition={0}
+        />
       </View>
     </PressableScale>
   );

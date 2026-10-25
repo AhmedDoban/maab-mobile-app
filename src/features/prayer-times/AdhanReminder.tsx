@@ -3,7 +3,6 @@ import { useAppSelector } from "@/store/Store";
 import * as Haptics from "expo-haptics";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { InteractionManager } from "react-native";
 import {
   adhanPlaysNatively,
   configurePrayerNotifications,
@@ -20,7 +19,8 @@ import {
   usePrayerConfig,
   usePrayerDay,
 } from "./_components/usePrayerSchedule";
-import { AdhanSoundId } from "./_data/adhanSounds";
+import { adhanFor, AdhanSoundId } from "./_data/adhanSounds";
+import { shallowEqual } from "react-redux";
 import { addDays, prayerDates } from "./_data/calculate";
 import { getPrayerStartingNow } from "./_data/schedule";
 import { PrayerName, REMINDER_PRAYERS } from "./_data/types";
@@ -39,8 +39,15 @@ export default function AdhanReminder() {
     day ? getPrayerStartingNow(day.times, now) : null,
   );
   const reminders = useAppSelector((s) => s.settings.prayerReminders);
-  const sound = useAppSelector((s) => s.settings.adhanSound);
-  const customUri = useAppSelector((s) => s.settings.customAdhan?.uri ?? null);
+  const adhan = useAppSelector(
+    (s) => ({
+      adhanSound: s.settings.adhanSound,
+      customAdhan: s.settings.customAdhan,
+      adhanPerPrayer: s.settings.adhanPerPrayer,
+      prayerAdhans: s.settings.prayerAdhans,
+    }),
+    shallowEqual,
+  );
   const [active, setActive] = useState<{
     prayer: PrayerName;
     nativeAudio: boolean;
@@ -71,10 +78,10 @@ export default function AdhanReminder() {
     t("channelName", { sound: t(`settings:sounds.${id}`) });
 
   useEffect(() => {
-    const task = InteractionManager.runAfterInteractions(() => {
+    const task = requestIdleCallback(() => {
       configurePrayerNotifications(channelName);
     });
-    return () => task.cancel();
+    return () => cancelIdleCallback(task);
   }, [i18n.language]);
 
   useEffect(() => {
@@ -113,8 +120,7 @@ export default function AdhanReminder() {
     );
     syncPrayerNotifications({
       alerts,
-      sound,
-      customUri,
+      adhanFor: (prayer) => adhanFor(adhan, prayer),
       channelName,
       playbackChannel: t("playbackChannel"),
       stopLabel: t("stopAdhan"),
@@ -122,12 +128,12 @@ export default function AdhanReminder() {
         t("notificationTitle", { prayer: label(prayer, date.getDay() === 5) }),
       body: t("notificationBody"),
     });
-  }, [config, day, reminders, sound, customUri, i18n.language]);
+  }, [config, day, reminders, adhan, i18n.language]);
 
   return (
     <AdhanSplash
       prayer={active?.prayer ?? null}
-      sound={sound}
+      adhan={active ? adhanFor(adhan, active.prayer) : null}
       nativeAudio={active?.nativeAudio ?? false}
       time={active && day ? day.times[active.prayer] : undefined}
       onClose={close}

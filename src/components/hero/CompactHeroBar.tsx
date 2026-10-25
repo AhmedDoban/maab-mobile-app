@@ -12,7 +12,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeroSearchField from "./HeroSearchField";
-import type { PageHeroProps } from "./PageHero";
+import type { HeroBar } from "./heroTypes";
 
 const BUTTON = 42;
 const BAR = 64;
@@ -20,15 +20,17 @@ const BAR = 64;
 export default memo(function CompactHeroBar({
   hero,
   visible,
+  overImage = true,
 }: {
-  hero: PageHeroProps;
+  hero: HeroBar;
   visible: boolean;
+  overImage?: boolean;
 }) {
   const insets = useSafeAreaInsets();
   const colors = useThemeColors();
   const progress = useSharedValue(visible ? 1 : 0);
   const tint = colors.isDark ? colors.brand.deep : colors.brand.main;
-  useStatusBarStyle(visible ? null : "light");
+  useStatusBarStyle(visible || !overImage ? null : "light");
 
   useEffect(() => {
     progress.set(

@@ -2,7 +2,9 @@ import * as DocumentPicker from "expo-document-picker";
 import { Platform } from "react-native";
 import { CustomAdhan } from "../_data/adhanSounds";
 
-export default async function pickCustomAdhan(): Promise<CustomAdhan | null> {
+export default async function pickCustomAdhan(
+  slot = "all",
+): Promise<CustomAdhan | null> {
   const result = await DocumentPicker.getDocumentAsync({
     type: "audio/*",
     copyToCacheDirectory: true,
@@ -14,7 +16,7 @@ export default async function pickCustomAdhan(): Promise<CustomAdhan | null> {
   if (Platform.OS === "web") return { uri: asset.uri, name };
 
   const { Directory, File, Paths } = await import("expo-file-system");
-  const folder = new Directory(Paths.document, "adhan");
+  const folder = new Directory(Paths.document, "adhan", slot);
   folder.create({ idempotent: true, intermediates: true });
   for (const old of folder.list()) old.delete();
 

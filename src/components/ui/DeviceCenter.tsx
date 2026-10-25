@@ -1,9 +1,9 @@
 import { PropsWithChildren, useRef, useState } from "react";
-import { useWindowDimensions, View } from "react-native";
+import { useWindowDimensions, View, type ViewInstance } from "react-native";
 
 export default function DeviceCenter({ children }: PropsWithChildren) {
   const { height: screenHeight } = useWindowDimensions();
-  const box = useRef<View>(null);
+  const box = useRef<ViewInstance>(null);
   const [boxTop, setBoxTop] = useState<number | null>(null);
   const [contentHeight, setContentHeight] = useState(0);
 

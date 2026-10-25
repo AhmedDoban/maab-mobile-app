@@ -1,3 +1,4 @@
+import { IconKey } from "@/components/ui/Icon";
 import { Locale } from "@/i18n/config";
 
 export interface ZikrContent {
@@ -26,4 +27,5 @@ export interface AzkarCategory {
   resetEachPrayer?: boolean;
   fridayOnly?: boolean;
   goals: ZikrGoal[];
+  icon?: IconKey;
 }

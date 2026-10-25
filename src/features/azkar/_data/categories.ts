@@ -38,6 +38,7 @@ const categories: AzkarCategory[] = [
       { id: 30, count: 100 },
       { id: 31, count: 100 },
     ],
+    icon: "dhuhr",
   },
   {
     id: "evening_azkar",
@@ -75,6 +76,7 @@ const categories: AzkarCategory[] = [
       { id: 29, count: 1 },
       { id: 30, count: 100 },
     ],
+    icon: "isha",
   },
   {
     id: "prayer_later_azkar",
@@ -94,6 +96,7 @@ const categories: AzkarCategory[] = [
       { id: 10, count: 7 },
       { id: 11, count: 1 },
     ],
+    icon: "prayer",
   },
   {
     id: "sleep_azkar",
@@ -116,6 +119,7 @@ const categories: AzkarCategory[] = [
       { id: 12, count: 1 },
       { id: 13, count: 1 },
     ],
+    icon: "sleep",
   },
   {
     id: "friday_salawat",
@@ -123,6 +127,7 @@ const categories: AzkarCategory[] = [
     featured: true,
     fridayOnly: true,
     goals: [{ id: 1, count: 100 }],
+    icon: "muhammad",
   },
   {
     id: "wake_up_azkar",
@@ -133,6 +138,7 @@ const categories: AzkarCategory[] = [
       { id: 2, count: 1 },
       { id: 3, count: 1 },
     ],
+    icon: "wakeUp",
   },
   {
     id: "adhan_azkar",
@@ -149,6 +155,7 @@ const categories: AzkarCategory[] = [
       { id: 8, count: 1 },
       { id: 9, count: 1 },
     ],
+    icon: "azan",
   },
   {
     id: "wudu_azkar",
@@ -158,6 +165,7 @@ const categories: AzkarCategory[] = [
       { id: 1, count: 1 },
       { id: 2, count: 1 },
     ],
+    icon: "wudu",
   },
   {
     id: "mosque_azkar",
@@ -168,6 +176,7 @@ const categories: AzkarCategory[] = [
       { id: 2, count: 1 },
       { id: 3, count: 1 },
     ],
+    icon: "mosque",
   },
   {
     id: "home_azkar",
@@ -177,6 +186,7 @@ const categories: AzkarCategory[] = [
       { id: 1, count: 1 },
       { id: 2, count: 1 },
     ],
+    icon: "homeEnter",
   },
   {
     id: "khala_azkar",
@@ -186,6 +196,7 @@ const categories: AzkarCategory[] = [
       { id: 1, count: 1 },
       { id: 2, count: 1 },
     ],
+    icon: "khala",
   },
   {
     id: "food_azkar",
@@ -198,6 +209,7 @@ const categories: AzkarCategory[] = [
       { id: 4, count: 1 },
       { id: 5, count: 1 },
     ],
+    icon: "food",
   },
   {
     id: "hajj_and_umrah_azkar",
@@ -207,6 +219,7 @@ const categories: AzkarCategory[] = [
       { id: 1, count: 1 },
       { id: 2, count: 1 },
     ],
+    icon: "haji",
   },
   {
     id: "clothing_azkar",
@@ -216,6 +229,7 @@ const categories: AzkarCategory[] = [
       { id: 1, count: 1 },
       { id: 2, count: 1 },
     ],
+    icon: "clothes",
   },
   {
     id: "distress_azkar",
@@ -229,6 +243,7 @@ const categories: AzkarCategory[] = [
       { id: 29, count: 1 },
       { id: 33, count: 1 },
     ],
+    icon: "salah",
   },
   {
     id: "nature_azkar",
@@ -240,6 +255,7 @@ const categories: AzkarCategory[] = [
       { id: 9, count: 1 },
       { id: 28, count: 1 },
     ],
+    icon: "nature",
   },
   {
     id: "travel_azkar",
@@ -252,6 +268,7 @@ const categories: AzkarCategory[] = [
       { id: 13, count: 1 },
       { id: 14, count: 1 },
     ],
+    icon: "flight",
   },
   {
     id: "prayer_duas",
@@ -263,6 +280,7 @@ const categories: AzkarCategory[] = [
       { id: 35, count: 1 },
       { id: 36, count: 1 },
     ],
+    icon: "prayer",
   },
   {
     id: "repentance_azkar",
@@ -274,6 +292,7 @@ const categories: AzkarCategory[] = [
       { id: 40, count: 1 },
       { id: 42, count: 1 },
     ],
+    icon: "pray",
   },
   {
     id: "sickness_azkar",
@@ -286,6 +305,7 @@ const categories: AzkarCategory[] = [
       { id: 41, count: 3 },
       { id: 42, count: 7 },
     ],
+    icon: "sick",
   },
   {
     id: "marriage_azkar",
@@ -296,6 +316,7 @@ const categories: AzkarCategory[] = [
       { id: 23, count: 1 },
       { id: 24, count: 1 },
     ],
+    icon: "marriage",
   },
   {
     id: "daily_life_azkar",
@@ -313,6 +334,7 @@ const categories: AzkarCategory[] = [
       { id: 37, count: 1 },
       { id: 39, count: 1 },
     ],
+    icon: "reminderIcon",
   },
   {
     id: "prophetic_duas",
@@ -349,6 +371,7 @@ const categories: AzkarCategory[] = [
       { id: 28, count: 1 },
       { id: 29, count: 1 },
     ],
+    icon: "dua",
   },
   {
     id: "quran_duas",
@@ -382,6 +405,7 @@ const categories: AzkarCategory[] = [
       { id: 25, count: 1 },
       { id: 26, count: 1 },
     ],
+    icon: "quran",
   },
   {
     id: "prophets_duas",
@@ -402,12 +426,14 @@ const categories: AzkarCategory[] = [
       { id: 12, count: 1 },
       { id: 13, count: 1 },
     ],
+    icon: "sujood",
   },
   {
     id: "quran_completion_duas",
     title: { ar: "دعاء ختم القرآن", en: "Dua for Completing the Quran" },
     featured: false,
     goals: [{ id: 1, count: 1 }],
+    icon: "quran1",
   },
 ];
 

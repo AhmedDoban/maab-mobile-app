@@ -7,4 +7,10 @@
   <string name="widget_dhikr_hint">A short dhikr that changes every day</string>
   <string name="widget_open_app">Open the app to load prayer times</string>
   <string name="widget_dhikr_default">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</string>
+  <string name="widget_next_small">Next prayer (compact)</string>
+  <string name="widget_next_small_hint">The next prayer and time left, in a small square</string>
+  <string name="widget_today">Today\'s prayers</string>
+  <string name="widget_today_hint">Every prayer of the day in a list, with the next one highlighted</string>
+  <string name="widget_modern">Prayer times (new design)</string>
+  <string name="widget_modern_hint">A light card with the next prayer, time left and all five prayers</string>
 </resources>

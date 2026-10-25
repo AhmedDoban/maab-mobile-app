@@ -1,2 +1,9 @@
 "widget.name" = "Next prayer";
 "widget.description" = "The next prayer with a live countdown";
+"widget.times.name" = "Prayer times";
+"widget.times.description" = "Today's prayers with the next one highlighted";
+"widget.dhikr.name" = "Dhikr of the day";
+"widget.dhikr.description" = "A short dhikr that changes every day";
+"widget.openApp" = "Open Maab to load prayer times";
+"widget.modern.name" = "Prayer times (new design)";
+"widget.modern.description" = "A light card with the next prayer, time left and all five prayers";

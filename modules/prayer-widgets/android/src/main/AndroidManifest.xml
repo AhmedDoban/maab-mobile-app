@@ -18,6 +18,24 @@
       </intent-filter>
       <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_dhikr_info" />
     </receiver>
+    <receiver android:name="expo.modules.prayerwidgets.NextPrayerSmallWidget" android:label="@string/widget_next_small" android:exported="false">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_next_small_info" />
+    </receiver>
+    <receiver android:name="expo.modules.prayerwidgets.TodayWidget" android:label="@string/widget_today" android:exported="false">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_today_info" />
+    </receiver>
+    <receiver android:name="expo.modules.prayerwidgets.ModernPrayerWidget" android:label="@string/widget_modern" android:exported="false">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_modern_info" />
+    </receiver>
     <receiver android:name="expo.modules.prayerwidgets.WidgetRefreshReceiver" android:exported="false">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED" />

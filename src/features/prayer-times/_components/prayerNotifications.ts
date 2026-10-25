@@ -1,6 +1,7 @@
 import { isRunningInExpoGo } from "expo";
 import { AppState, Platform } from "react-native";
 import {
+  AdhanChoice,
   AdhanSoundId,
   BUNDLED_SOUNDS,
   channelId,
@@ -87,8 +88,7 @@ type PrayerAlert = { prayer: PrayerName; date: Date };
 
 type SyncOptions = {
   alerts: PrayerAlert[];
-  sound: AdhanSoundId;
-  customUri: string | null;
+  adhanFor: (prayer: PrayerName) => AdhanChoice;
   channelName: (id: AdhanSoundId) => string;
   playbackChannel: string;
   stopLabel: string;
@@ -120,8 +120,7 @@ export function syncPrayerNotifications(options: SyncOptions) {
 async function reschedule(
   {
     alerts,
-    sound,
-    customUri,
+    adhanFor,
     channelName,
     playbackChannel,
     stopLabel,
@@ -139,15 +138,16 @@ async function reschedule(
   const now = Date.now();
   const wanted = new Map<
     string,
-    { prayer: PrayerName; date: Date; title: string }
+    { prayer: PrayerName; date: Date; title: string; adhan: AdhanChoice }
   >();
   for (const { prayer, date } of alerts) {
     if (date.getTime() <= now) continue;
     const text = title(prayer, date);
+    const adhan = adhanFor(prayer);
     const id = `${ID_PREFIX}${date.getTime()}-${prayer}-${signature(
-      `${sound}|${text}|${body}`,
+      `${adhan.sound}|${adhan.custom?.uri ?? ""}|${text}|${body}`,
     )}`;
-    wanted.set(id, { prayer, date, title: text });
+    wanted.set(id, { prayer, date, title: text, adhan });
   }
 
   const scheduled = await Notifications.getAllScheduledNotificationsAsync();
@@ -164,15 +164,15 @@ async function reschedule(
     );
     if (stale()) return;
     scheduleAdhanAlarms(
-      [...wanted].map(([id, { prayer, date, title: text }]) => ({
+      [...wanted].map(([id, { prayer, date, title: text, adhan }]) => ({
         id,
         at: date.getTime(),
         prayer,
         title: text,
         body,
-        channelId: channelId(sound),
-        sound: channelId(sound),
-        soundUri: sound === "custom" ? (customUri ?? "") : "",
+        channelId: channelId(adhan.sound),
+        sound: channelId(adhan.sound),
+        soundUri: adhan.sound === "custom" ? (adhan.custom?.uri ?? "") : "",
         channelName: playbackChannel,
         stopLabel,
       })),
@@ -194,7 +194,7 @@ async function reschedule(
       ),
   );
 
-  for (const [identifier, { prayer, date, title: text }] of wanted) {
+  for (const [identifier, { prayer, date, title: text, adhan }] of wanted) {
     if (stale()) return;
     if (existing.has(identifier)) continue;
     await Notifications.scheduleNotificationAsync({
@@ -202,13 +202,13 @@ async function reschedule(
       content: {
         title: text,
         body,
-        sound: notificationSound(sound, Platform.OS === "ios"),
+        sound: notificationSound(adhan.sound, Platform.OS === "ios"),
         data: { prayer },
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
         date,
-        channelId: channelId(sound),
+        channelId: channelId(adhan.sound),
       },
     }).catch(() => {});
   }

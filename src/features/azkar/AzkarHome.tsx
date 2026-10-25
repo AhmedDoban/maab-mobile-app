@@ -1,102 +1,104 @@
-import HeroScreen from "@/components/hero/HeroScreen";
-import { PageHeroProps } from "@/components/hero/PageHero";
+import HijriDateChip from "@/features/prayer-times/_ui/HijriDateChip";
+import MihrabArt from "@/components/art/MihrabArt";
+import CompactHeroBar from "@/components/hero/CompactHeroBar";
+import IllustratedHero from "@/components/hero/IllustratedHero";
+import type { HeroAction, HeroSearch } from "@/components/hero/heroTypes";
+import ContentColumn from "@/components/ui/ContentColumn";
 import EmptyState from "@/components/ui/EmptyState";
-import OrnamentHeading from "@/components/ui/OrnamentHeading";
-import { PAGE_MOSQUES } from "@/constants/mosques";
 import PrayerTimesCard from "@/features/prayer-times/PrayerTimesCard";
+import useCompactHero from "@/hooks/useCompactHero";
+import useDirection from "@/hooks/useDirection";
+import useTabBarSpace from "@/hooks/useTabBarSpace";
 import { router } from "expo-router";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
-import {
-  categories,
-  dailyCategories,
-  isFriday,
-  searchCategories,
-} from "./_data";
+import Animated from "react-native-reanimated";
+import { isFriday, searchCategories } from "./_data";
 import CategoryGrid from "./_ui/CategoryGrid";
-import FeaturedCard from "./_ui/FeaturedCard";
-import SurahCard from "./_ui/SurahCard";
+import DailyJourneyCard from "./_ui/DailyJourneyCard";
+import DailyWirdSection from "./_ui/DailyWirdSection";
+import ExploreSection from "./_ui/ExploreSection";
 import VerseOfDayCard from "./_ui/VerseOfDayCard";
 
-const otherCategories = categories.filter((c) => !c.featured);
+const COMPACT_HEIGHT = 150;
 
 const openFavorites = () => router.push("/favorites");
 
 export default function AzkarHome() {
   const { t } = useTranslation(["azkar", "common"]);
+  const { direction } = useDirection();
+  const tabBarSpace = useTabBarSpace();
   const [query, setQuery] = useState("");
   const results = useMemo(() => searchCategories(query), [query]);
   const searching = query.trim().length > 0;
   const friday = isFriday();
-  const daily = useMemo(() => dailyCategories(), [friday]);
+  const { compact, onScroll } = useCompactHero(COMPACT_HEIGHT);
 
-  const hero = useMemo<PageHeroProps>(
+  const search = useMemo<HeroSearch>(
     () => ({
-      title: t("common:tabs.azkar"),
-      subtitle: t("tagline"),
-      source: PAGE_MOSQUES.home,
-      action: {
-        icon: "heart",
-        label: t("openFavorites"),
-        onPress: openFavorites,
-      },
-      search: {
-        value: query,
-        onChangeText: setQuery,
-        placeholder: t("searchPlaceholder"),
-      },
+      value: query,
+      onChangeText: setQuery,
+      placeholder: t("searchPlaceholder"),
     }),
     [t, query],
   );
+  const action = useMemo<HeroAction>(
+    () => ({
+      icon: "heart",
+      label: t("openFavorites"),
+      onPress: openFavorites,
+    }),
+    [t],
+  );
+  const bar = useMemo(
+    () => ({ title: t("common:tabs.azkar"), search, action }),
+    [t, search, action],
+  );
+  const contentStyle = useMemo(
+    () => ({ paddingBottom: tabBarSpace + 24 }),
+    [tabBarSpace],
+  );
 
   return (
-    <HeroScreen hero={hero}>
-      {searching ? (
-        results.length > 0 ? (
-          <CategoryGrid categories={results} />
-        ) : (
-          <EmptyState icon="search" title={t("noResults")} />
-        )
-      ) : (
-        <>
-          <PrayerTimesCard />
-
-          <View className="gap-4">
-            <OrnamentHeading title={t("featured")} />
-            <View className="flex-row flex-wrap gap-3">
-              {friday ? (
-                <View className="basis-[47%] grow">
-                  <SurahCard
-                    surahId={18}
-                    title={t("surahKahf")}
-                    subtitle={t("fridaySunnah")}
-                  />
-                </View>
-              ) : null}
-              {daily.map((category) => (
-                <View key={category.id} className="basis-[47%] grow">
-                  <FeaturedCard category={category} />
-                </View>
-              ))}
-              <View className="basis-[47%] grow">
-                <SurahCard
-                  surahId={67}
-                  title={t("surahMulk")}
-                  subtitle={t("mulkHint")}
-                />
-              </View>
-            </View>
-          </View>
-
-          <VerseOfDayCard />
-
-          <View className="gap-4">
-            <OrnamentHeading title={t("allCategories")} />
-            <CategoryGrid categories={otherCategories} />
-          </View>
-        </>
-      )}
-    </HeroScreen>
+    <View className="flex-1 bg-main-bg">
+      <Animated.ScrollView
+        className="flex-1 bg-main-bg"
+        style={{ direction }}
+        contentContainerStyle={contentStyle}
+        contentInsetAdjustmentBehavior="never"
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="handled"
+        scrollEventThrottle={16}
+        onScroll={onScroll}
+      >
+        <IllustratedHero
+          title={t("greeting")}
+          subtitle={t("homeTagline")}
+          art={<MihrabArt />}
+          leading={<HijriDateChip />}
+          search={search}
+          action={action}
+        />
+        <ContentColumn className="gap-6 px-4">
+          {searching ? (
+            results.length > 0 ? (
+              <CategoryGrid categories={results} />
+            ) : (
+              <EmptyState icon="search" title={t("noResults")} />
+            )
+          ) : (
+            <>
+              <PrayerTimesCard />
+              <DailyWirdSection friday={friday} />
+              <VerseOfDayCard />
+              <ExploreSection />
+              <DailyJourneyCard friday={friday} />
+            </>
+          )}
+        </ContentColumn>
+      </Animated.ScrollView>
+      <CompactHeroBar hero={bar} visible={compact} overImage={false} />
+    </View>
   );
 }

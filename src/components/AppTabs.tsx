@@ -11,7 +11,7 @@ import {
   type BottomTabNavigationOptions,
 } from "expo-router/js-tabs";
 import { useCallback, useMemo } from "react";
-import { NativeTabs } from "expo-router/unstable-native-tabs";
+import { NativeTabs } from "expo-router/native-tabs";
 import { StatusBarProvider } from "@/components/StatusBarStyle";
 import { useTranslation } from "react-i18next";
 import { Easing, Platform, View } from "react-native";

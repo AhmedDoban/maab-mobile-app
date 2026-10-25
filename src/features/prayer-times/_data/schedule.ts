@@ -6,13 +6,13 @@ import { PrayerName, REMINDER_PRAYERS } from "./types";
 export type PrayerStatus = "passed" | "next" | "upcoming";
 type PrayerClock = Record<PrayerName, string>;
 
-interface ScheduledPrayer {
+export interface ScheduledPrayer {
   name: PrayerName;
   time: string;
   status: PrayerStatus;
 }
 
-interface NextPrayer {
+export interface NextPrayer {
   name: PrayerName;
   time: string;
   minutesLeft: number;
@@ -115,3 +115,14 @@ export function getPrayerDay(config: PrayerConfig, now: Date): PrayerDay {
   cachedDay = { config, key, day };
   return day;
 }
+
+export type PrayerCardProps = {
+  day: PrayerDay;
+  prayers: ScheduledPrayer[];
+  next: NextPrayer;
+  now: Date;
+  isFriday: boolean;
+  city: string | null;
+  showHint: boolean;
+  onDenied: () => void;
+};

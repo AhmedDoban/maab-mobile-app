@@ -40,16 +40,48 @@ object WidgetRenderer {
     val next = ids(context, manager, NextPrayerWidget::class.java)
     val times = ids(context, manager, PrayerTimesWidget::class.java)
     val dhikr = ids(context, manager, DhikrWidget::class.java)
-    next.forEach { manager.updateAppWidget(it, nextPrayer(context, manager, it, payload, now)) }
-    times.forEach { manager.updateAppWidget(it, prayerTimes(context, payload, now)) }
+    val small = ids(context, manager, NextPrayerSmallWidget::class.java)
+    val today = ids(context, manager, TodayWidget::class.java)
+    val modern = ids(context, manager, ModernPrayerWidget::class.java)
+    next.forEach { update(context, manager, it, Kind.NEXT, payload, now) }
+    times.forEach { update(context, manager, it, Kind.TIMES, payload, now) }
     dhikr.forEach { manager.updateAppWidget(it, dhikr(context, payload, now)) }
+    small.forEach { update(context, manager, it, Kind.SMALL, payload, now) }
+    today.forEach { update(context, manager, it, Kind.TODAY, payload, now) }
+    modern.forEach { update(context, manager, it, Kind.MODERN, payload, now) }
     LockScreenPrayer.update(context, payload, now)
     val lockScreen = payload?.lockScreen == true
-    if (next.isNotEmpty() || times.isNotEmpty() || dhikr.isNotEmpty() || lockScreen) {
-      WidgetScheduler.schedule(context, payload, now, next.isNotEmpty() || times.isNotEmpty())
+    val timed = next.isNotEmpty() || times.isNotEmpty() || small.isNotEmpty() ||
+      today.isNotEmpty() || modern.isNotEmpty()
+    if (timed || dhikr.isNotEmpty() || lockScreen) {
+      WidgetScheduler.schedule(context, payload, now, timed)
     } else {
       WidgetScheduler.cancel(context)
     }
+  }
+
+  private enum class Kind { NEXT, TIMES, SMALL, TODAY, MODERN }
+
+  private const val COMPACT_WIDTH = 200f
+  private const val TALL_HEIGHT = 230f
+
+  private fun update(
+    context: Context,
+    manager: AppWidgetManager,
+    id: Int,
+    kind: Kind,
+    payload: WidgetPayload?,
+    now: Long
+  ) {
+    val (w, h) = size(manager, id)
+    val views = when {
+      w < COMPACT_WIDTH -> nextSmall(context, payload, now)
+      h >= TALL_HEIGHT -> today(context, payload, now)
+      kind == Kind.TIMES || kind == Kind.TODAY -> prayerTimes(context, payload, now)
+      kind == Kind.MODERN -> modern(context, payload, now)
+      else -> nextPrayer(context, manager, id, payload, now)
+    }
+    manager.updateAppWidget(id, views)
   }
 
   private fun ids(context: Context, manager: AppWidgetManager, type: Class<*>) =
@@ -245,6 +277,153 @@ object WidgetRenderer {
         )
       }
       day.forEach { views.addView(R.id.row, prayerTile(context, it, next, now)) }
+    }
+    views.setOnClickPendingIntent(R.id.root, openApp(context))
+    return views
+  }
+
+  private fun leftText(payload: WidgetPayload, now: Long): String {
+    val minutes = payload.minutesLeft(now)
+    return "${payload.leftTitle} ${minutes / 60}:${(minutes % 60).toString().padStart(2, '0')}"
+  }
+
+  private fun nextSmall(context: Context, payload: WidgetPayload?, now: Long): RemoteViews {
+    val views = RemoteViews(context.packageName, R.layout.widget_next_small)
+    background(views, payload)
+    val next = payload?.next(now)
+    if (payload == null || next == null) {
+      visible(views, R.id.content, false)
+      visible(views, R.id.empty, true)
+    } else {
+      visible(views, R.id.empty, false)
+      visible(views, R.id.content, true)
+      views.setTextViewText(R.id.title, payload.nextTitle)
+      views.setImageViewResource(R.id.icon, iconOf(next))
+      views.setTextViewText(R.id.name, next.label)
+      views.setTextViewText(R.id.time, next.time)
+      views.setTextViewText(R.id.left, leftText(payload, now))
+    }
+    views.setOnClickPendingIntent(R.id.root, openApp(context))
+    return views
+  }
+
+  private fun todayRow(
+    context: Context,
+    prayer: WidgetPrayer,
+    next: WidgetPrayer?,
+    now: Long,
+    rtl: Boolean
+  ): RemoteViews {
+    val row = RemoteViews(
+      context.packageName,
+      if (rtl) R.layout.widget_today_row_rtl else R.layout.widget_today_row
+    )
+    row.setTextViewText(R.id.rowName, prayer.label)
+    row.setTextViewText(R.id.rowTime, prayer.time)
+    row.setImageViewResource(R.id.rowIcon, iconOf(prayer))
+    when {
+      prayer == next -> {
+        row.setViewVisibility(R.id.rowBg, View.VISIBLE)
+        row.setTextColor(R.id.rowName, INK)
+        row.setTextColor(R.id.rowTime, INK)
+        row.setInt(R.id.rowIcon, "setColorFilter", INK)
+      }
+      prayer.at <= now -> {
+        val faded = Color.argb(PASSED_ALPHA, 255, 255, 255)
+        row.setTextColor(R.id.rowName, faded)
+        row.setTextColor(R.id.rowTime, faded)
+        row.setInt(R.id.rowIcon, "setImageAlpha", PASSED_ALPHA)
+      }
+    }
+    return row
+  }
+
+  private fun today(context: Context, payload: WidgetPayload?, now: Long): RemoteViews {
+    val views = RemoteViews(context.packageName, R.layout.widget_today)
+    background(views, payload)
+    views.removeAllViews(R.id.rows)
+    val day = payload?.day(now).orEmpty()
+    val next = payload?.next(now)
+    if (payload == null || day.isEmpty() || next == null) {
+      visible(views, R.id.content, false)
+      visible(views, R.id.empty, true)
+    } else {
+      visible(views, R.id.empty, false)
+      visible(views, R.id.content, true)
+      views.setTextViewText(R.id.title, payload.nextTitle)
+      views.setTextViewText(R.id.name, "${next.label} · ${next.time}")
+      views.setTextViewText(R.id.left, leftText(payload, now))
+      val date = payload.dateOf(now)
+      views.setTextViewText(
+        R.id.date,
+        if (payload.city.isEmpty()) date else "$date · ${payload.city}"
+      )
+      day.forEach { views.addView(R.id.rows, todayRow(context, it, next, now, payload.rtl)) }
+    }
+    views.setOnClickPendingIntent(R.id.root, openApp(context))
+    return views
+  }
+
+  private fun modernCell(
+    context: Context,
+    prayer: WidgetPrayer,
+    next: WidgetPrayer?,
+    now: Long,
+    accent: Int
+  ): RemoteViews {
+    val cell = RemoteViews(context.packageName, R.layout.widget_modern_cell)
+    cell.setTextViewText(R.id.cellName, prayer.label)
+    cell.setTextViewText(R.id.cellTime, prayer.time)
+    cell.setImageViewResource(R.id.cellIcon, iconOf(prayer))
+    if (prayer == next) {
+      cell.setViewVisibility(R.id.cellBg, View.VISIBLE)
+      cell.setInt(R.id.cellBg, "setColorFilter", accent)
+      cell.setTextColor(R.id.cellName, Color.WHITE)
+      cell.setTextColor(R.id.cellTime, Color.WHITE)
+      cell.setInt(R.id.cellIcon, "setColorFilter", Color.WHITE)
+    } else {
+      cell.setInt(R.id.cellIcon, "setColorFilter", accent)
+      if (prayer.at <= now) {
+        cell.setInt(R.id.cellIcon, "setImageAlpha", PASSED_ALPHA)
+        val ink = context.getColor(R.color.widget_card_ink)
+        val faded = Color.argb(PASSED_ALPHA, Color.red(ink), Color.green(ink), Color.blue(ink))
+        cell.setTextColor(R.id.cellName, faded)
+        cell.setTextColor(R.id.cellTime, faded)
+      }
+    }
+    return cell
+  }
+
+  private fun modern(context: Context, payload: WidgetPayload?, now: Long): RemoteViews {
+    val views = RemoteViews(
+      context.packageName,
+      layout(payload, R.layout.widget_modern, R.layout.widget_modern_rtl)
+    )
+    views.removeAllViews(R.id.row)
+    val day = payload?.day(now).orEmpty()
+    val next = payload?.next(now)
+    if (payload == null || day.isEmpty() || next == null) {
+      visible(views, R.id.content, false)
+      visible(views, R.id.empty, true)
+    } else {
+      visible(views, R.id.empty, false)
+      visible(views, R.id.content, true)
+      val accent = payload.color
+      views.setInt(R.id.circle, "setColorFilter", accent)
+      views.setImageViewResource(R.id.icon, iconOf(next))
+      views.setTextViewText(R.id.name, next.label)
+      views.setTextViewText(R.id.time, next.time)
+      views.setTextColor(R.id.time, accent)
+      views.setTextViewText(R.id.leftTitle, payload.leftTitle)
+      val minutes = payload.minutesLeft(now)
+      views.setTextViewText(
+        R.id.left,
+        "${minutes / 60}:${(minutes % 60).toString().padStart(2, '0')}"
+      )
+      visible(views, R.id.city, payload.city.isNotEmpty())
+      views.setTextViewText(R.id.city, payload.city)
+      views.setTextViewText(R.id.date, payload.dateOf(now))
+      day.forEach { views.addView(R.id.row, modernCell(context, it, next, now, accent)) }
     }
     views.setOnClickPendingIntent(R.id.root, openApp(context))
     return views

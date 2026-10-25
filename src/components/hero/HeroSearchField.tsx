@@ -1,10 +1,16 @@
 import Icon from "@/components/ui/Icon";
 import PressableScale from "@/components/ui/PressableScale";
 import useDirection from "@/hooks/useDirection";
+import useThemeColors from "@/hooks/useThemeColors";
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Keyboard, TextInput, View } from "react-native";
+import {
+  Keyboard,
+  TextInput,
+  View,
+  type TextInputInstance,
+} from "react-native";
 import Animated, {
   Easing,
   Extrapolation,
@@ -14,21 +20,25 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import SearchBackdrop from "./SearchBackdrop";
-import type { HeroAction, HeroSearch } from "./PageHero";
+import type { HeroAction, HeroSearch } from "./heroTypes";
 
 export default function HeroSearchField({
   search,
   action,
   size: SIZE = 56,
+  plain = false,
 }: {
   search: HeroSearch;
   action?: HeroAction;
   size?: number;
+  plain?: boolean;
 }) {
   const GAP = 10;
   const { t } = useTranslation("common");
   const { isRTL } = useDirection();
-  const input = useRef<TextInput>(null);
+  const colors = useThemeColors();
+  const tint = plain ? colors.ink : "#ffffff";
+  const input = useRef<TextInputInstance>(null);
   const [expanded, setExpanded] = useState(false);
   const open = expanded || search.value.length > 0;
   const [fullWidth, setFullWidth] = useState(0);
@@ -93,10 +103,11 @@ export default function HeroSearchField({
       {action ? (
         <SearchBackdrop
           size={SIZE}
+          plain={plain}
           style={[{ end: actionEnd, width: SIZE }, extra]}
         />
       ) : null}
-      <SearchBackdrop size={SIZE} style={pill} />
+      <SearchBackdrop size={SIZE} plain={plain} style={pill} />
 
       {action ? (
         <Animated.View
@@ -118,7 +129,7 @@ export default function HeroSearchField({
             accessibilityLabel={action.label}
             className="flex-1 items-center justify-center"
           >
-            <Icon name={action.icon} size={SIZE * 0.43} tintColor="#ffffff" />
+            <Icon name={action.icon} size={SIZE * 0.43} tintColor={tint} />
           </PressableScale>
         </Animated.View>
       ) : null}
@@ -144,7 +155,7 @@ export default function HeroSearchField({
             accessibilityLabel={t("clear")}
             className="ps-4 pe-1"
           >
-            <Icon name="close" size={SIZE * 0.4} tintColor="#ffffff" />
+            <Icon name="close" size={SIZE * 0.4} tintColor={tint} />
           </PressableScale>
           <TextInput
             ref={input}
@@ -152,10 +163,13 @@ export default function HeroSearchField({
             onChangeText={search.onChangeText}
             onSubmitEditing={search.onSubmitEditing}
             placeholder={search.placeholder}
-            placeholderTextColor="rgba(255, 255, 255, 0.75)"
+            placeholderTextColor={
+              plain ? colors.gray : "rgba(255, 255, 255, 0.75)"
+            }
             returnKeyType="search"
             className={cn(
-              "h-full flex-1 px-2 text-white",
+              "h-full flex-1 px-2",
+              plain ? "text-ink" : "text-white",
               SIZE < 50 ? "text-base" : "text-lg",
               isRTL ? "font-lama" : "font-space",
             )}
@@ -171,7 +185,7 @@ export default function HeroSearchField({
           className="absolute end-0 top-0 items-center justify-center"
           style={{ width: SIZE - 2, height: SIZE - 2 }}
         >
-          <Icon name="search" size={SIZE * 0.43} tintColor="#ffffff" />
+          <Icon name="search" size={SIZE * 0.43} tintColor={tint} />
         </PressableScale>
       </Animated.View>
     </View>

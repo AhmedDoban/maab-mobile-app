@@ -1,7 +1,10 @@
+import { router } from "expo-router";
+import HijriDateChip from "@/features/prayer-times/_ui/HijriDateChip";
 import ContentColumn from "@/components/ui/ContentColumn";
 import CompactHeroBar from "@/components/hero/CompactHeroBar";
-import PageHero, { PageHeroProps } from "@/components/hero/PageHero";
-import { PAGE_MOSQUES } from "@/constants/mosques";
+import MushafArt from "@/components/art/MushafArt";
+import IllustratedHero from "@/components/hero/IllustratedHero";
+import type { HeroBar } from "@/components/hero/heroTypes";
 import { normalizeQuran } from "@/features/azkar/_data/quran";
 import useCompactHero from "@/hooks/useCompactHero";
 import useDirection from "@/hooks/useDirection";
@@ -28,6 +31,8 @@ const renderRow: ListRenderItem<QuranRow> = ({ item, index }) => (
   <QuranListRow row={item} first={index === 0} />
 );
 
+const openFavorites = () => router.push("/quran-favorites");
+
 export default function QuranHome() {
   const { t } = useTranslation(["common", "azkar"]);
   const { direction } = useDirection();
@@ -45,12 +50,15 @@ export default function QuranHome() {
   const { results: verseResults } = useVerseSearch(deferredQuery);
 
   const onChangeText = useCallback((text: string) => setQuery(text), []);
-  const hero = useMemo<PageHeroProps>(
+  const hero = useMemo<HeroBar>(
     () => ({
+      action: {
+        icon: "heart",
+        label: t("azkar:openFavorites"),
+        onPress: openFavorites,
+      },
       title: t("tabs.quran"),
       subtitle: t("azkar:quranTagline"),
-      source: PAGE_MOSQUES.quran,
-      height: HERO,
       search: {
         value: query,
         onChangeText,
@@ -73,7 +81,14 @@ export default function QuranHome() {
 
   const header = (
     <>
-      <PageHero {...hero} />
+      <IllustratedHero
+        title={hero.title}
+        subtitle={hero.subtitle}
+        art={<MushafArt />}
+        leading={<HijriDateChip />}
+        search={hero.search}
+        action={hero.action}
+      />
       <ContentColumn className="gap-4 px-4 pt-2">
         {searching ? (
           <QuranSearchResults surahs={surahResults} verses={verseResults} />
@@ -116,7 +131,7 @@ export default function QuranHome() {
         windowSize={7}
         ListHeaderComponent={header}
       />
-      <CompactHeroBar hero={hero} visible={compact} />
+      <CompactHeroBar hero={hero} visible={compact} overImage={false} />
     </View>
   );
 }

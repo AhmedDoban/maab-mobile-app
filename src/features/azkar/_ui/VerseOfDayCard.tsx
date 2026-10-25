@@ -1,77 +1,89 @@
-import { memo } from "react";
 import AppText from "@/components/ui/AppText";
+import Icon from "@/components/ui/Icon";
 import IconCircle from "@/components/ui/IconCircle";
-import { Colors } from "@/constants/Colors";
+import PressableScale from "@/components/ui/PressableScale";
+import useThemeColors from "@/hooks/useThemeColors";
+import { memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Image, StyleSheet, View } from "react-native";
+import { View } from "react-native";
+import useSavedAyah from "../_components/useSavedAyah";
 import { getRandomVerse, toArabicDigits } from "../_data/quran";
-
-const BACKGROUND = require("@/assets/images/qoran_bg.webp");
-const LIGHT = Colors.light;
-const CREAM = "#fbfaf4";
+import PaperBackground from "./PaperBackground";
 
 export default memo(function VerseOfDayCard() {
   const { t, i18n } = useTranslation("azkar");
   const verse = getRandomVerse();
+  const colors = useThemeColors();
   const english = i18n.language === "en";
+  const { saved, toggle } = useSavedAyah(verse.surahId, verse.ayah);
 
   return (
-    <View
-      className="overflow-hidden rounded-[28px] border"
-      style={{ backgroundColor: CREAM, borderColor: LIGHT.line }}
+    <PaperBackground
+      style={{
+        borderRadius: 16,
+        borderWidth: 1,
+        borderColor: colors.line,
+      }}
+      baseColor={colors.surface}
+      ornamentColor={colors.main}
+      spread={0.7}
+      tileSize={30}
+      intensity={0.5}
+      patternTile={40}
+      patternOpacity={0.06}
+      pattern="girih"
     >
-      <Image
-        source={BACKGROUND}
-        resizeMode="cover"
-        style={[StyleSheet.absoluteFill, { width: "100%", height: "100%" }]}
-      />
+      <View className="gap-3 p-5">
+        <View className="flex-row items-center gap-2.5">
+          <IconCircle
+            icon="bookOpen"
+            tintColor={colors.main}
+            backgroundColor={colors.mainSoft}
+          />
+          <AppText weight="bold" className="text-lg text-main">
+            {t("verseOfDay")}
+          </AppText>
+        </View>
 
-      <View className="flex-row" style={{ direction: "ltr" }}>
-        <View style={{ width: "34%" }} />
-        <View
-          className="flex-1 gap-3 py-5 pe-5 ps-2"
-          style={{ direction: english ? "ltr" : "rtl" }}
-        >
-          <View className="flex-row items-center gap-2.5">
-            <IconCircle
-              icon="quran"
-              tintColor={LIGHT.main}
-              backgroundColor={LIGHT.mainSoft}
-            />
-            <AppText
-              weight="bold"
-              className="text-base"
-              style={{ color: LIGHT.ink }}
-            >
-              {t("verseOfDay")}
-            </AppText>
-          </View>
+        {english ? (
+          <AppText
+            weight="bold"
+            className="text-center text-base leading-7 text-main"
+          >
+            {`“${verse.translation}”`}
+          </AppText>
+        ) : (
+          <AppText
+            variant="quran"
+            className="text-center"
+            style={{ fontSize: 22, lineHeight: 40, color: colors.main }}
+          >
+            {`﴿ ${verse.text} ﴾`}
+          </AppText>
+        )}
 
-          {english ? (
-            <AppText
-              weight="bold"
-              className="text-base leading-6"
-              style={{ color: LIGHT.main }}
-            >
-              {`“${verse.translation}”`}
-            </AppText>
-          ) : (
-            <AppText
-              variant="quran"
-              style={{ fontSize: 20, lineHeight: 38, color: LIGHT.main }}
-            >
-              {`﴿ ${verse.text} ﴾`}
-            </AppText>
-          )}
-
-          <AppText className="text-xs" style={{ color: LIGHT.gray }}>
+        <View className="flex-row items-center justify-between gap-3">
+          <AppText className="shrink text-sm text-main-gray">
             {t("verseRef", {
               surah: english ? verse.surahEn : verse.surah,
               ayah: english ? verse.ayah : toArabicDigits(verse.ayah),
             })}
           </AppText>
+          <PressableScale
+            hitSlop={10}
+            onPress={toggle}
+            accessibilityRole="button"
+            accessibilityState={{ selected: saved }}
+            accessibilityLabel={t(saved ? "unsaveAyah" : "saveAyah")}
+          >
+            <Icon
+              name={saved ? "bookmarkFill" : "bookmark"}
+              size={22}
+              tintColor={colors.main}
+            />
+          </PressableScale>
         </View>
       </View>
-    </View>
+    </PaperBackground>
   );
 });

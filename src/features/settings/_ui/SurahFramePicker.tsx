@@ -1,4 +1,4 @@
-import { FRAME_COUNT } from "@/features/quran/_data/frameSvgs";
+import { FRAME_IMAGES } from "@/features/quran/_data/frameImages";
 import { setSurahFrame } from "@/store/Slices/SettingsSlice";
 import { useAppDispatch, useAppSelector } from "@/store/Store";
 import * as Haptics from "expo-haptics";
@@ -6,7 +6,7 @@ import { useCallback } from "react";
 import { View } from "react-native";
 import SurahFramePreview from "./SurahFramePreview";
 
-const FRAME_IDS = Array.from({ length: FRAME_COUNT }, (_, i) => i + 1);
+const FRAME_IDS = Array.from({ length: FRAME_IMAGES.length }, (_, i) => i + 1);
 
 export default function SurahFramePicker() {
   const dispatch = useAppDispatch();

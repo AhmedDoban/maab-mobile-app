@@ -6,4 +6,10 @@
   <string name="widget_prayer_times_hint">صلوات اليوم الخمس في سطر واحد</string>
   <string name="widget_dhikr_hint">ذكر قصير يتغير كل يوم</string>
   <string name="widget_open_app">افتح التطبيق لتحميل المواقيت</string>
+  <string name="widget_next_small">الصلاة القادمة (مصغّرة)</string>
+  <string name="widget_next_small_hint">الصلاة القادمة والوقت المتبقي في مربع صغير</string>
+  <string name="widget_today">صلوات اليوم</string>
+  <string name="widget_today_hint">كل صلوات اليوم في قائمة مع إبراز الصلاة القادمة</string>
+  <string name="widget_modern">مواقيت الصلاة (التصميم الجديد)</string>
+  <string name="widget_modern_hint">بطاقة فاتحة بالصلاة القادمة والوقت المتبقي والصلوات الخمس</string>
 </resources>

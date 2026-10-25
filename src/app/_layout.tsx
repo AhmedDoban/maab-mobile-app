@@ -1,5 +1,5 @@
 import AppTabs from "@/components/AppTabs";
-import AnimatedSplash from "@/components/splash/AnimatedSplash";
+import StartupSplash from "@/components/splash/StartupSplash";
 import ThemeProvider from "@/components/theme/ThemeProvider";
 import "@/css/global.css";
 import useAppFonts from "@/hooks/useAppFonts";
@@ -27,7 +27,7 @@ export default function RootLayout() {
       <StoreProvider onReady={onStoreReady}>
         <ThemeProvider>
           <AppTabs />
-          {splashDone ? null : <AnimatedSplash onDone={onSplashDone} />}
+          {splashDone ? null : <StartupSplash onDone={onSplashDone} />}
         </ThemeProvider>
       </StoreProvider>
     </GestureHandlerRootView>

@@ -7,20 +7,20 @@ import { setAsrMethod, setPrayerMethod } from "@/store/Slices/SettingsSlice";
 import { useAppDispatch, useAppSelector } from "@/store/Store";
 import { useTranslation } from "react-i18next";
 import { Platform, View } from "react-native";
-import useLockScreenPrayer from "../_components/useLockScreenPrayer";
 import useSettingsColors from "../_components/useSettingsColors";
 import PrayerMethodList from "./PrayerMethodList";
+import useLockScreenPrayer from "../_components/useLockScreenPrayer";
 import SettingsCard from "./SettingsCard";
 import SettingsIconBadge from "./SettingsIconBadge";
 import SettingsSwitchRow from "./SettingsSwitchRow";
 
 export default function PrayerSettings() {
+  const lockScreen = useLockScreenPrayer();
   const { t } = useTranslation("settings");
   const dispatch = useAppDispatch();
   const palette = useSettingsColors();
   const method = useAppSelector((s) => s.settings.prayerMethod);
   const asr = useAppSelector((s) => s.settings.asrMethod);
-  const lockScreen = useLockScreenPrayer();
   const { location, status, retry } = usePrayerLocation();
   const city = useCityName(location?.city);
   const loading = status === "loading";

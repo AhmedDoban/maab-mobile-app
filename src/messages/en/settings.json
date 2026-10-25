@@ -206,5 +206,28 @@
   },
   "paletteApplying": "Applying color…",
   "paletteApplyingHint": "Just a moment while the app updates its colors",
-  "paletteIconHint": "The home screen icon updates after you leave the app and your phone's screen turns off."
+  "paletteIconHint": "The home screen icon updates after you leave the app and your phone's screen turns off.",
+  "prayerCardStyle": "Prayer times card",
+  "prayerCardStyles": {
+    "modern": {
+      "title": "Modern",
+      "hint": "Light card with a live countdown"
+    },
+    "classic": {
+      "title": "Classic",
+      "hint": "The colored card with the mosque window"
+    }
+  },
+  "prayerAlerts": "Adhan alert for each prayer",
+  "sameAdhan": {
+    "title": "Same adhan for all prayers",
+    "hint": "Turn off to choose a different adhan for each prayer"
+  },
+  "prayerAdhans": "Adhan for each prayer",
+  "prayerAdhanFor": "{{prayer}} adhan",
+  "startup": "When the app opens",
+  "showSplash": {
+    "title": "Show the splash screen",
+    "hint": "Plays the opening animation every time you open the app"
+  }
 }

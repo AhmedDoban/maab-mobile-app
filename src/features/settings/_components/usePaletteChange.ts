@@ -4,7 +4,6 @@ import { setPalette } from "@/store/Slices/SettingsSlice";
 import { Store, useAppDispatch, useAppSelector } from "@/store/Store";
 import * as Haptics from "expo-haptics";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { InteractionManager } from "react-native";
 
 const SHOW_DELAY = 120;
 const MIN_DURATION = 1200;
@@ -12,9 +11,7 @@ const MIN_DURATION = 1200;
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const afterInteractions = () =>
-  new Promise<void>((resolve) =>
-    InteractionManager.runAfterInteractions(() => resolve()),
-  );
+  new Promise<void>((resolve) => requestIdleCallback(() => resolve()));
 
 export default function usePaletteChange() {
   const dispatch = useAppDispatch();

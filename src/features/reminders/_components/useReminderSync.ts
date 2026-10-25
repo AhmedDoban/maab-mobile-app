@@ -3,7 +3,6 @@ import { useAppSelector } from "@/store/Store";
 import { shallowEqual } from "react-redux";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { InteractionManager } from "react-native";
 import {
   dhikrContents,
   quranContents,
@@ -26,7 +25,7 @@ export default function useReminderSync() {
   const locale = i18n.language as Locale;
 
   useEffect(() => {
-    const task = InteractionManager.runAfterInteractions(() => {
+    const task = requestIdleCallback(() => {
       const plans: ReminderPlan[] = [];
       if (dhikr.enabled) {
         const slots = reminderSlots("dhikr", dhikr.every);
@@ -56,6 +55,6 @@ export default function useReminderSync() {
       }
       syncReminderNotifications(plans, t("reminders.channel")).catch(() => {});
     });
-    return () => task.cancel();
+    return () => cancelIdleCallback(task);
   }, [dhikr, quran, locale]);
 }

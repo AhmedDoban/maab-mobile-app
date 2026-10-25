@@ -6,6 +6,7 @@ import {
 } from "@/features/prayer-times/_data/types";
 import {
   AdhanSoundId,
+  AdhanChoice,
   CustomAdhan,
   DEFAULT_ADHAN,
   isAdhanSound,
@@ -106,6 +107,29 @@ const toReminder = (
   every: isReminderInterval(value?.every) ? value.every : fallback.every,
 });
 
+export type PrayerCardStyle = "modern" | "classic";
+
+const isPrayerCardStyle = (value: unknown): value is PrayerCardStyle =>
+  value === "modern" || value === "classic";
+
+const toPrayerAdhans = (
+  value: unknown,
+): Partial<Record<PrayerName, AdhanChoice>> => {
+  if (!value || typeof value !== "object") return {};
+  const out: Partial<Record<PrayerName, AdhanChoice>> = {};
+  for (const prayer of REMINDER_PRAYERS) {
+    const item = (value as Record<string, Partial<AdhanChoice>>)[prayer];
+    if (!item || !isAdhanSound(item.sound)) continue;
+    const custom =
+      item.custom && typeof item.custom.uri === "string"
+        ? { uri: item.custom.uri, name: String(item.custom.name ?? "") }
+        : null;
+    if (item.sound === "custom" && !custom) continue;
+    out[prayer] = { sound: item.sound, custom };
+  }
+  return out;
+};
+
 export interface SettingsState {
   locale: Locale;
   theme: ThemePreference;
@@ -120,8 +144,12 @@ export interface SettingsState {
   prayerReminders: Partial<Record<PrayerName, boolean>>;
   reminderHintSeen: boolean;
   lockScreenPrayer: boolean;
+  prayerCardStyle: PrayerCardStyle;
+  showSplash: boolean;
   adhanSound: AdhanSoundId;
   customAdhan: CustomAdhan | null;
+  adhanPerPrayer: boolean;
+  prayerAdhans: Partial<Record<PrayerName, AdhanChoice>>;
   prayerLocation: PrayerLocation | null;
   prayerMethod: PrayerMethodSetting;
   asrMethod: AsrMethod;
@@ -143,8 +171,12 @@ const defaultSettings = (locale: Locale = defaultLocale): SettingsState => ({
   prayerReminders: Object.fromEntries(REMINDER_PRAYERS.map((p) => [p, true])),
   reminderHintSeen: false,
   lockScreenPrayer: false,
+  prayerCardStyle: "modern",
+  showSplash: true,
   adhanSound: DEFAULT_ADHAN,
   customAdhan: null,
+  adhanPerPrayer: false,
+  prayerAdhans: {},
   prayerLocation: null,
   prayerMethod: "auto",
   asrMethod: "auto",
@@ -163,6 +195,12 @@ export const SettingsSlice = createSlice({
     },
     setTheme(state, action: PayloadAction<ThemePreference>) {
       state.theme = action.payload;
+    },
+    setPrayerCardStyle(state, action: PayloadAction<PrayerCardStyle>) {
+      state.prayerCardStyle = action.payload;
+    },
+    setShowSplash(state, action: PayloadAction<boolean>) {
+      state.showSplash = action.payload;
     },
     setReminder(
       state,
@@ -238,6 +276,26 @@ export const SettingsSlice = createSlice({
     setAdhanSound(state, action: PayloadAction<AdhanSoundId>) {
       state.adhanSound = action.payload;
     },
+    setAdhanPerPrayer(state, action: PayloadAction<boolean>) {
+      state.adhanPerPrayer = action.payload;
+    },
+    setPrayerAdhan(
+      state,
+      action: PayloadAction<{ prayer: PrayerName; sound: AdhanSoundId }>,
+    ) {
+      const { prayer, sound } = action.payload;
+      const custom =
+        state.prayerAdhans[prayer]?.custom ??
+        (sound === "custom" ? state.customAdhan : null);
+      state.prayerAdhans[prayer] = { sound, custom };
+    },
+    setPrayerCustomAdhan(
+      state,
+      action: PayloadAction<{ prayer: PrayerName; file: CustomAdhan }>,
+    ) {
+      const { prayer, file } = action.payload;
+      state.prayerAdhans[prayer] = { sound: "custom", custom: file };
+    },
     setCustomAdhan(state, action: PayloadAction<CustomAdhan>) {
       state.customAdhan = action.payload;
       state.adhanSound = "custom";
@@ -285,6 +343,11 @@ export const SettingsSlice = createSlice({
           ? action.payload.adhanSound
           : state.adhanSound,
         customAdhan: action.payload.customAdhan ?? state.customAdhan,
+        adhanPerPrayer:
+          typeof action.payload.adhanPerPrayer === "boolean"
+            ? action.payload.adhanPerPrayer
+            : state.adhanPerPrayer,
+        prayerAdhans: toPrayerAdhans(action.payload.prayerAdhans),
         prayerLocation: action.payload.prayerLocation
           ? {
               ...action.payload.prayerLocation,
@@ -297,6 +360,13 @@ export const SettingsSlice = createSlice({
         asrMethod: isAsrMethod(action.payload.asrMethod)
           ? action.payload.asrMethod
           : state.asrMethod,
+        showSplash:
+          typeof action.payload.showSplash === "boolean"
+            ? action.payload.showSplash
+            : state.showSplash,
+        prayerCardStyle: isPrayerCardStyle(action.payload.prayerCardStyle)
+          ? action.payload.prayerCardStyle
+          : state.prayerCardStyle,
         lockScreenPrayer:
           typeof action.payload.lockScreenPrayer === "boolean"
             ? action.payload.lockScreenPrayer
@@ -340,6 +410,8 @@ export const SettingsSlice = createSlice({
 export const {
   setLocale,
   setTheme,
+  setPrayerCardStyle,
+  setShowSplash,
   setPalette,
   setReminder,
   setTextSize,
@@ -355,6 +427,9 @@ export const {
   togglePrayerReminder,
   setAdhanSound,
   setCustomAdhan,
+  setAdhanPerPrayer,
+  setPrayerAdhan,
+  setPrayerCustomAdhan,
   setPrayerLocation,
   setPrayerMethod,
   setAsrMethod,

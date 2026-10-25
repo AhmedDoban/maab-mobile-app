@@ -112,7 +112,9 @@ export default function CategoryContent({
         windowSize={7}
         removeClippedSubviews={Platform.OS === "android"}
         itemLayoutAnimation={hideCompleted ? LAYOUT : undefined}
-        ListHeaderComponent={progress.complete ? CategoryCompletedBanner : null}
+        ListHeaderComponent={
+          progress.complete ? CategoryCompletedBanner : undefined
+        }
         renderItem={renderItem}
       />
       <TopProgressBar done={progress.done} total={progress.total} />

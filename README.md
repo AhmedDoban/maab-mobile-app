@@ -26,7 +26,7 @@ The Quran text, tafsir, search, azkar, local hadiths and prayer times are bundle
 
 ## Tech stack
 
-Expo SDK 57 · React Native 0.86 · expo-router · TypeScript · Reanimated 4 · react-native-svg · Redux Toolkit · NativeWind · i18next.
+Expo SDK 58 · React Native 0.88 · expo-router · TypeScript · Reanimated 4 · react-native-svg · Redux Toolkit · NativeWind · i18next.
 Native parts are local Expo modules in [`modules/`](modules) (Android exact adhan alarms and playback, prayer widgets, app icon switching) and an iOS widget target in [`targets/widget`](targets/widget).
 
 ## Getting started

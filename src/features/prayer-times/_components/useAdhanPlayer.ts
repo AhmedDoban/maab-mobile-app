@@ -5,7 +5,7 @@ import {
 } from "expo-audio";
 import { useAppSelector } from "@/store/Store";
 import { useCallback, useEffect, useState } from "react";
-import { adhanSource, AdhanSoundId } from "../_data/adhanSounds";
+import { adhanSource, AdhanSoundId, CustomAdhan } from "../_data/adhanSounds";
 
 export default function useAdhanPlayer() {
   const player = useAudioPlayer(null);
@@ -18,8 +18,8 @@ export default function useAdhanPlayer() {
   }, [status.didJustFinish]);
 
   const play = useCallback(
-    (id: AdhanSoundId) => {
-      const source = adhanSource(id, custom);
+    (id: AdhanSoundId, file?: CustomAdhan | null) => {
+      const source = adhanSource(id, file ?? custom);
       if (!source) return;
       setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
       try {

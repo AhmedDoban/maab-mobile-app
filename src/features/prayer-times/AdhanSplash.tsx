@@ -9,7 +9,7 @@ import { Modal, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import usePrayerLabels from "./_components/usePrayerLabels";
-import { AdhanSoundId } from "./_data/adhanSounds";
+import { AdhanChoice } from "./_data/adhanSounds";
 import { PrayerName } from "./_data/types";
 import AdhanAudio from "./_ui/AdhanAudio";
 import AdhanBackdrop from "./_ui/adhan/AdhanBackdrop";
@@ -20,12 +20,12 @@ import { ADHAN_PALETTE } from "./_data/adhanPalette";
 export default function AdhanSplash({
   prayer,
   time,
-  sound,
+  adhan,
   nativeAudio,
   onClose,
 }: {
   prayer: PrayerName | null;
-  sound: AdhanSoundId;
+  adhan: AdhanChoice | null;
   nativeAudio: boolean;
   time?: string;
   onClose: () => void;
@@ -39,8 +39,8 @@ export default function AdhanSplash({
 
   return (
     <>
-      {prayer && !nativeAudio ? (
-        <AdhanAudio key={prayer} sound={sound} onEnd={onClose} />
+      {prayer && adhan && !nativeAudio ? (
+        <AdhanAudio key={prayer} adhan={adhan} onEnd={onClose} />
       ) : null}
       <Modal
         visible={prayer !== null}

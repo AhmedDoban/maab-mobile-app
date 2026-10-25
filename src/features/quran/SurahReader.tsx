@@ -187,6 +187,7 @@ export default function SurahReader({
         onLayout={(e) => {
           const { width, height } = e.nativeEvent.layout;
           if (width !== area?.width || height !== area?.height) {
+            if (area) pageFade.fadeIn();
             setArea({ width, height });
           }
         }}

@@ -1,16 +1,21 @@
 import useDirection from "@/hooks/useDirection";
 import useThemeColors from "@/hooks/useThemeColors";
-import useTransitionGuard from "@/hooks/useTransitionGuard";
 import { Stack } from "expo-router";
-import { useMemo } from "react";
+import { type ComponentProps, useMemo } from "react";
 import { Platform, View } from "react-native";
+import TransitionGuard from "./TransitionGuard";
+
+type ScreenLayout = NonNullable<ComponentProps<typeof Stack>["screenLayout"]>;
+
+const screenLayout: ScreenLayout = ({ navigation, children }) => (
+  <TransitionGuard navigation={navigation}>{children}</TransitionGuard>
+);
 
 const TAB_ROOTS = ["index", "hadith", "quran", "qibla", "settings"];
 
 export default function StackLayout() {
   const colors = useThemeColors();
   const { isRTL } = useDirection();
-  const screenListeners = useTransitionGuard();
 
   const titleStyle = useMemo(
     () => ({
@@ -23,7 +28,7 @@ export default function StackLayout() {
 
   const stack = (
     <Stack
-      screenListeners={screenListeners}
+      screenLayout={screenLayout}
       screenOptions={({ route }) => ({
         headerShown: !TAB_ROOTS.includes(route.name),
         headerShadowVisible: false,

@@ -1,58 +1,39 @@
-import type { EventArg, NavigationAction } from "expo-router/react-navigation";
-import { useCallback, useRef } from "react";
+import { usePreventRemove } from "expo-router";
+import { useEffect, useRef, useState } from "react";
 
 const SETTLE_FALLBACK_MS = 700;
 
-type Navigation = { dispatch: (action: NavigationAction) => void };
-type RemoveEvent = EventArg<"beforeRemove", true, { action: NavigationAction }>;
-type TransitionEvent = EventArg<"transitionEnd", false, { closing: boolean }>;
+type TransitionEvents = {
+  addListener: (
+    type: "transitionEnd",
+    callback: (event: { data: { closing: boolean } }) => void,
+  ) => () => void;
+};
 
-export default function useTransitionGuard() {
-  const settled = useRef(new Set<string>());
-  const timers = useRef(new Map<string, ReturnType<typeof setTimeout>>());
-  const queued = useRef(new Map<string, NavigationAction>());
+export default function useTransitionGuard(navigation: TransitionEvents) {
+  const [settled, setSettled] = useState(false);
+  const pending = useRef<(() => void) | null>(null);
 
-  return useCallback(
-    ({
-      navigation,
-      route,
-    }: {
-      navigation: Navigation;
-      route: { key: string };
-    }) => {
-      const settle = () => {
-        clearTimeout(timers.current.get(route.key));
-        timers.current.delete(route.key);
-        settled.current.add(route.key);
-        const action = queued.current.get(route.key);
-        if (!action) return;
-        queued.current.delete(route.key);
-        navigation.dispatch(action);
-      };
+  useEffect(() => {
+    const settle = () => setSettled(true);
+    const timer = setTimeout(settle, SETTLE_FALLBACK_MS);
+    const unsubscribe = navigation.addListener("transitionEnd", (event) => {
+      if (!event.data.closing) settle();
+    });
+    return () => {
+      clearTimeout(timer);
+      unsubscribe();
+    };
+  }, [navigation]);
 
-      const scheduleFallback = () => {
-        if (settled.current.has(route.key) || timers.current.has(route.key)) {
-          return;
-        }
-        timers.current.set(route.key, setTimeout(settle, SETTLE_FALLBACK_MS));
-      };
+  usePreventRemove(!settled, ({ repeat }) => {
+    pending.current = repeat;
+  });
 
-      return {
-        focus: scheduleFallback,
-        transitionEnd: (e: TransitionEvent) => {
-          if (!e.data.closing) settle();
-        },
-        beforeRemove: (e: RemoveEvent) => {
-          if (settled.current.has(route.key)) {
-            settled.current.delete(route.key);
-            return;
-          }
-          e.preventDefault();
-          queued.current.set(route.key, e.data.action);
-          scheduleFallback();
-        },
-      };
-    },
-    [],
-  );
+  useEffect(() => {
+    if (!settled || !pending.current) return;
+    const repeat = pending.current;
+    pending.current = null;
+    repeat();
+  }, [settled]);
 }

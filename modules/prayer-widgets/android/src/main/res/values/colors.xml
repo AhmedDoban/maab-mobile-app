@@ -1,0 +1,6 @@
+<resources>
+  <color name="widget_card_bg">#FFFFFFFF</color>
+  <color name="widget_card_ink">#FF092B38</color>
+  <color name="widget_card_gray">#FF667176</color>
+  <color name="widget_card_line">#FFE5E7EB</color>
+</resources>
