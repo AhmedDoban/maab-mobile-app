@@ -47,11 +47,6 @@ export default function WirdRowCard({
             />
           )}
         </View>
-        <Icon
-          name={isRTL ? "chevronLeft" : "chevronRight"}
-          size={16}
-          tintColor={colors.gray}
-        />
       </PressableScale>
     </Link>
   );

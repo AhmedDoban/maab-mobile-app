@@ -65,6 +65,8 @@ object WidgetRenderer {
 
   private const val COMPACT_WIDTH = 200f
   private const val TALL_HEIGHT = 230f
+  private const val MODERN_SMALL_WIDTH = 280f
+  private const val MODERN_LIST_HEIGHT = 200f
 
   private fun update(
     context: Context,
@@ -76,10 +78,10 @@ object WidgetRenderer {
   ) {
     val (w, h) = size(manager, id)
     val views = when {
+      kind == Kind.MODERN -> modern(context, payload, now, w, h)
       w < COMPACT_WIDTH -> nextSmall(context, payload, now)
       h >= TALL_HEIGHT -> today(context, payload, now)
       kind == Kind.TIMES || kind == Kind.TODAY -> prayerTimes(context, payload, now)
-      kind == Kind.MODERN -> modern(context, payload, now, w, h)
       else -> nextPrayer(context, manager, id, payload, now)
     }
     manager.updateAppWidget(id, views)
@@ -400,6 +402,78 @@ object WidgetRenderer {
     return cell
   }
 
+  private fun modernRow(
+    context: Context,
+    prayer: WidgetPrayer,
+    next: WidgetPrayer?,
+    now: Long,
+    accent: Int,
+    rtl: Boolean
+  ): RemoteViews {
+    val row = RemoteViews(
+      context.packageName,
+      if (rtl) R.layout.widget_modern_list_row_rtl else R.layout.widget_modern_list_row
+    )
+    row.setTextViewText(R.id.rowName, prayer.label)
+    row.setTextViewText(R.id.rowTime, prayer.time)
+    row.setImageViewResource(R.id.rowIcon, iconOf(prayer))
+    if (prayer == next) {
+      row.setViewVisibility(R.id.rowBg, View.VISIBLE)
+      row.setInt(R.id.rowBg, "setColorFilter", accent)
+      row.setTextColor(R.id.rowName, Color.WHITE)
+      row.setTextColor(R.id.rowTime, Color.WHITE)
+      row.setInt(R.id.rowIcon, "setColorFilter", Color.WHITE)
+    } else {
+      row.setInt(R.id.rowIcon, "setColorFilter", accent)
+      if (prayer.at <= now) {
+        row.setInt(R.id.rowIcon, "setImageAlpha", PASSED_ALPHA)
+        val ink = context.getColor(R.color.widget_card_ink)
+        val faded = Color.argb(PASSED_ALPHA, Color.red(ink), Color.green(ink), Color.blue(ink))
+        row.setTextColor(R.id.rowName, faded)
+        row.setTextColor(R.id.rowTime, faded)
+      }
+    }
+    return row
+  }
+
+  private fun modernSmall(
+    context: Context,
+    payload: WidgetPayload?,
+    now: Long,
+    h: Float
+  ): RemoteViews {
+    val views = RemoteViews(
+      context.packageName,
+      layout(payload, R.layout.widget_modern_small, R.layout.widget_modern_small_rtl)
+    )
+    views.removeAllViews(R.id.list)
+    val day = payload?.day(now).orEmpty()
+    val next = payload?.next(now)
+    if (payload == null || day.isEmpty() || next == null) {
+      visible(views, R.id.content, false)
+      visible(views, R.id.empty, true)
+    } else {
+      visible(views, R.id.empty, false)
+      visible(views, R.id.content, true)
+      val accent = payload.color
+      views.setInt(R.id.circle, "setColorFilter", accent)
+      views.setImageViewResource(R.id.icon, iconOf(next))
+      views.setTextViewText(R.id.name, next.label)
+      views.setTextViewText(R.id.time, next.time)
+      views.setTextColor(R.id.time, accent)
+      views.setTextViewText(R.id.left, leftText(payload, now))
+      val showList = h >= MODERN_LIST_HEIGHT
+      visible(views, R.id.list, showList)
+      if (showList) {
+        day.forEach {
+          views.addView(R.id.list, modernRow(context, it, next, now, accent, payload.rtl))
+        }
+      }
+    }
+    views.setOnClickPendingIntent(R.id.root, openApp(context))
+    return views
+  }
+
   private fun modern(
     context: Context,
     payload: WidgetPayload?,
@@ -407,6 +481,7 @@ object WidgetRenderer {
     w: Float,
     h: Float
   ): RemoteViews {
+    if (w < MODERN_SMALL_WIDTH) return modernSmall(context, payload, now, h)
     val views = RemoteViews(
       context.packageName,
       layout(payload, R.layout.widget_modern, R.layout.widget_modern_rtl)

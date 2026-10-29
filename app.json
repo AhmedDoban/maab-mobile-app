@@ -2,7 +2,7 @@
   "expo": {
     "name": "Maab",
     "slug": "maab",
-    "version": "1.6.1",
+    "version": "1.7.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "maab",

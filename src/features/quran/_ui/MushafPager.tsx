@@ -20,6 +20,7 @@ const WINDOW = 2;
 const SCROLL_WINDOW = 1;
 const SWIPE_DISTANCE = 60;
 const SWIPE_VELOCITY = 600;
+const RESIZE_WIDEN_MS = 300;
 const PAGES = Array.from({ length: PAGE_COUNT }, (_, i) => i + 1);
 
 export default memo(function MushafPager({
@@ -42,12 +43,19 @@ export default memo(function MushafPager({
   const pager = useRef<PagerView>(null);
   const shown = useRef(page);
   const committed = useRef(page);
-  const [wide, setWide] = useState(false);
+  const sizeKey = `${width}x${height}`;
+  const firstSize = useRef(sizeKey);
+  const [wideFor, setWideFor] = useState<string | null>(null);
+  const wide = wideFor === sizeKey;
 
   useEffect(() => {
-    const frame = requestAnimationFrame(() => setWide(true));
-    return () => cancelAnimationFrame(frame);
-  }, []);
+    if (sizeKey === firstSize.current) {
+      const frame = requestAnimationFrame(() => setWideFor(sizeKey));
+      return () => cancelAnimationFrame(frame);
+    }
+    const timer = setTimeout(() => setWideFor(sizeKey), RESIZE_WIDEN_MS);
+    return () => clearTimeout(timer);
+  }, [sizeKey]);
 
   useEffect(() => {
     committed.current = page;

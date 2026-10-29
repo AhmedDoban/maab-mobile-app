@@ -31,6 +31,7 @@ export default function StackLayout() {
       screenLayout={screenLayout}
       screenOptions={({ route }) => ({
         headerShown: !TAB_ROOTS.includes(route.name),
+        freezeOnBlur: true,
         headerShadowVisible: false,
         headerTintColor: colors.isDark ? "#ffffff" : colors.main,
         headerTitleStyle: titleStyle,

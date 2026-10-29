@@ -50,8 +50,6 @@ export default function SurahReader({
   ayah?: number;
   page?: number;
 }) {
-  const t0 = Date.now();
-  require("react").useLayoutEffect(() => { console.log("ROTPERF reader", Date.now() - t0); });
   const { t, i18n } = useTranslation("azkar");
   const ar = i18n.language === "ar";
   const surahName = useSurahName();
@@ -118,19 +116,21 @@ export default function SurahReader({
 
   useEffect(() => {
     let last = Dimensions.get("window");
-    const sub = Dimensions.addEventListener("change", ({ window }: { window: ScaledSize }) => {
-      if (window.width === last.width && window.height === last.height) return;
-      last = window;
-      console.log("ROTPERF dims", Date.now());
-      hideRotation();
-    });
+    const sub = Dimensions.addEventListener(
+      "change",
+      ({ window }: { window: ScaledSize }) => {
+        if (window.width === last.width && window.height === last.height)
+          return;
+        last = window;
+        hideRotation();
+      },
+    );
     return () => sub.remove();
   }, [hideRotation]);
   useEffect(() => {
-    console.log("ROTPERF commit", Date.now(), JSON.stringify(area));
     let second = 0;
     const first = requestAnimationFrame(() => {
-      second = requestAnimationFrame(() => { console.log("ROTPERF reveal", Date.now()); revealRotation(); });
+      second = requestAnimationFrame(revealRotation);
     });
     return () => {
       cancelAnimationFrame(first);
@@ -219,7 +219,6 @@ export default function SurahReader({
         }}
         onLayout={(e) => {
           const { width, height } = e.nativeEvent.layout;
-          console.log("ROTPERF layout", Date.now(), width, height);
           clearTimeout(pendingArea.current);
           if (width === area?.width && height === area?.height) return;
           if (!area) {

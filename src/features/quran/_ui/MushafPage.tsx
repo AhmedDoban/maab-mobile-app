@@ -38,8 +38,6 @@ export default memo(function MushafPage({
   height: number;
   active: AyahRef | null;
 }) {
-  const t0 = Date.now();
-  require("react").useLayoutEffect(() => { console.log("ROTPERF page", page, width, Date.now() - t0); });
   const c = useMushafColors();
   const meta = getPageMeta(page);
   const ayahs = getPageAyahs(page);

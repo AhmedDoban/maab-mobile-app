@@ -1,0 +1,51 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="0dp"
+  android:layout_marginTop="1dp"
+  android:layout_marginBottom="1dp"
+  android:layout_weight="1"
+  android:layoutDirection="rtl">
+
+  <ImageView
+    android:id="@+id/rowBg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scaleType="fitXY"
+    android:src="@drawable/widget_cell"
+    android:visibility="gone" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp">
+
+    <ImageView
+      android:id="@+id/rowIcon"
+      android:layout_width="14dp"
+      android:layout_height="14dp" />
+
+    <TextView
+      android:id="@+id/rowName"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="6dp"
+      android:layout_weight="1"
+      android:ellipsize="end"
+      android:maxLines="1"
+      android:textAlignment="viewStart"
+      android:textColor="@color/widget_card_ink"
+      android:textSize="12sp" />
+
+    <TextView
+      android:id="@+id/rowTime"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:maxLines="1"
+      android:textColor="@color/widget_card_ink"
+      android:textSize="12sp"
+      android:textStyle="bold" />
+  </LinearLayout>
+</FrameLayout>
