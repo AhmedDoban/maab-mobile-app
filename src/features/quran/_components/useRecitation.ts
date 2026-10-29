@@ -1,10 +1,7 @@
 import { AyahRef, nextAyah } from "@/features/azkar/_data/quran";
+import useAudioFlags from "@/hooks/useAudioFlags";
 import { useAppSelector } from "@/store/Store";
-import {
-  setAudioModeAsync,
-  useAudioPlayer,
-  useAudioPlayerStatus,
-} from "expo-audio";
+import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ayahAudioUrl } from "../_data/reciters";
 import isOnline from "@/lib/isOnline";
@@ -18,7 +15,7 @@ const needsBasmala = ({ surah, ayah }: AyahRef) =>
 export default function useRecitation() {
   const reciter = useAppSelector((s) => s.settings.reciter);
   const player = useAudioPlayer(null);
-  const status = useAudioPlayerStatus(player);
+  const status = useAudioFlags(player);
   const [current, setCurrent] = useState<AyahRef | null>(null);
   const [playing, setPlaying] = useState(false);
   const [offline, setOffline] = useState(false);

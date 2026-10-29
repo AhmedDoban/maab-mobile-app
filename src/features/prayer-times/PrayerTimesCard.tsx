@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/store/Store";
-import { useCallback, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import useCityName from "./_components/useCityName";
 import usePrayerSchedule from "./_components/usePrayerSchedule";
 import ClassicPrayerCard from "./_ui/ClassicPrayerCard";
@@ -8,7 +8,7 @@ import NotificationPermissionDialog from "./_ui/NotificationPermissionDialog";
 import PrayerTimesCardSkeleton from "./_ui/PrayerTimesCardSkeleton";
 import PrayerTimesError from "./_ui/PrayerTimesError";
 
-export default function PrayerTimesCard() {
+export default memo(function PrayerTimesCard() {
   const { day, prayers, next, now, isFriday, status, retry } =
     usePrayerSchedule();
   const [askNotifications, setAskNotifications] = useState(false);
@@ -46,4 +46,4 @@ export default function PrayerTimesCard() {
       />
     </>
   );
-}
+});

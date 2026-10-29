@@ -12,7 +12,14 @@ export async function readDorarCache(key: string) {
   }
 }
 
-export async function writeDorarCache(key: string, raw: string) {
+let writes = Promise.resolve();
+
+export function writeDorarCache(key: string, raw: string) {
+  writes = writes.then(() => write(key, raw));
+  return writes;
+}
+
+async function write(key: string, raw: string) {
   try {
     const index: string[] = JSON.parse(
       (await AsyncStorage.getItem(INDEX)) ?? "[]",

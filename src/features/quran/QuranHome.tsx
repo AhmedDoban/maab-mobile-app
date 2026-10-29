@@ -24,6 +24,9 @@ import QuranSavedSection from "./_ui/QuranSavedSection";
 import QuranSearchResults from "./_ui/QuranSearchResults";
 import QuranSectionTabs, { QuranSection } from "./_ui/QuranSectionTabs";
 
+const ART = <MushafArt />;
+const LEADING = <HijriDateChip />;
+
 const HERO = 220;
 const NONE: QuranRow[] = [];
 
@@ -84,8 +87,8 @@ export default function QuranHome() {
       <IllustratedHero
         title={hero.title}
         subtitle={hero.subtitle}
-        art={<MushafArt />}
-        leading={<HijriDateChip />}
+        art={ART}
+        leading={LEADING}
         search={hero.search}
         action={hero.action}
       />

@@ -22,9 +22,10 @@ export default function HadithSearchResults({ query }: { query: string }) {
   const { data, isFetching, isError } = useSearchHadithQuery(query, {
     skip: !useDorar,
   });
+  const showLocal = !useDorar || isError;
   const local = useMemo(
-    () => searchLocalHadiths(query).slice(0, MAX_LOCAL),
-    [query],
+    () => (showLocal ? searchLocalHadiths(query).slice(0, MAX_LOCAL) : []),
+    [query, showLocal],
   );
 
   if (useDorar && isFetching) {

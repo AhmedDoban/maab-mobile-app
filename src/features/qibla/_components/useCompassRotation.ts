@@ -1,13 +1,12 @@
 import {
-  Easing,
   type SharedValue,
   useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
-  withTiming,
+  withSpring,
 } from "react-native-reanimated";
 
-const TIMING = { duration: 180, easing: Easing.out(Easing.quad) };
+const SPRING = { stiffness: 300, damping: 35, mass: 1 };
 
 export default function useCompassRotation(
   heading: SharedValue<number>,
@@ -21,9 +20,8 @@ export default function useCompassRotation(
       const delta = (((target - last.get()) % 360) + 360) % 360;
       const next = last.get() + (delta > 180 ? delta - 360 : delta);
       last.set(next);
-      rotation.set(withTiming(next, TIMING));
+      rotation.set(withSpring(next, SPRING));
     },
-    [base],
   );
   return useAnimatedStyle(() => ({
     transform: [{ rotate: `${rotation.get()}deg` }],

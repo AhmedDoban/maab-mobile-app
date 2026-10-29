@@ -29,11 +29,22 @@ export default memo(function CategoryTile({
   return (
     <Link href={`/category/${category.id}`} asChild>
       <PressableScale className="min-h-[72px] flex-row items-center gap-2.5 rounded-2xl border border-line bg-surface px-3 py-3">
-        <Icon
-          name={category.icon ?? "tabAzkar"}
-          size={24}
-          tintColor={colors.main}
-        />
+        {showProgress ? (
+          <ProgressRing
+            progress={total ? done / total : 0}
+            color={complete ? colors.mainFill : colors.main}
+            checkColor={colors.onFill}
+            track={colors.line}
+            icon={category.icon ?? "tabAzkar"}
+            size={42}
+          />
+        ) : (
+          <Icon
+            name={category.icon ?? "tabAzkar"}
+            size={24}
+            tintColor={colors.main}
+          />
+        )}
         <View className="flex-1 gap-0.5">
           <AppText
             weight="bold"
@@ -53,15 +64,7 @@ export default memo(function CategoryTile({
                 : t("progress", { done, total })}
           </AppText>
         </View>
-        {showProgress ? (
-          <ProgressRing
-            progress={total ? done / total : 0}
-            color={complete ? colors.mainFill : colors.main}
-            checkColor={colors.onFill}
-            track={colors.line}
-            size={38}
-          />
-        ) : (
+        {showProgress ? null : (
           <Icon
             name={isRTL ? "chevronLeft" : "chevronRight"}
             size={14}

@@ -46,7 +46,7 @@ export default memo(function DailyJourneyCard({ friday }: { friday: boolean }) {
         />
       </View>
 
-      <View className="flex-1 flex-row items-center justify-center gap-1.5 self-stretch">
+      <View className="flex-1 flex-row items-center justify-center gap-1.5 self-stretch pe-11">
         <Image source={JOURNEY_SPRIG} style={SPRIG} contentFit="contain" />
         <Icon name="leaf" size={14} tintColor={colors.main} />
         <AppText className="shrink text-xs text-main-gray" numberOfLines={2}>

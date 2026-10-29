@@ -21,6 +21,9 @@ import DailyWirdSection from "./_ui/DailyWirdSection";
 import ExploreSection from "./_ui/ExploreSection";
 import VerseOfDayCard from "./_ui/VerseOfDayCard";
 
+const ART = <MihrabArt />;
+const LEADING = <HijriDateChip />;
+
 const COMPACT_HEIGHT = 150;
 
 const openFavorites = () => router.push("/favorites");
@@ -75,8 +78,8 @@ export default function AzkarHome() {
         <IllustratedHero
           title={t("greeting")}
           subtitle={t("homeTagline")}
-          art={<MihrabArt />}
-          leading={<HijriDateChip />}
+          art={ART}
+          leading={LEADING}
           search={search}
           action={action}
         />

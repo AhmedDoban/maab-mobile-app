@@ -20,7 +20,6 @@ import { PAGE_IMAGES } from "../_data/pageImages";
 import { getPageMeta } from "../_data/pageMeta";
 import MushafPageFooter from "./MushafPageFooter";
 import MushafPageHeader from "./MushafPageHeader";
-import PageMarkers from "./PageMarkers";
 import PageUnderlay from "./PageUnderlay";
 import SurahFrames from "./SurahFrames";
 
@@ -39,10 +38,12 @@ export default memo(function MushafPage({
   height: number;
   active: AyahRef | null;
 }) {
+  const t0 = Date.now();
+  require("react").useLayoutEffect(() => { console.log("ROTPERF page", page, width, Date.now() - t0); });
   const c = useMushafColors();
   const meta = getPageMeta(page);
   const ayahs = getPageAyahs(page);
-  const geometry = usePageGeometry(page, width, height, meta.viewBox);
+  const geometry = usePageGeometry(width, height, meta.viewBox);
   const scrollY = useRef(0);
   const [shown, setShown] = useState(false);
   const onShown = useCallback(() => setShown(true), []);
@@ -53,7 +54,7 @@ export default memo(function MushafPage({
     const timer = setTimeout(onShown, SHOW_FALLBACK_MS);
     return () => clearTimeout(timer);
   }, [shown, onShown]);
-  const fit = geometry.stretch ? "none" : "xMidYMid meet";
+
   const bookmarked = useAppSelector((s) =>
     s.settings.quranBookmark
       ? pageOf(
@@ -92,7 +93,7 @@ export default memo(function MushafPage({
           meta={meta}
           ayahs={ayahs}
           active={active}
-          preserveAspectRatio={fit}
+          toBox={geometry.toBox}
         />
         {meta.titles.length ? (
           <SurahFrames titles={meta.titles} toBox={geometry.toBox} />
@@ -100,7 +101,7 @@ export default memo(function MushafPage({
         <Image
           source={PAGE_IMAGES[page - 1]}
           style={StyleSheet.absoluteFill}
-          contentFit={geometry.stretch ? "fill" : "contain"}
+          contentFit="contain"
           tintColor={c.ink}
           priority="high"
           transition={0}
@@ -108,7 +109,6 @@ export default memo(function MushafPage({
           onDisplay={onShown}
           onError={onShown}
         />
-        <PageMarkers meta={meta} preserveAspectRatio={fit} />
       </View>
 
       <MushafPageFooter page={page} />

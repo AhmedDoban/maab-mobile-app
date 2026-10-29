@@ -1,85 +1,83 @@
-import {
-  AlarmClockIcon,
-  ArrowDown01Icon,
-  ArrowLeft01Icon,
-  ArrowRight01Icon,
-  ArrowUpRight01Icon,
-  BedSingle02Icon,
-  BookOpen01Icon,
-  Book02Icon,
-  Bookmark02Icon,
-  Calendar03Icon,
-  Cancel01Icon,
-  ChartColumnIcon,
-  CheckmarkCircle02Icon,
-  CleanIcon,
-  CloudUploadIcon,
-  Clock01Icon,
-  Compass01Icon,
-  Copy01Icon,
-  Database01Icon,
-  Delete02Icon,
-  Door01Icon,
-  DuaIcon,
-  Facebook01Icon,
-  FavouriteIcon,
-  Flight,
-  GithubIcon,
-  GlobeIcon,
-  HajiIcon,
-  HandPrayerIcon,
-  InstagramIcon,
-  Kaaba01Icon,
-  Kurta01Icon,
-  Leaf01Icon,
-  Linkedin01Icon,
-  Location01Icon,
-  Moon01Icon,
-  Moon02Icon,
-  MoonStarIcon,
-  Mosque02Icon,
-  MuhammadIcon,
-  Notification03Icon,
-  NotificationOff03Icon,
-  OrganicFoodIcon,
-  PaintBoardIcon,
-  PauseIcon,
-  PlayIcon,
-  PrayerRug01Icon,
-  PrayerRug02Icon,
-  QuoteUpIcon,
-  Quran01Icon,
-  Quran02Icon,
-  RefreshIcon,
-  ReminderIcon,
-  RukuIcon,
-  SalahIcon,
-  SalahTimeIcon,
-  Search01Icon,
-  Settings02Icon,
-  Share08Icon,
-  SmartPhone01Icon,
-  SoapDispenserDropletIcon,
-  StopIcon,
-  SujoodIcon,
-  Sun03Icon,
-  SunCloud02Icon,
-  SunriseIcon,
-  SunsetIcon,
-  TasbihIcon,
-  TaskDailyFreeIcons,
-  TentTreeIcon,
-  TextFontIcon,
-  Tick02Icon,
-  TranslateIcon,
-  UndoIcon,
-  UserLove02Icon,
-  VolumeHighIcon,
-  VomitingIcon,
-  WhatsappIcon,
-  WifiOff02Icon,
-  WuduIcon,
-} from "@hugeicons/core-free-icons";
+import AlarmClockIcon from "@hugeicons/core-free-icons/AlarmClockIcon";
+import ArrowDown01Icon from "@hugeicons/core-free-icons/ArrowDown01Icon";
+import ArrowLeft01Icon from "@hugeicons/core-free-icons/ArrowLeft01Icon";
+import ArrowRight01Icon from "@hugeicons/core-free-icons/ArrowRight01Icon";
+import ArrowUpRight01Icon from "@hugeicons/core-free-icons/ArrowUpRight01Icon";
+import BedSingle02Icon from "@hugeicons/core-free-icons/BedSingle02Icon";
+import BookOpen01Icon from "@hugeicons/core-free-icons/BookOpen01Icon";
+import Book02Icon from "@hugeicons/core-free-icons/Book02Icon";
+import Bookmark02Icon from "@hugeicons/core-free-icons/Bookmark02Icon";
+import Calendar03Icon from "@hugeicons/core-free-icons/Calendar03Icon";
+import Cancel01Icon from "@hugeicons/core-free-icons/Cancel01Icon";
+import ChartColumnIcon from "@hugeicons/core-free-icons/ChartColumnIcon";
+import CheckmarkCircle02Icon from "@hugeicons/core-free-icons/CheckmarkCircle02Icon";
+import CleanIcon from "@hugeicons/core-free-icons/CleanIcon";
+import CloudUploadIcon from "@hugeicons/core-free-icons/CloudUploadIcon";
+import Clock01Icon from "@hugeicons/core-free-icons/Clock01Icon";
+import Compass01Icon from "@hugeicons/core-free-icons/Compass01Icon";
+import Copy01Icon from "@hugeicons/core-free-icons/Copy01Icon";
+import Database01Icon from "@hugeicons/core-free-icons/Database01Icon";
+import Delete02Icon from "@hugeicons/core-free-icons/Delete02Icon";
+import Door01Icon from "@hugeicons/core-free-icons/Door01Icon";
+import DuaIcon from "@hugeicons/core-free-icons/DuaIcon";
+import Facebook01Icon from "@hugeicons/core-free-icons/Facebook01Icon";
+import FavouriteIcon from "@hugeicons/core-free-icons/FavouriteIcon";
+import Flight from "@hugeicons/core-free-icons/Airplane01Icon";
+import GithubIcon from "@hugeicons/core-free-icons/GithubIcon";
+import GlobeIcon from "@hugeicons/core-free-icons/GlobeIcon";
+import HajiIcon from "@hugeicons/core-free-icons/HajiIcon";
+import HandPrayerIcon from "@hugeicons/core-free-icons/HandPrayerIcon";
+import InstagramIcon from "@hugeicons/core-free-icons/InstagramIcon";
+import Kaaba01Icon from "@hugeicons/core-free-icons/Kaaba01Icon";
+import Kurta01Icon from "@hugeicons/core-free-icons/Kurta01Icon";
+import Leaf01Icon from "@hugeicons/core-free-icons/Leaf01Icon";
+import Linkedin01Icon from "@hugeicons/core-free-icons/Linkedin01Icon";
+import Location01Icon from "@hugeicons/core-free-icons/Location01Icon";
+import Moon01Icon from "@hugeicons/core-free-icons/Moon01Icon";
+import Moon02Icon from "@hugeicons/core-free-icons/Moon02Icon";
+import MoonStarIcon from "@hugeicons/core-free-icons/MoonStarIcon";
+import Mosque02Icon from "@hugeicons/core-free-icons/Mosque02Icon";
+import MuhammadIcon from "@hugeicons/core-free-icons/MuhammadIcon";
+import Notification03Icon from "@hugeicons/core-free-icons/Notification03Icon";
+import NotificationOff03Icon from "@hugeicons/core-free-icons/NotificationOff03Icon";
+import OrganicFoodIcon from "@hugeicons/core-free-icons/OrganicFoodIcon";
+import PaintBoardIcon from "@hugeicons/core-free-icons/PaintBoardIcon";
+import PauseIcon from "@hugeicons/core-free-icons/PauseIcon";
+import PlayIcon from "@hugeicons/core-free-icons/PlayIcon";
+import PrayerRug01Icon from "@hugeicons/core-free-icons/PrayerRug01Icon";
+import PrayerRug02Icon from "@hugeicons/core-free-icons/PrayerRug02Icon";
+import QuoteUpIcon from "@hugeicons/core-free-icons/QuoteUpIcon";
+import Quran01Icon from "@hugeicons/core-free-icons/Quran01Icon";
+import Quran02Icon from "@hugeicons/core-free-icons/Quran02Icon";
+import RefreshIcon from "@hugeicons/core-free-icons/RefreshIcon";
+import ReminderIcon from "@hugeicons/core-free-icons/ReminderIcon";
+import RukuIcon from "@hugeicons/core-free-icons/RukuIcon";
+import SalahIcon from "@hugeicons/core-free-icons/SalahIcon";
+import SalahTimeIcon from "@hugeicons/core-free-icons/SalahTimeIcon";
+import Search01Icon from "@hugeicons/core-free-icons/Search01Icon";
+import Settings02Icon from "@hugeicons/core-free-icons/Settings02Icon";
+import Share08Icon from "@hugeicons/core-free-icons/Share08Icon";
+import SmartPhone01Icon from "@hugeicons/core-free-icons/SmartPhone01Icon";
+import SoapDispenserDropletIcon from "@hugeicons/core-free-icons/SoapDispenserDropletIcon";
+import StopIcon from "@hugeicons/core-free-icons/StopIcon";
+import SujoodIcon from "@hugeicons/core-free-icons/SujoodIcon";
+import Sun03Icon from "@hugeicons/core-free-icons/Sun03Icon";
+import SunCloud02Icon from "@hugeicons/core-free-icons/SunCloud02Icon";
+import SunriseIcon from "@hugeicons/core-free-icons/SunriseIcon";
+import SunsetIcon from "@hugeicons/core-free-icons/SunsetIcon";
+import TasbihIcon from "@hugeicons/core-free-icons/TasbihIcon";
+import TaskDailyFreeIcons from "@hugeicons/core-free-icons/TaskDaily01Icon";
+import TentTreeIcon from "@hugeicons/core-free-icons/TentTreeIcon";
+import TextFontIcon from "@hugeicons/core-free-icons/TextFontIcon";
+import Tick02Icon from "@hugeicons/core-free-icons/Tick02Icon";
+import TranslateIcon from "@hugeicons/core-free-icons/TranslateIcon";
+import UndoIcon from "@hugeicons/core-free-icons/UndoIcon";
+import UserLove02Icon from "@hugeicons/core-free-icons/UserLove02Icon";
+import VolumeHighIcon from "@hugeicons/core-free-icons/VolumeHighIcon";
+import VomitingIcon from "@hugeicons/core-free-icons/VomitingIcon";
+import WhatsappIcon from "@hugeicons/core-free-icons/WhatsappIcon";
+import WifiOff02Icon from "@hugeicons/core-free-icons/WifiOff02Icon";
+import WuduIcon from "@hugeicons/core-free-icons/WuduIcon";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react-native";
 import type { ColorValue } from "react-native";
 import QuranCoverIcon from "./QuranCoverIcon";

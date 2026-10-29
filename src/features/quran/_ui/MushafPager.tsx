@@ -17,6 +17,9 @@ import { scheduleOnRN } from "react-native-worklets";
 import MushafPagerSlot from "./MushafPagerSlot";
 
 const WINDOW = 2;
+const SCROLL_WINDOW = 1;
+const SWIPE_DISTANCE = 60;
+const SWIPE_VELOCITY = 600;
 const PAGES = Array.from({ length: PAGE_COUNT }, (_, i) => i + 1);
 
 export default memo(function MushafPager({
@@ -39,7 +42,6 @@ export default memo(function MushafPager({
   const pager = useRef<PagerView>(null);
   const shown = useRef(page);
   const committed = useRef(page);
-  const idle = useRef(true);
   const [wide, setWide] = useState(false);
 
   useEffect(() => {
@@ -86,22 +88,39 @@ export default memo(function MushafPager({
       const next = e.nativeEvent.position + 1;
       if (next === shown.current) return;
       shown.current = next;
-      if (idle.current || Math.abs(next - committed.current) >= WINDOW) {
-        commit();
-      }
+      commit();
     },
     [commit],
   );
 
   const onPageScrollStateChanged = useCallback(
     (e: PageScrollStateChangedNativeEvent) => {
-      idle.current = e.nativeEvent.pageScrollState === "idle";
-      if (idle.current) commit();
+      if (e.nativeEvent.pageScrollState === "idle") commit();
     },
     [commit],
   );
 
+  const scrollMode = width > height;
+  const window = scrollMode ? SCROLL_WINDOW : WINDOW;
+
+  const turn = useCallback((step: number) => {
+    const target = Math.min(PAGE_COUNT, Math.max(1, shown.current + step));
+    if (target !== shown.current) pager.current?.setPage(target - 1);
+  }, []);
+
   const gesture = useMemo(() => {
+    const swipe = Gesture.Pan()
+      .enabled(scrollMode)
+      .activeOffsetX([-24, 24])
+      .failOffsetY([-10, 10])
+      .onEnd((e) => {
+        if (
+          Math.abs(e.translationX) > SWIPE_DISTANCE ||
+          Math.abs(e.velocityX) > SWIPE_VELOCITY
+        ) {
+          scheduleOnRN(turn, e.translationX > 0 ? 1 : -1);
+        }
+      });
     const tap = Gesture.Tap()
       .maxDuration(250)
       .maxDistance(10)
@@ -113,8 +132,8 @@ export default memo(function MushafPager({
       .onStart((e) => {
         scheduleOnRN(onLongPress, e.x, e.y);
       });
-    return Gesture.Exclusive(longPress, tap);
-  }, [onTap, onLongPress]);
+    return Gesture.Race(swipe, Gesture.Exclusive(longPress, tap));
+  }, [scrollMode, turn, onTap, onLongPress]);
 
   const pages = useMemo(
     () =>
@@ -122,14 +141,12 @@ export default memo(function MushafPager({
         <MushafPagerSlot
           key={p}
           page={p}
-          width={width}
-          height={height}
           renderPage={
-            Math.abs(p - page) <= (wide ? WINDOW : 0) ? renderPage : undefined
+            Math.abs(p - page) <= (wide ? window : 0) ? renderPage : undefined
           }
         />
       )),
-    [page, wide, width, height, renderPage],
+    [page, wide, window, renderPage],
   );
 
   return (
@@ -139,6 +156,7 @@ export default memo(function MushafPager({
         style={{ width, height }}
         initialPage={page - 1}
         layoutDirection="rtl"
+        scrollEnabled={!scrollMode}
         offscreenPageLimit={1}
         onPageSelected={onPageSelected}
         onPageScrollStateChanged={onPageScrollStateChanged}

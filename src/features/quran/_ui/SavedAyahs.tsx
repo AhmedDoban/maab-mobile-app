@@ -1,9 +1,5 @@
 import OrnamentHeading from "@/components/ui/OrnamentHeading";
-import {
-  ayahText,
-  ayahTranslation,
-  getSurah,
-} from "@/features/azkar/_data/quran";
+import { getSurah } from "@/features/azkar/_data/quran";
 import { useAppSelector } from "@/store/Store";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
@@ -27,8 +23,6 @@ export default function SavedAyahs() {
                 surahId,
                 surah: getSurah(surahId)?.name ?? "",
                 ayah,
-                text: ayahText(surahId, ayah),
-                translation: ayahTranslation(surahId, ayah),
               }}
             />
           );

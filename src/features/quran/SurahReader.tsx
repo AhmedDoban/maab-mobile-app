@@ -11,9 +11,9 @@ import { setQuranBookmark } from "@/store/Slices/SettingsSlice";
 import { useAppDispatch, useAppSelector } from "@/store/Store";
 import * as Haptics from "expo-haptics";
 import { router, Stack } from "expo-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { View } from "react-native";
+import { Dimensions, ScaledSize, StyleSheet, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -29,6 +29,7 @@ import useSurahName from "./_components/useSurahName";
 import { preloadTafsir } from "./_components/useTafsir";
 import { useKeepAwake } from "expo-keep-awake";
 import usePageFade from "./_components/usePageFade";
+import useRotationCover from "./_components/useRotationCover";
 import MushafPage from "./_ui/MushafPage";
 import MushafPager from "./_ui/MushafPager";
 import { hitTest } from "./_components/pageHitTest";
@@ -38,6 +39,7 @@ import NoInternetDialog from "@/components/ui/NoInternetDialog";
 import AyahSheet from "./_ui/AyahSheet";
 
 const TAFSIR_DELAY_MS = 800;
+const AREA_SETTLE_MS = 80;
 
 export default function SurahReader({
   id,
@@ -48,6 +50,8 @@ export default function SurahReader({
   ayah?: number;
   page?: number;
 }) {
+  const t0 = Date.now();
+  require("react").useLayoutEffect(() => { console.log("ROTPERF reader", Date.now() - t0); });
   const { t, i18n } = useTranslation("azkar");
   const ar = i18n.language === "ar";
   const surahName = useSurahName();
@@ -65,6 +69,7 @@ export default function SurahReader({
   const { isRTL, direction } = useDirection();
   const dispatch = useAppDispatch();
   const insets = useSafeAreaInsets();
+  const side = Math.max(insets.left, insets.right);
   const bookmark = useAppSelector((s) => s.settings.quranBookmark);
   const recitation = useRecitation();
 
@@ -103,6 +108,35 @@ export default function SurahReader({
   }, []);
 
   const pageFade = usePageFade();
+  const rotation = useRotationCover();
+  const revealRotation = rotation.reveal;
+  const hideRotation = rotation.hide;
+  const pendingArea = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
+  useEffect(() => () => clearTimeout(pendingArea.current), []);
+
+  useEffect(() => {
+    let last = Dimensions.get("window");
+    const sub = Dimensions.addEventListener("change", ({ window }: { window: ScaledSize }) => {
+      if (window.width === last.width && window.height === last.height) return;
+      last = window;
+      console.log("ROTPERF dims", Date.now());
+      hideRotation();
+    });
+    return () => sub.remove();
+  }, [hideRotation]);
+  useEffect(() => {
+    console.log("ROTPERF commit", Date.now(), JSON.stringify(area));
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => { console.log("ROTPERF reveal", Date.now()); revealRotation(); });
+    });
+    return () => {
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, [area, revealRotation]);
   const slideTo = useCallback(
     (target: number) => {
       pageFade.fadeIn();
@@ -175,20 +209,27 @@ export default function SurahReader({
     >
       <Stack.Screen options={screenOptions} />
 
-      <View
+      <Animated.View
         className="flex-1"
+        layout={rotation.layout}
         style={{
           marginTop: insets.top,
           marginBottom: insets.bottom,
-          marginLeft: insets.left,
-          marginRight: insets.right,
+          marginHorizontal: side,
         }}
         onLayout={(e) => {
           const { width, height } = e.nativeEvent.layout;
-          if (width !== area?.width || height !== area?.height) {
-            if (area) pageFade.fadeIn();
+          console.log("ROTPERF layout", Date.now(), width, height);
+          clearTimeout(pendingArea.current);
+          if (width === area?.width && height === area?.height) return;
+          if (!area) {
             setArea({ width, height });
+            return;
           }
+          pendingArea.current = setTimeout(
+            () => setArea({ width, height }),
+            AREA_SETTLE_MS,
+          );
         }}
       >
         {area ? (
@@ -204,7 +245,15 @@ export default function SurahReader({
             />
           </Animated.View>
         ) : null}
-      </View>
+        <Animated.View
+          pointerEvents="none"
+          style={[
+            StyleSheet.absoluteFill,
+            { backgroundColor: c.page },
+            rotation.coverStyle,
+          ]}
+        />
+      </Animated.View>
 
       <Animated.View
         pointerEvents={chrome ? "box-none" : "none"}
@@ -212,8 +261,7 @@ export default function SurahReader({
         style={[
           {
             paddingTop: insets.top + 6,
-            paddingLeft: insets.left + 12,
-            paddingRight: insets.right + 12,
+            paddingHorizontal: side + 12,
             backgroundColor: c.page,
             direction,
           },
@@ -251,8 +299,7 @@ export default function SurahReader({
         style={[
           {
             paddingBottom: insets.bottom + 8,
-            paddingLeft: insets.left + 16,
-            paddingRight: insets.right + 16,
+            paddingHorizontal: side + 16,
             backgroundColor: c.page,
           },
           chromeStyle,

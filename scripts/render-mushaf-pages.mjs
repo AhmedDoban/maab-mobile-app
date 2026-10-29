@@ -3,6 +3,13 @@ import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import {
+  markerBox,
+  parseMatrix,
+  shiftMarker,
+  shiftY,
+  spaceContent,
+} from "./mushaf-lines.mjs";
 
 const ROOT = path.resolve(
   path.dirname(new URL(import.meta.url).pathname),
@@ -53,18 +60,21 @@ function titlesOf(page, polygons) {
   const x1 = Math.max(...all.map((b) => b[2]));
   return printed.map(([surah, , ny0, , ny1]) => {
     const height = Math.min(line * 0.95, (ny1 - ny0) * 1.5);
+    const center = (ny0 + ny1) / 2;
     return [
       surah,
       round(x0),
-      round((ny0 + ny1) / 2 - height / 2),
+      round(shiftY(center) - height / 2),
       round(x1 - x0),
       round(height),
     ];
   });
 }
 
-function split(svg) {
+function split(svg, page) {
   const viewBox = svg.match(/viewBox="([^"]+)"/)[1];
+  const spaced = page > 2;
+  const matrix = parseMatrix(svg);
   const transform = svg.match(/<g transform="([^"]+)">/)[1];
   const markersStart = svg.indexOf('<g id="ayah_markers"');
   const contentStart = svg.indexOf('<g id="content"');
@@ -80,12 +90,35 @@ function split(svg) {
   ].map(([, t, d, rest]) => {
     let index = ds.indexOf(d);
     if (index < 0) index = ds.push(d) - 1;
-    return [t, index, /evenodd/.test(rest) ? 1 : 0];
+    const transform = spaced ? shiftMarker(matrix, t, d) : t;
+    const [x0, y0, x1, y1] = markerBox(matrix, transform, d);
+    return [
+      transform,
+      index,
+      /evenodd/.test(rest) ? 1 : 0,
+      round(x0),
+      round(y0),
+      round(x1 - x0),
+      round(y1 - y0),
+    ];
   });
+  if (spaced) {
+    const height = Number(viewBox.split(/\s+/)[3]);
+    const text = spaceContent(svg, height);
+    return {
+      viewBox: text.viewBox,
+      transform,
+      ds,
+      markers,
+      polygons,
+      textSvg: text.textSvg,
+      ambiguous: text.ambiguous,
+    };
+  }
   const textSvg = (svg.slice(0, markersStart) + svg.slice(contentStart))
     .replace(/<path[^>]*class="ayahPolygon"[^>]*\/>/g, "")
     .replace(/#231f20/gi, "#000000");
-  return { viewBox, transform, ds, markers, polygons, textSvg };
+  return { viewBox, transform, ds, markers, polygons, textSvg, ambiguous: 0 };
 }
 
 fs.mkdirSync(IMAGES, { recursive: true });
@@ -96,12 +129,15 @@ const files = fs
   .filter((f) => f.endsWith(".svg"))
   .sort();
 let imageBytes = 0;
+let ambiguousTotal = 0;
 
 for (const file of files) {
   const page = Number(file.slice(0, 3));
   if (only.length && !only.includes(page)) continue;
   const svg = fs.readFileSync(path.join(SOURCE, file), "utf8");
-  const { viewBox, transform, ds, markers, polygons, textSvg } = split(svg);
+  const { viewBox, transform, ds, markers, polygons, textSvg, ambiguous } =
+    split(svg, page);
+  ambiguousTotal += ambiguous;
   const png = new Resvg(textSvg, {
     fitTo: { mode: "width", value: WIDTH },
     background: "rgba(0,0,0,0)",
@@ -161,5 +197,5 @@ if (!only.length) {
 }
 fs.rmSync(tmp, { recursive: true, force: true });
 console.log(
-  `rendered ${only.length || files.length} pages, ${(imageBytes / 1048576).toFixed(1)} MB of images`,
+  `rendered ${only.length || files.length} pages, ${(imageBytes / 1048576).toFixed(1)} MB of images, ${ambiguousTotal} line assignments decided by distance`,
 );

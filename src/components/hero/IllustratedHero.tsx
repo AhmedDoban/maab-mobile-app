@@ -1,10 +1,13 @@
+import { ART_H, ART_W } from "@/components/art/ArtCanvas";
 import AppText from "@/components/ui/AppText";
 import ContentColumn from "@/components/ui/ContentColumn";
-import { memo, ReactNode } from "react";
-import { View } from "react-native";
+import { memo, ReactNode, useMemo } from "react";
+import { useWindowDimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeroSearchField from "./HeroSearchField";
 import type { HeroAction, HeroSearch } from "./heroTypes";
+
+const MAX_ART_HEIGHT = 0.35;
 
 export default memo(function IllustratedHero({
   title,
@@ -22,6 +25,11 @@ export default memo(function IllustratedHero({
   action?: HeroAction;
 }) {
   const insets = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
+  const artStyle = useMemo(
+    () => ({ maxWidth: (height * MAX_ART_HEIGHT * ART_W) / ART_H }),
+    [height],
+  );
 
   return (
     <ContentColumn className="gap-4 px-4">
@@ -51,7 +59,9 @@ export default memo(function IllustratedHero({
             <AppText className="text-base text-ink">{subtitle}</AppText>
           ) : null}
         </View>
-        <View className="w-[42%] self-end">{art}</View>
+        <View className="w-[42%] self-end" style={artStyle}>
+          {art}
+        </View>
       </View>
     </ContentColumn>
   );

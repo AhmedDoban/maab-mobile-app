@@ -1,7 +1,7 @@
 {
   "name": "maab",
   "main": "expo-router/entry",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "dependencies": {
     "@bacons/apple-targets": "^5.0.0",
     "@hugeicons/core-free-icons": "^4.3.5",

@@ -20,7 +20,13 @@ export default function PrayerDateRow({
   const locale = i18n.language as Locale;
 
   return (
-    <View className={inline ? "flex-row items-center gap-4" : "shrink gap-2"}>
+    <View
+      className={
+        inline
+          ? "flex-row flex-wrap items-center gap-x-4 gap-y-1"
+          : "shrink gap-2"
+      }
+    >
       {city ? (
         <View className="shrink flex-row items-center gap-1.5">
           <Icon name="location" size={14} tintColor={colors.main} />

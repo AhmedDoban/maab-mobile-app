@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 import AppText from "@/components/ui/AppText";
-import Icon from "@/components/ui/Icon";
+import Icon, { IconKey } from "@/components/ui/Icon";
 
 const STROKE = 4;
 
@@ -11,12 +11,14 @@ export default function ProgressRing({
   track,
   checkColor = "#ffffff",
   size = 44,
+  icon,
 }: {
   progress: number;
   color: string;
   track: string;
   checkColor?: string;
   size?: number;
+  icon?: IconKey;
 }) {
   const r = (size - STROKE) / 2;
   const circumference = 2 * Math.PI * r;
@@ -63,13 +65,17 @@ export default function ProgressRing({
           strokeDashoffset={circumference * (1 - progress)}
         />
       </Svg>
-      <AppText
-        weight="bold"
-        className="text-[11px]"
-        style={{ color, textAlign: "center" }}
-      >
-        {`${Math.round(progress * 100)}%`}
-      </AppText>
+      {icon ? (
+        <Icon name={icon} size={size / 2} tintColor={color} />
+      ) : (
+        <AppText
+          weight="bold"
+          className="text-[11px]"
+          style={{ color, textAlign: "center" }}
+        >
+          {`${Math.round(progress * 100)}%`}
+        </AppText>
+      )}
     </View>
   );
 }

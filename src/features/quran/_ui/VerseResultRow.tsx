@@ -1,13 +1,19 @@
 import AppText from "@/components/ui/AppText";
 import PressableScale from "@/components/ui/PressableScale";
-import { toArabicDigits, VerseMatch } from "@/features/azkar/_data/quran";
+import {
+  ayahText,
+  ayahTranslation,
+  toArabicDigits,
+  VerseMatch,
+} from "@/features/azkar/_data/quran";
 import { Link } from "expo-router";
+import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import useLocalDigits from "../_components/useLocalDigits";
 import useSurahName from "../_components/useSurahName";
 
-export default function VerseResultRow({ verse }: { verse: VerseMatch }) {
+export default memo(function VerseResultRow({ verse }: { verse: VerseMatch }) {
   const { t, i18n } = useTranslation("azkar");
   const ar = i18n.language === "ar";
   const num = useLocalDigits();
@@ -31,11 +37,11 @@ export default function VerseResultRow({ verse }: { verse: VerseMatch }) {
             className="text-xl leading-10"
             numberOfLines={3}
           >
-            {`${verse.text} ${toArabicDigits(verse.ayah)}`}
+            {`${ayahText(verse.surahId, verse.ayah)} ${toArabicDigits(verse.ayah)}`}
           </AppText>
         ) : (
           <AppText className="text-sm leading-6" numberOfLines={3}>
-            {verse.translation}
+            {ayahTranslation(verse.surahId, verse.ayah)}
           </AppText>
         )}
         <View className="flex-row">
@@ -49,4 +55,4 @@ export default function VerseResultRow({ verse }: { verse: VerseMatch }) {
       </PressableScale>
     </Link>
   );
-}
+});

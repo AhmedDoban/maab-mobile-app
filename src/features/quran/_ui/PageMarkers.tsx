@@ -1,26 +1,28 @@
 import { memo } from "react";
 import { StyleSheet } from "react-native";
 import Svg, { G, Path } from "react-native-svg";
+import type { PageGeometry } from "../_components/usePageGeometry";
 import useMushafColors from "../_components/useMushafColors";
+import { markerGroups } from "../_data/markerGroups";
 import type { PageMeta } from "../_data/pageMeta";
 
 export default memo(function PageMarkers({
   meta,
-  preserveAspectRatio,
+  toBox,
 }: {
   meta: PageMeta;
-  preserveAspectRatio: string;
+  toBox: PageGeometry["toBox"];
 }) {
   const c = useMushafColors();
 
-  return (
+  return markerGroups(meta).map(({ x, y, width, height, markers }) => (
     <Svg
-      style={StyleSheet.absoluteFill}
-      viewBox={meta.viewBox}
-      preserveAspectRatio={preserveAspectRatio}
+      key={`${x}-${y}`}
+      style={[styles.marker, toBox(x, y, width, height)]}
+      viewBox={`${x} ${y} ${width} ${height}`}
     >
       <G transform={meta.transform} color={c.accent}>
-        {meta.markers.map(([transform, d, evenOdd], i) => (
+        {markers.map(([transform, d, evenOdd], i) => (
           <G key={i} transform={transform}>
             <Path
               d={meta.ds[d]}
@@ -31,5 +33,7 @@ export default memo(function PageMarkers({
         ))}
       </G>
     </Svg>
-  );
+  ));
 });
+
+const styles = StyleSheet.create({ marker: { position: "absolute" } });

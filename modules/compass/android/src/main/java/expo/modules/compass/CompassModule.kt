@@ -15,6 +15,7 @@ import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.math.sqrt
 
 class CompassModule : Module(), SensorEventListener {
   private val context: Context
@@ -31,6 +32,8 @@ class CompassModule : Module(), SensorEventListener {
   private var north = 0.0
   private var primed = false
   private var declination = 0f
+  private var expectedField = 0f
+  private var interference = false
   private var accuracy = SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM
   private var sent = Double.NaN
   private var sentAt = 0L
@@ -45,12 +48,14 @@ class CompassModule : Module(), SensorEventListener {
     }
 
     Function("setLocation") { latitude: Double, longitude: Double ->
-      declination = GeomagneticField(
+      val field = GeomagneticField(
         latitude.toFloat(),
         longitude.toFloat(),
         0f,
         System.currentTimeMillis()
-      ).declination
+      )
+      declination = field.declination
+      expectedField = field.fieldStrength / 1000f
     }
 
     OnStartObserving("onHeading") { start() }
@@ -67,6 +72,7 @@ class CompassModule : Module(), SensorEventListener {
   private fun start() {
     val sensor = rotationSensor() ?: return
     primed = false
+    interference = false
     sent = Double.NaN
     sensors.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME)
     sensors.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.let {
@@ -91,6 +97,7 @@ class CompassModule : Module(), SensorEventListener {
   override fun onSensorChanged(event: SensorEvent) {
     if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
       accuracy = event.accuracy
+      checkInterference(event.values)
       return
     }
     SensorManager.getRotationMatrixFromVector(rotation, event.values)
@@ -126,7 +133,25 @@ class CompassModule : Module(), SensorEventListener {
     if (!sent.isNaN() && (change < MIN_CHANGE || now - sentAt < MIN_INTERVAL_MS)) return
     sent = heading
     sentAt = now
-    sendEvent("onHeading", mapOf("heading" to heading, "accuracy" to accuracy))
+    emit(heading)
+  }
+
+  private fun emit(heading: Double) {
+    sendEvent(
+      "onHeading",
+      mapOf("heading" to heading, "accuracy" to accuracy, "interference" to interference)
+    )
+  }
+
+  private fun checkInterference(values: FloatArray) {
+    if (expectedField <= 0f) return
+    val strength = sqrt(values[0] * values[0] + values[1] * values[1] + values[2] * values[2])
+    val deviation = abs(strength - expectedField) / expectedField
+    val disturbed =
+      if (interference) deviation > CLEAR_DEVIATION else deviation > INTERFERENCE_DEVIATION
+    if (disturbed == interference) return
+    interference = disturbed
+    if (!sent.isNaN()) emit(sent)
   }
 
   override fun onAccuracyChanged(sensor: Sensor, value: Int) {
@@ -134,9 +159,11 @@ class CompassModule : Module(), SensorEventListener {
   }
 
   companion object {
-    private const val SMOOTHING = 0.2
+    private const val SMOOTHING = 0.3
     private const val MIN_CHANGE = 0.5
-    private const val MIN_INTERVAL_MS = 30L
+    private const val MIN_INTERVAL_MS = 16L
     private const val UPRIGHT_PITCH = 0.87f
+    private const val INTERFERENCE_DEVIATION = 0.35f
+    private const val CLEAR_DEVIATION = 0.25f
   }
 }

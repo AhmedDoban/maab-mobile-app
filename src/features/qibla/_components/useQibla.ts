@@ -29,6 +29,7 @@ export default function useQibla() {
   const heading = useSharedValue(0);
   const [reading, setReading] = useState<Reading | null>(null);
   const [accuracy, setAccuracy] = useState(3);
+  const [interference, setInterference] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const bearing = useMemo(
     () => (coords ? qiblaBearing(coords) : null),
@@ -111,6 +112,7 @@ export default function useQibla() {
       let pending: Reading | null = null;
       let shownAt = 0;
       let lastAccuracy: number | null = null;
+      let lastInterference = false;
       let timer: ReturnType<typeof setTimeout> | undefined;
 
       const flush = () => {
@@ -148,7 +150,11 @@ export default function useQibla() {
         }
       };
 
-      const onHeading = (value: number, headingAccuracy: number) => {
+      const onHeading = (
+        value: number,
+        headingAccuracy: number,
+        disturbed = false,
+      ) => {
         rawHeading.current = value;
         heading.set(value);
         report.current?.(value);
@@ -156,12 +162,16 @@ export default function useQibla() {
           lastAccuracy = headingAccuracy;
           setAccuracy(headingAccuracy);
         }
+        if (disturbed !== lastInterference) {
+          lastInterference = disturbed;
+          setInterference(disturbed);
+        }
       };
 
       const position = coordsRef.current;
       if (compassAvailable && position) {
         subscription = watchCompass(position, (r) =>
-          onHeading(r.heading, r.accuracy),
+          onHeading(r.heading, r.accuracy, r.interference),
         );
       } else {
         (async () => {
@@ -189,6 +199,7 @@ export default function useQibla() {
         rawHeading.current = null;
         heading.set(0);
         setReading(null);
+        setInterference(false);
       };
     }, [status, heading]),
   );
@@ -203,6 +214,7 @@ export default function useQibla() {
     offset: reading?.offset ?? null,
     aligned: reading?.aligned ?? false,
     accuracy,
+    interference,
     bearing,
     distance,
     retry,

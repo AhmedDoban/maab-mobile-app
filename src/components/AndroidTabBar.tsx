@@ -25,8 +25,7 @@ export default function AndroidTabBar({
       className="bg-main-bg pt-2"
       style={{
         paddingBottom: insets.bottom + 8,
-        paddingLeft: insets.left + 12,
-        paddingRight: insets.right + 12,
+        paddingHorizontal: Math.max(insets.left, insets.right) + 12,
       }}
     >
       <View

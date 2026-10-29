@@ -19,6 +19,7 @@ export default function QiblaView({
   offset,
   aligned,
   accuracy,
+  interference,
   bearing,
   distance,
 }: {
@@ -27,6 +28,7 @@ export default function QiblaView({
   offset: number | null;
   aligned: boolean;
   accuracy: number;
+  interference: boolean;
   bearing: number;
   distance: number;
 }) {
@@ -43,6 +45,15 @@ export default function QiblaView({
     }
     wasAligned.current = aligned;
   }, [aligned]);
+
+  const warning =
+    offset === null
+      ? null
+      : interference
+        ? t("interference")
+        : accuracy < 2
+          ? t("calibrate")
+          : null;
 
   const status =
     offset === null
@@ -96,10 +107,13 @@ export default function QiblaView({
       </View>
 
       <AppText
-        className="px-6 text-xs text-main-gray"
+        className={cn(
+          "px-6 text-xs",
+          warning ? "text-main-orange" : "text-main-gray",
+        )}
         style={{ textAlign: "center" }}
       >
-        {offset !== null && accuracy < 2 ? t("calibrate") : t("hint")}
+        {warning ?? t("hint")}
       </AppText>
     </View>
   );

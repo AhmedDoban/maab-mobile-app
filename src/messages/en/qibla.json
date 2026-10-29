@@ -14,6 +14,7 @@
   "fromNorth": "{{deg}}° from north",
   "km": "{{value}} km",
   "calibrate": "Move your phone in a figure 8 to calibrate the compass",
+  "interference": "Magnetic interference may make the direction inaccurate. Move away from electronics, metal and magnets (like a case or charger), then move your phone in a figure 8",
   "north": "N",
   "east": "E",
   "south": "S",

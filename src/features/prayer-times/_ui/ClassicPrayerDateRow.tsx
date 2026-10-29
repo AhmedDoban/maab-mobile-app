@@ -17,17 +17,19 @@ export default function ClassicPrayerDateRow({
   const comma = locale === "ar" ? "،" : ",";
 
   return (
-    <View className="flex-row items-center gap-1.5">
-      <Icon name="calendar" size={13} tintColor="#ffffff" />
-      <AppText
-        className="shrink text-xs text-white"
-        style={{ opacity: 0.85 }}
-        numberOfLines={1}
-      >
-        {`${hijri.weekday[locale]}${comma} ${hijri.day} ${hijri.monthName[locale]} ${hijri.year}`}
-      </AppText>
+    <View className="flex-row flex-wrap items-center gap-x-1.5 gap-y-1">
+      <View className="shrink flex-row items-center gap-1.5">
+        <Icon name="calendar" size={13} tintColor="#ffffff" />
+        <AppText
+          className="shrink text-xs text-white"
+          style={{ opacity: 0.85 }}
+          numberOfLines={1}
+        >
+          {`${hijri.weekday[locale]}${comma} ${hijri.day} ${hijri.monthName[locale]} ${hijri.year}`}
+        </AppText>
+      </View>
       {city ? (
-        <>
+        <View className="shrink flex-row items-center gap-1.5">
           <Icon name="location" size={12} tintColor="#ffffff" />
           <AppText
             className="shrink text-xs text-white"
@@ -36,7 +38,7 @@ export default function ClassicPrayerDateRow({
           >
             {city}
           </AppText>
-        </>
+        </View>
       ) : null}
     </View>
   );

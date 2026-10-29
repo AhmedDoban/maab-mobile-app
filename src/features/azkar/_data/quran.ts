@@ -164,8 +164,6 @@ export type VerseMatch = {
   surahId: number;
   surah: string;
   ayah: number;
-  text: string;
-  translation: string;
 };
 
 export const normalizeQuran = (text: string) =>
@@ -263,8 +261,6 @@ export function searchVerses(query: string, limit = 80): VerseMatch[] {
     surahId: surah,
     surah: getSurah(surah)?.name ?? "",
     ayah,
-    text: ayahText(surah, ayah),
-    translation: ayahTranslation(surah, ayah),
   }));
 }
 

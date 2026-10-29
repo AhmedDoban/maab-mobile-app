@@ -1,16 +1,14 @@
 import { memo, ReactNode } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export default memo(function MushafPagerSlot({
   page,
-  width,
-  height,
   renderPage,
 }: {
   page: number;
-  width: number;
-  height: number;
   renderPage?: (page: number) => ReactNode;
 }) {
-  return <View style={{ width, height }}>{renderPage?.(page)}</View>;
+  return <View style={styles.slot}>{renderPage?.(page)}</View>;
 });
+
+const styles = StyleSheet.create({ slot: { flex: 1 } });

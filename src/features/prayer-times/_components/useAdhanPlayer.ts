@@ -1,15 +1,12 @@
-import {
-  setAudioModeAsync,
-  useAudioPlayer,
-  useAudioPlayerStatus,
-} from "expo-audio";
+import { setAudioModeAsync, useAudioPlayer } from "expo-audio";
+import useAudioFlags from "@/hooks/useAudioFlags";
 import { useAppSelector } from "@/store/Store";
 import { useCallback, useEffect, useState } from "react";
 import { adhanSource, AdhanSoundId, CustomAdhan } from "../_data/adhanSounds";
 
 export default function useAdhanPlayer() {
   const player = useAudioPlayer(null);
-  const status = useAudioPlayerStatus(player);
+  const status = useAudioFlags(player);
   const custom = useAppSelector((s) => s.settings.customAdhan);
   const [current, setCurrent] = useState<AdhanSoundId | null>(null);
 

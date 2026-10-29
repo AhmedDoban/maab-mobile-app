@@ -1,6 +1,6 @@
 import AppText from "@/components/ui/AppText";
 import { PAGE_COUNT } from "@/features/azkar/_data/quran";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -26,6 +26,7 @@ export default function PageSlider({
   const width = useSharedValue(0);
   const progress = useSharedValue((page - 1) / (PAGE_COUNT - 1));
   const dragging = useSharedValue(false);
+  const shown = useSharedValue(0);
   const [label, setLabel] = useState(page);
 
   useEffect(() => {
@@ -34,23 +35,33 @@ export default function PageSlider({
     setLabel(page);
   }, [page, dragging, progress]);
 
-  const pageAt = (x: number) => {
-    "worklet";
-    const usable = Math.max(width.get() - THUMB_W, 1);
-    const p = 1 - Math.min(1, Math.max(0, (x - THUMB_W / 2) / usable));
-    progress.set(p);
-    return Math.round(p * (PAGE_COUNT - 1)) + 1;
-  };
+  const pan = useMemo(() => {
+    const pageAt = (x: number) => {
+      "worklet";
+      const usable = Math.max(width.get() - THUMB_W, 1);
+      const p = 1 - Math.min(1, Math.max(0, (x - THUMB_W / 2) / usable));
+      progress.set(p);
+      return Math.round(p * (PAGE_COUNT - 1)) + 1;
+    };
+    const show = (x: number) => {
+      "worklet";
+      const next = pageAt(x);
+      if (next === shown.get()) return;
+      shown.set(next);
+      scheduleOnRN(setLabel, next);
+    };
 
-  const pan = Gesture.Pan()
-    .minDistance(0)
-    .onBegin((e) => {
-      dragging.set(true);
-      scheduleOnRN(setLabel, pageAt(e.x));
-    })
-    .onUpdate((e) => scheduleOnRN(setLabel, pageAt(e.x)))
-    .onEnd((e) => scheduleOnRN(onChange, pageAt(e.x)))
-    .onFinalize(() => dragging.set(false));
+    return Gesture.Pan()
+      .minDistance(0)
+      .onBegin((e) => {
+        dragging.set(true);
+        shown.set(0);
+        show(e.x);
+      })
+      .onUpdate((e) => show(e.x))
+      .onEnd((e) => scheduleOnRN(onChange, pageAt(e.x)))
+      .onFinalize(() => dragging.set(false));
+  }, [width, progress, dragging, shown, onChange]);
 
   const thumb = useAnimatedStyle(() => ({
     transform: [

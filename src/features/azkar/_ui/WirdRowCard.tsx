@@ -31,11 +31,11 @@ export default function WirdRowCard({
           <AppText
             weight="bold"
             className="text-[15px] text-ink"
-            numberOfLines={1}
+            numberOfLines={2}
           >
             {title}
           </AppText>
-          <AppText className="text-xs text-main-gray" numberOfLines={1}>
+          <AppText className="text-xs text-main-gray" numberOfLines={2}>
             {subtitle}
           </AppText>
           {progress === undefined ? null : (

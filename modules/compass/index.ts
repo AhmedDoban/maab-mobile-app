@@ -1,7 +1,11 @@
 import { Platform } from "react-native";
 import { requireOptionalNativeModule, type EventSubscription } from "expo";
 
-export type CompassReading = { heading: number; accuracy: number };
+export type CompassReading = {
+  heading: number;
+  accuracy: number;
+  interference?: boolean;
+};
 
 type NativeCompass = {
   isAvailable(): boolean;

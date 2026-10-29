@@ -17,6 +17,7 @@ export default function Qibla() {
     offset,
     aligned,
     accuracy,
+    interference,
     bearing,
     distance,
     retry,
@@ -50,6 +51,7 @@ export default function Qibla() {
             offset={offset}
             aligned={aligned}
             accuracy={accuracy}
+            interference={interference}
             bearing={bearing}
             distance={distance}
           />

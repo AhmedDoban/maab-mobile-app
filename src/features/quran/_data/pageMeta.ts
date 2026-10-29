@@ -4,7 +4,15 @@ export type PageMeta = {
   viewBox: string;
   transform: string;
   ds: string[];
-  markers: [transform: string, d: number, evenOdd: 0 | 1][];
+  markers: [
+    transform: string,
+    d: number,
+    evenOdd: 0 | 1,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+  ][];
   titles: [
     surah: number,
     x: number,

@@ -17,6 +17,9 @@ import HadithIntro from "./_ui/HadithIntro";
 import HadithListFooter from "./_ui/HadithListFooter";
 import HadithListItem from "./_ui/HadithListItem";
 
+const ART = <HadithArt />;
+const LEADING = <HijriDateChip />;
+
 const HERO = 220;
 
 const renderHadith: ListRenderItem<LocalHadith> = ({ item }) => (
@@ -69,8 +72,8 @@ export default function HadithHome() {
         <IllustratedHero
           title={hero.title}
           subtitle={hero.subtitle}
-          art={<HadithArt />}
-          leading={<HijriDateChip />}
+          art={ART}
+          leading={LEADING}
           search={hero.search}
           action={hero.action}
         />
