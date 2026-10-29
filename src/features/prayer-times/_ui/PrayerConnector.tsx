@@ -1,11 +1,11 @@
 import { View } from "react-native";
 
-export default function PrayerConnector() {
+export default function PrayerConnector({ hidden }: { hidden: boolean }) {
   return (
-    <View className="w-3 flex-row items-center pt-[22px]">
+    <View className="w-2 items-center self-center">
       <View
-        className="size-1 rounded-full bg-main-gray"
-        style={{ opacity: 0.4 }}
+        className="h-8 w-px rounded-full bg-line"
+        style={{ opacity: hidden ? 0 : 1 }}
       />
     </View>
   );

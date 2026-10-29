@@ -1,8 +1,8 @@
-import type * as Location from "expo-location";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Platform } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
+import { compassAvailable, watchCompass } from "../../../../modules/compass";
 import {
   CityName,
   lookupCityName,
@@ -39,13 +39,15 @@ export default function useQibla() {
     [coords],
   );
   const bearingRef = useRef(bearing);
+  const coordsRef = useRef(coords);
   const rawHeading = useRef<number | null>(null);
   const report = useRef<((value: number) => void) | null>(null);
 
   useEffect(() => {
     bearingRef.current = bearing;
+    coordsRef.current = coords;
     if (rawHeading.current !== null) report.current?.(rawHeading.current);
-  }, [bearing]);
+  }, [bearing, coords]);
 
   useEffect(() => {
     let cancelled = false;
@@ -104,7 +106,7 @@ export default function useQibla() {
     useCallback(() => {
       if (status !== "ready" || Platform.OS === "web") return;
       let cancelled = false;
-      let subscription: Location.LocationSubscription | undefined;
+      let subscription: { remove: () => void } | null | undefined;
       let shown: Reading | null = null;
       let pending: Reading | null = null;
       let shownAt = 0;
@@ -146,23 +148,38 @@ export default function useQibla() {
         }
       };
 
-      (async () => {
-        try {
-          const Location = await import("expo-location");
-          const next = await Location.watchHeadingAsync((h) => {
-            const value = h.trueHeading >= 0 ? h.trueHeading : h.magHeading;
-            rawHeading.current = value;
-            heading.set(value);
-            report.current?.(value);
-            if (h.accuracy !== lastAccuracy) {
-              lastAccuracy = h.accuracy;
-              setAccuracy(h.accuracy);
-            }
-          });
-          if (cancelled) next.remove();
-          else subscription = next;
-        } catch {}
-      })();
+      const onHeading = (value: number, headingAccuracy: number) => {
+        rawHeading.current = value;
+        heading.set(value);
+        report.current?.(value);
+        if (headingAccuracy !== lastAccuracy) {
+          lastAccuracy = headingAccuracy;
+          setAccuracy(headingAccuracy);
+        }
+      };
+
+      const position = coordsRef.current;
+      if (compassAvailable && position) {
+        subscription = watchCompass(position, (r) =>
+          onHeading(r.heading, r.accuracy),
+        );
+      } else {
+        (async () => {
+          try {
+            const Location = await import("expo-location");
+            const next = await Location.watchHeadingAsync((h) =>
+              onHeading(
+                h.trueHeading === -1
+                  ? h.magHeading
+                  : (h.trueHeading + 360) % 360,
+                h.accuracy,
+              ),
+            );
+            if (cancelled) next.remove();
+            else subscription = next;
+          } catch {}
+        })();
+      }
 
       return () => {
         cancelled = true;

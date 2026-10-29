@@ -1,6 +1,5 @@
 import { Platform } from "react-native";
-import { requireOptionalNativeModule } from "expo";
-import type { EventSubscription } from "expo-modules-core";
+import { requireOptionalNativeModule, type EventSubscription } from "expo";
 
 export type AdhanAlarm = {
   id: string;

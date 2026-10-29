@@ -1,5 +1,5 @@
-import { Fragment } from "react";
-import { View } from "react-native";
+import { Fragment, useCallback, useState } from "react";
+import { LayoutChangeEvent, View } from "react-native";
 import usePrayerLabels from "../_components/usePrayerLabels";
 import { PrayerCardProps } from "../_data/schedule";
 import { shortTime } from "../_data/time";
@@ -12,6 +12,7 @@ import ReminderHint from "./ReminderHint";
 
 const MINUTE = 60_000;
 const CARD_STYLE = { boxShadow: "0 8px 24px rgba(0, 0, 0, 0.06)" };
+const WIDE_CARD = 440;
 
 export default function ModernPrayerCard({
   day,
@@ -24,6 +25,11 @@ export default function ModernPrayerCard({
   onDenied,
 }: PrayerCardProps) {
   const { label } = usePrayerLabels();
+  const [wide, setWide] = useState(false);
+  const onLayout = useCallback(
+    (e: LayoutChangeEvent) => setWide(e.nativeEvent.layout.width >= WIDE_CARD),
+    [],
+  );
   const targetMs =
     Math.floor(now.getTime() / MINUTE) * MINUTE + next.minutesLeft * MINUTE;
 
@@ -31,6 +37,7 @@ export default function ModernPrayerCard({
     <View
       className="gap-4 rounded-3xl border border-line bg-surface p-4"
       style={CARD_STYLE}
+      onLayout={onLayout}
     >
       <View className="flex-row items-center gap-3">
         <NextPrayerSummary
@@ -39,15 +46,25 @@ export default function ModernPrayerCard({
         />
         <View className="h-12 w-px bg-line" />
         <PrayerCountdownText targetMs={targetMs} />
-        <View className="flex-1 items-end">
-          <PrayerDateRow hijri={day.hijri} city={city} />
-        </View>
+        {wide ? (
+          <View className="flex-1 items-end">
+            <PrayerDateRow hijri={day.hijri} city={city} />
+          </View>
+        ) : null}
       </View>
+
+      {wide ? null : <PrayerDateRow hijri={day.hijri} city={city} inline />}
 
       <View className="flex-row items-start">
         {prayers.map(({ name, time, status }, index) => (
           <Fragment key={name}>
-            {index > 0 ? <PrayerConnector /> : null}
+            {index > 0 ? (
+              <PrayerConnector
+                hidden={
+                  status === "next" || prayers[index - 1].status === "next"
+                }
+              />
+            ) : null}
             <PrayerCell
               prayer={name}
               label={label(name, isFriday)}

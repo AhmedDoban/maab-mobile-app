@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 
@@ -78,7 +79,7 @@ object WidgetRenderer {
       w < COMPACT_WIDTH -> nextSmall(context, payload, now)
       h >= TALL_HEIGHT -> today(context, payload, now)
       kind == Kind.TIMES || kind == Kind.TODAY -> prayerTimes(context, payload, now)
-      kind == Kind.MODERN -> modern(context, payload, now)
+      kind == Kind.MODERN -> modern(context, payload, now, w, h)
       else -> nextPrayer(context, manager, id, payload, now)
     }
     manager.updateAppWidget(id, views)
@@ -181,9 +182,12 @@ object WidgetRenderer {
     )
     background(views, payload)
     val (w, h) = size(manager, id)
-    val wide = w >= 250f
+    val wide = w >= 320f
+    val showTile = w >= 230f
     val showStrip = h >= 110f
     val showDate = h >= 165f
+    visible(views, R.id.divider, showTile)
+    visible(views, R.id.tile, showTile)
     visible(views, R.id.arch, wide)
     visible(views, R.id.headerSpace, wide)
     visible(views, R.id.stripSpace, wide)
@@ -369,12 +373,14 @@ object WidgetRenderer {
     prayer: WidgetPrayer,
     next: WidgetPrayer?,
     now: Long,
-    accent: Int
+    accent: Int,
+    showIcon: Boolean
   ): RemoteViews {
     val cell = RemoteViews(context.packageName, R.layout.widget_modern_cell)
     cell.setTextViewText(R.id.cellName, prayer.label)
     cell.setTextViewText(R.id.cellTime, prayer.time)
     cell.setImageViewResource(R.id.cellIcon, iconOf(prayer))
+    visible(cell, R.id.cellIcon, showIcon)
     if (prayer == next) {
       cell.setViewVisibility(R.id.cellBg, View.VISIBLE)
       cell.setInt(R.id.cellBg, "setColorFilter", accent)
@@ -394,11 +400,25 @@ object WidgetRenderer {
     return cell
   }
 
-  private fun modern(context: Context, payload: WidgetPayload?, now: Long): RemoteViews {
+  private fun modern(
+    context: Context,
+    payload: WidgetPayload?,
+    now: Long,
+    w: Float,
+    h: Float
+  ): RemoteViews {
     val views = RemoteViews(
       context.packageName,
       layout(payload, R.layout.widget_modern, R.layout.widget_modern_rtl)
     )
+    val showLeft = w >= 280f
+    val showInfo = w >= 350f
+    val showIcons = h >= 150f
+    visible(views, R.id.divider, showLeft)
+    visible(views, R.id.leftCol, showLeft)
+    visible(views, R.id.info, showInfo)
+    views.setTextViewTextSize(R.id.time, TypedValue.COMPLEX_UNIT_SP, if (w >= 300f) 24f else 20f)
+    padding(context, views, R.id.content, if (h >= 130f) 14 else 10)
     views.removeAllViews(R.id.row)
     val day = payload?.day(now).orEmpty()
     val next = payload?.next(now)
@@ -423,7 +443,7 @@ object WidgetRenderer {
       visible(views, R.id.city, payload.city.isNotEmpty())
       views.setTextViewText(R.id.city, payload.city)
       views.setTextViewText(R.id.date, payload.dateOf(now))
-      day.forEach { views.addView(R.id.row, modernCell(context, it, next, now, accent)) }
+      day.forEach { views.addView(R.id.row, modernCell(context, it, next, now, accent, showIcons)) }
     }
     views.setOnClickPendingIntent(R.id.root, openApp(context))
     return views

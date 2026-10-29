@@ -149,10 +149,9 @@ export default function SurahReader({
           width={area.width}
           height={area.height}
           active={p === activePage ? active : null}
-          priority={p === page ? "high" : "normal"}
         />
       ) : null,
-    [area, activePage, active, page],
+    [area, activePage, active],
   );
 
   const play = () => {

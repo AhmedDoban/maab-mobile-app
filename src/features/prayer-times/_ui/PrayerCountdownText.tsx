@@ -21,7 +21,7 @@ export default memo(function PrayerCountdownText({
   const s = seconds % 60;
 
   return (
-    <View className="items-center gap-1.5">
+    <View className="shrink-0 items-center gap-1.5">
       <AppText className="text-xs text-main-gray" numberOfLines={1}>
         {t("untilPrayer")}
       </AppText>

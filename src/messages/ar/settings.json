@@ -210,7 +210,7 @@
   },
   "paletteApplying": "جارٍ تطبيق اللون…",
   "paletteApplyingHint": "لحظات وينتهي تغيير ألوان التطبيق",
-  "paletteIconHint": "تتغير أيقونة التطبيق على الشاشة الرئيسية بعد خروجك منه وقفل شاشة الموبايل.",
+  "paletteIconHint": "تتغير أيقونة التطبيق على الشاشة الرئيسية بمجرد خروجك منه.",
   "prayerCardStyle": "بطاقة مواقيت الصلاة",
   "prayerCardStyles": {
     "modern": {

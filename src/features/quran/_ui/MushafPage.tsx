@@ -33,13 +33,11 @@ export default memo(function MushafPage({
   width,
   height,
   active,
-  priority,
 }: {
   page: number;
   width: number;
   height: number;
   active: AyahRef | null;
-  priority: "high" | "normal";
 }) {
   const c = useMushafColors();
   const meta = getPageMeta(page);
@@ -104,7 +102,7 @@ export default memo(function MushafPage({
           style={StyleSheet.absoluteFill}
           contentFit={geometry.stretch ? "fill" : "contain"}
           tintColor={c.ink}
-          priority={priority}
+          priority="high"
           transition={0}
           recyclingKey={String(page)}
           onDisplay={onShown}

@@ -13,14 +13,14 @@ export default function NextPrayerSummary({
   const colors = useThemeColors();
 
   return (
-    <View className="flex-row items-center gap-3">
+    <View className="shrink flex-row items-center gap-3">
       <View
         className="size-12 items-center justify-center rounded-full"
         style={{ backgroundColor: colors.mainFill }}
       >
         <Icon name="mosque" size={24} tintColor={colors.onFill} />
       </View>
-      <View>
+      <View className="shrink">
         <AppText weight="bold" className="text-base text-ink" numberOfLines={1}>
           {label}
         </AppText>
@@ -29,6 +29,7 @@ export default function NextPrayerSummary({
           className="text-[32px] leading-[40px] text-main"
           style={{ writingDirection: "ltr" }}
           numberOfLines={1}
+          adjustsFontSizeToFit
         >
           {time}
         </AppText>

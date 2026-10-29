@@ -9,27 +9,32 @@ import { HijriDate } from "../_data/hijri";
 export default function PrayerDateRow({
   hijri,
   city,
+  inline = false,
 }: {
   hijri: HijriDate;
   city: string | null;
+  inline?: boolean;
 }) {
   const { t, i18n } = useTranslation("prayer");
   const colors = useThemeColors();
   const locale = i18n.language as Locale;
 
   return (
-    <View className="shrink gap-2">
+    <View className={inline ? "flex-row items-center gap-4" : "shrink gap-2"}>
       {city ? (
-        <View className="flex-row items-center gap-1.5">
+        <View className="shrink flex-row items-center gap-1.5">
           <Icon name="location" size={14} tintColor={colors.main} />
           <AppText className="shrink text-xs text-main-gray" numberOfLines={1}>
             {city}
           </AppText>
         </View>
       ) : null}
-      <View className="flex-row items-center gap-1.5">
+      <View className="shrink flex-row items-center gap-1.5">
         <Icon name="calendar" size={14} tintColor={colors.main} />
-        <AppText className="shrink text-xs text-main-gray" numberOfLines={2}>
+        <AppText
+          className="shrink text-xs text-main-gray"
+          numberOfLines={inline ? 1 : 2}
+        >
           {`${hijri.weekday[locale]} ${hijri.day} ${hijri.monthName[locale]} ${t("hijriYear", { year: hijri.year })}`}
         </AppText>
       </View>

@@ -10,6 +10,7 @@ import {
 } from "react";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import PagerView, {
+  type PageScrollStateChangedNativeEvent,
   type PagerViewOnPageSelectedEvent,
 } from "react-native-pager-view";
 import { scheduleOnRN } from "react-native-worklets";
@@ -37,6 +38,8 @@ export default memo(function MushafPager({
 }) {
   const pager = useRef<PagerView>(null);
   const shown = useRef(page);
+  const committed = useRef(page);
+  const idle = useRef(true);
   const [wide, setWide] = useState(false);
 
   useEffect(() => {
@@ -45,6 +48,7 @@ export default memo(function MushafPager({
   }, []);
 
   useEffect(() => {
+    committed.current = page;
     if (shown.current === page) return;
     shown.current = page;
     const frame = requestAnimationFrame(() =>
@@ -71,14 +75,30 @@ export default memo(function MushafPager({
     };
   }, [width, height]);
 
+  const commit = useCallback(() => {
+    if (shown.current === committed.current) return;
+    committed.current = shown.current;
+    onChange(shown.current);
+  }, [onChange]);
+
   const onPageSelected = useCallback(
     (e: PagerViewOnPageSelectedEvent) => {
       const next = e.nativeEvent.position + 1;
       if (next === shown.current) return;
       shown.current = next;
-      onChange(next);
+      if (idle.current || Math.abs(next - committed.current) >= WINDOW) {
+        commit();
+      }
     },
-    [onChange],
+    [commit],
+  );
+
+  const onPageScrollStateChanged = useCallback(
+    (e: PageScrollStateChangedNativeEvent) => {
+      idle.current = e.nativeEvent.pageScrollState === "idle";
+      if (idle.current) commit();
+    },
+    [commit],
   );
 
   const gesture = useMemo(() => {
@@ -121,6 +141,7 @@ export default memo(function MushafPager({
         layoutDirection="rtl"
         offscreenPageLimit={1}
         onPageSelected={onPageSelected}
+        onPageScrollStateChanged={onPageScrollStateChanged}
       >
         {pages}
       </PagerView>

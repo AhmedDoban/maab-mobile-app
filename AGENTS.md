@@ -36,7 +36,7 @@ src/
   messages/{ar,en}/    translation JSON per namespace (common, azkar, hadith, prayer, qibla, settings)
   constants/           palettes, colors, static config
   lib/                 generic utilities
-modules/               local Expo native modules (adhan-alarm: Android exact alarms + full-screen adhan)
+modules/               local Expo native modules (adhan-alarm: Android exact alarms + full-screen adhan; compass: Android qibla heading from the rotation-vector sensor)
 plugins/               Expo config plugins (referenced from app.json)
 scripts/               build scripts (Android run/APK, Play bundle, version bump, mushaf page, surah frame, widget preview and store screenshot images)
 .githooks/             git hooks (pre-commit runs the version bump)

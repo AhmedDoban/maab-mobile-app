@@ -193,6 +193,7 @@
           </LinearLayout>
 
           <ImageView
+            android:id="@+id/divider"
             android:layout_width="1dp"
             android:layout_height="40dp"
             android:layout_marginStart="10dp"
@@ -200,6 +201,7 @@
             android:background="#33FFFFFF" />
 
           <FrameLayout
+            android:id="@+id/tile"
             android:layout_width="38dp"
             android:layout_height="38dp"
             android:background="@drawable/widget_tile">

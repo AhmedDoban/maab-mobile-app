@@ -13,12 +13,12 @@ class AppIconPackage : Package {
         AppIconSwitcher.watchScreen(activity.applicationContext)
       }
 
-      override fun onResume(activity: Activity) {
-        AppIconSwitcher.foreground = true
+      override fun onPause(activity: Activity) {
+        if (activity.isFinishing) AppIconSwitcher.applyPending(activity.applicationContext)
       }
 
-      override fun onPause(activity: Activity) {
-        AppIconSwitcher.foreground = false
+      override fun onUserLeaveHint(activity: Activity) {
+        AppIconSwitcher.applyPending(activity.applicationContext)
       }
     })
   }

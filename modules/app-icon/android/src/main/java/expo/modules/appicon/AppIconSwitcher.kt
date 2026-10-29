@@ -14,14 +14,11 @@ object AppIconSwitcher {
   private const val KEY_TARGET = "target"
   private const val KEY_NAMES = "names"
 
-  @Volatile
-  var foreground = false
-
   private var watching = false
 
   private val screenOff = object : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-      if (!foreground) applyPending(context.applicationContext)
+      applyPending(context.applicationContext)
     }
   }
 
@@ -72,7 +69,7 @@ object AppIconSwitcher {
     editor.commit()
   }
 
-  private fun applyPending(context: Context) {
+  fun applyPending(context: Context) {
     val prefs = prefs(context)
     val target = prefs.getString(KEY_TARGET, null) ?: return
     val names = prefs.getString(KEY_NAMES, null)?.split(",").orEmpty()
