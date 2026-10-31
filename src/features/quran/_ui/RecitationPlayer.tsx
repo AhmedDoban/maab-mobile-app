@@ -11,6 +11,7 @@ import useMushafColors from "../_components/useMushafColors";
 import useSurahName from "../_components/useSurahName";
 import { getReciter } from "../_data/reciters";
 import ReciterPicker from "./ReciterPicker";
+import { contentLocale } from "@/i18n/config";
 
 export default function RecitationPlayer({
   current,
@@ -19,6 +20,7 @@ export default function RecitationPlayer({
   onPlay,
   onPause,
   onStop,
+  onOpen,
 }: {
   current: AyahRef | null;
   playing: boolean;
@@ -26,13 +28,14 @@ export default function RecitationPlayer({
   onPlay: () => void;
   onPause: () => void;
   onStop: () => void;
+  onOpen?: () => void;
 }) {
   const { t, i18n } = useTranslation("azkar");
   const c = useMushafColors();
   const reciterId = useAppSelector((s) => s.settings.reciter);
   const reciter = getReciter(reciterId);
   const [picking, setPicking] = useState(false);
-  const ar = i18n.language === "ar";
+  const ar = contentLocale(i18n.language) === "ar";
   const num = useLocalDigits();
   const surahName = useSurahName();
   const closePicker = useCallback(() => setPicking(false), []);
@@ -84,6 +87,17 @@ export default function RecitationPlayer({
         </View>
         <Icon name="chevronDown" size={16} tintColor={c.gold} />
       </PressableScale>
+
+      {current && onOpen ? (
+        <PressableScale
+          onPress={onOpen}
+          accessibilityLabel={t("openCurrentPage")}
+          className="size-11 items-center justify-center rounded-full"
+          style={{ backgroundColor: c.frameFill }}
+        >
+          <Icon name="bookOpen" size={18} tintColor={c.ink} />
+        </PressableScale>
+      ) : null}
 
       {current ? (
         <PressableScale

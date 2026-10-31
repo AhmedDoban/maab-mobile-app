@@ -1,10 +1,17 @@
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useDirection from "@/hooks/useDirection";
+import useFloatingTabBarSpace from "@/hooks/useFloatingTabBarSpace";
 import usePageInsets from "@/hooks/usePageInsets";
 import { cn } from "@/lib/utils";
-import { PropsWithChildren, ReactNode } from "react";
+import { useScrollToTop } from "expo-router";
+import { PropsWithChildren, ReactNode, useRef } from "react";
 import StatusBarBackdrop from "@/components/StatusBarBackdrop";
-import { ScrollView, ScrollViewProps, View } from "react-native";
+import {
+  ScrollView,
+  type ScrollViewInstance,
+  ScrollViewProps,
+  View,
+} from "react-native";
 import ContentColumn from "./ContentColumn";
 import PageHeader from "./PageHeader";
 
@@ -29,7 +36,10 @@ export default function Screen({
 }: Props) {
   const { direction } = useDirection();
   const insets = usePageInsets();
-  const { left, right } = useSafeAreaInsets();
+  const { top, left, right } = useSafeAreaInsets();
+  const tabBarSpace = useFloatingTabBarSpace();
+  const scrollRef = useRef<ScrollViewInstance>(null);
+  useScrollToTop(scrollRef);
   const header =
     customHeader ??
     (title ? <PageHeader title={title} trailing={headerTrailing} /> : null);
@@ -40,7 +50,8 @@ export default function Screen({
         className={cn("flex-1 bg-main-bg", className)}
         style={{
           direction,
-          paddingTop: title ? insets.paddingTop : 0,
+          paddingTop: title ? insets.paddingTop : top,
+          paddingBottom: tabBarSpace,
           paddingLeft: left,
           paddingRight: right,
         }}
@@ -53,9 +64,10 @@ export default function Screen({
 
   const scrollView = (
     <ScrollView
+      ref={scrollRef}
       className="flex-1 bg-main-bg"
       style={{ direction }}
-      contentContainerStyle={title ? insets : undefined}
+      contentContainerStyle={title ? insets : { paddingBottom: tabBarSpace }}
       contentInsetAdjustmentBehavior={title ? "never" : "automatic"}
       keyboardDismissMode="on-drag"
       keyboardShouldPersistTaps="handled"

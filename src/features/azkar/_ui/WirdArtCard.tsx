@@ -1,6 +1,6 @@
 import AppText from "@/components/ui/AppText";
 import PressableScale from "@/components/ui/PressableScale";
-import { Locale } from "@/i18n/config";
+import { contentLocale } from "@/i18n/config";
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import { memo } from "react";
@@ -10,7 +10,7 @@ import useArtCardSize from "../_components/useArtCardSize";
 import useCategoryProgress from "../_components/useCategoryProgress";
 import { AzkarCategory } from "../_data";
 import type { WirdArt } from "../_data/homeArt";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "@/components/ui/ProgressBar";
 
 const WHITE = "#ffffff";
 const TRACK = "rgba(255, 255, 255, 0.3)";
@@ -48,7 +48,7 @@ export default memo(function WirdArtCard({
             style={{ color: WHITE }}
             numberOfLines={1}
           >
-            {category.title[i18n.language as Locale]}
+            {category.title[contentLocale(i18n.language)]}
           </AppText>
           <AppText className="text-xs" style={{ color: WHITE }}>
             {complete ? t("done") : t("progressCount", { done, count: total })}

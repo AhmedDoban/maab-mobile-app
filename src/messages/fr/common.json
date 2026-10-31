@@ -1,0 +1,25 @@
+{
+  "appName": "Maab",
+  "tabs": {
+    "azkar": "Adhkar",
+    "hadith": "Hadith",
+    "qibla": "Qibla",
+    "favorites": "Favoris",
+    "settings": "Réglages",
+    "quran": "Coran"
+  },
+  "loading": "Chargement...",
+  "retry": "Réessayer",
+  "search": "Rechercher",
+  "clear": "Effacer",
+  "share": "Partager",
+  "somethingWrong": "Une erreur est survenue",
+  "copy": "Copier",
+  "copied": "Copié",
+  "offline": {
+    "title": "Pas de connexion Internet",
+    "message": "Les récitations ont besoin d'Internet la première fois, puis elles sont enregistrées sur votre appareil et fonctionnent hors ligne. Activez le Wi-Fi ou les données mobiles et réessayez.",
+    "later": "Plus tard",
+    "openSettings": "Ouvrir les réglages"
+  }
+}

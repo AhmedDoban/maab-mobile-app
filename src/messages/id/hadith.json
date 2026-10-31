@@ -1,0 +1,17 @@
+{
+  "dailyHadith": "Hadis Hari Ini",
+  "searchPlaceholder": "Cari hadis (kata bahasa Arab)",
+  "searchHint": "Cari di ensiklopedia Dorar dengan mengetik kata-kata bahasa Arab dari hadis.",
+  "dorarResults": "Hasil dari Dorar",
+  "collection": "Kumpulan Hadis Sahih",
+  "offlineResults": "Hasil dari koleksi offline",
+  "narrator": "Perawi",
+  "scholar": "Ulama",
+  "number": "Nomor",
+  "grade": "Derajat",
+  "noResults": "Hadis tidak ditemukan",
+  "dorarError": "Tidak dapat terhubung ke Dorar. Menampilkan hasil dari koleksi offline.",
+  "hadithNo": "No. {{number}}",
+  "saveHadith": "Simpan ke favorit",
+  "tagline": "Dari petunjuk Nabi ﷺ"
+}

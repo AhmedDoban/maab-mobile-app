@@ -1,0 +1,254 @@
+{
+  "language": "Bahasa",
+  "appearance": "Penampilan",
+  "system": "Sistem",
+  "light": "Cerah",
+  "dark": "Gelap",
+  "textSize": "Saiz teks zikir",
+  "textSizeGlyph": "A",
+  "textSizePreview": "Maha Suci Allah dan segala puji bagi-Nya",
+  "languageNames": {
+    "ar": "Bahasa Arab",
+    "en": "Bahasa Inggeris",
+    "ur": "Bahasa Urdu",
+    "id": "Bahasa Indonesia",
+    "bn": "Bahasa Bengali",
+    "tr": "Bahasa Turki",
+    "fa": "Bahasa Parsi",
+    "ms": "Bahasa Melayu",
+    "fr": "Bahasa Perancis"
+  },
+  "data": "Data",
+  "resetProgress": "Set semula pembilang",
+  "reading": "Tetapan bacaan",
+  "hapticOnComplete": {
+    "title": "Getaran apabila selesai",
+    "hint": "Getaran kuat apabila kiraan zikir mencapai sifar"
+  },
+  "hapticOnTap": {
+    "title": "Getaran pada setiap ketikan",
+    "hint": "Getaran ringan setiap kali anda mengetik kad"
+  },
+  "hideCompleted": {
+    "title": "Sembunyikan kad yang selesai",
+    "hint": "Kad akan pudar sebaik sahaja kiraannya mencapai sifar"
+  },
+  "cancel": "Batal",
+  "clearCache": "Kosongkan cache",
+  "resetSettings": "Pulihkan tetapan lalai",
+  "resetAll": "Padam semua data aplikasi",
+  "confirm": {
+    "progress": {
+      "title": "Set semula semua pembilang?",
+      "message": "Semua pembilang zikir hari ini akan kembali kepada sifar. Tindakan ini tidak boleh dibuat asal.",
+      "action": "Set semula",
+      "done": "Pembilang diset semula"
+    },
+    "cache": {
+      "title": "Kosongkan cache?",
+      "message": "Hasil carian dan waktu solat yang disimpan akan dipadam dan dimuatkan semula apabila perlu. Kegemaran dan tetapan anda tidak akan berubah.",
+      "action": "Kosongkan",
+      "done": "Cache dikosongkan"
+    },
+    "settings": {
+      "title": "Pulihkan tetapan lalai?",
+      "message": "Tema, saiz teks, pilihan bacaan dan peringatan azan akan kembali kepada lalai. Kegemaran dan pembilang anda tidak akan berubah.",
+      "action": "Pulihkan",
+      "done": "Tetapan lalai dipulihkan"
+    },
+    "all": {
+      "title": "Padam semua data aplikasi?",
+      "message": "Kegemaran, pembilang, tetapan dan cache akan dipadam sepenuhnya, seolah-olah aplikasi baru dipasang. Tindakan ini tidak boleh dibuat asal.",
+      "action": "Padam semua",
+      "done": "Semua data dipadam"
+    },
+    "recitations": {
+      "title": "Padam bacaan yang disimpan?",
+      "message": "Fail bacaan yang disimpan dalam peranti anda akan dipadam dan dimuat turun semula apabila anda mendengar.",
+      "action": "Padam",
+      "done": "Bacaan yang disimpan dipadam"
+    },
+    "quran": {
+      "title": "Padam data al-Quran?",
+      "message": "Penanda bacaan, ayat yang disimpan, serlahan dan khatam semasa anda akan dipadam. Tindakan ini tidak boleh dibuat asal.",
+      "action": "Padam",
+      "done": "Data al-Quran dipadam"
+    }
+  },
+  "version": "Versi {{version}}",
+  "adhanSound": "Bunyi azan",
+  "previewAdhan": "Dengar",
+  "stopAdhan": "Henti",
+  "sounds": {
+    "other": "Azan lalai",
+    "qassas": "Mohammed Marwan Qassas",
+    "qatami": "Nasser Al-Qatami",
+    "sobhi": "Islam Sobhi",
+    "custom": "Muat naik dari peranti"
+  },
+  "soundHints": {
+    "other": "Bunyi lalai aplikasi",
+    "reciter": "Azan penuh",
+    "custom": "Pilih fail audio dari peranti anda",
+    "customNotice": "Dimainkan dalam aplikasi; pemberitahuan menggunakan azan lalai"
+  },
+  "changeFile": "Tukar fail",
+  "prayerTimes": "Waktu solat",
+  "prayerLocation": "Lokasi",
+  "locationUnknown": "Lokasi belum ditetapkan",
+  "savedLocation": "Lokasi disimpan",
+  "updateLocation": "Kemas kini",
+  "prayerMethod": "Kaedah pengiraan",
+  "hanafiAsr": {
+    "title": "Asar Hanafi",
+    "hint": "Asar bermula lebih lewat, apabila bayang objek dua kali panjangnya"
+  },
+  "methods": {
+    "auto": "Automatik mengikut kawasan anda",
+    "UmmAlQura": "Umm al-Qura, Makkah",
+    "Egyptian": "Egyptian General Authority of Survey",
+    "MuslimWorldLeague": "Liga Dunia Islam",
+    "Karachi": "University of Islamic Sciences, Karachi",
+    "Dubai": "Dubai",
+    "Kuwait": "Kuwait",
+    "Qatar": "Qatar",
+    "NorthAmerica": "ISNA, Amerika Utara",
+    "MoonsightingCommittee": "Moonsighting Committee",
+    "Singapore": "Singapura",
+    "Turkey": "Diyanet, Turki",
+    "Tehran": "Institut Geofizik, Tehran"
+  },
+  "groups": {
+    "general": "Umum",
+    "worship": "Ibadah",
+    "data": "Data"
+  },
+  "theme": "Tema",
+  "readingOptions": "Pilihan bacaan",
+  "appColor": "Warna aplikasi",
+  "palettes": {
+    "emerald": "Zamrud",
+    "teal": "Teal",
+    "ocean": "Lautan",
+    "indigo": "Nila",
+    "violet": "Ungu",
+    "rose": "Mawar",
+    "ruby": "Delima",
+    "amber": "Ambar",
+    "olive": "Zaitun",
+    "slate": "Batu loh"
+  },
+  "surahFrame": "Bingkai tajuk surah",
+  "clearRecitations": "Bacaan disimpan",
+  "resetQuran": "Padam data al-Quran",
+  "zikrContent": "Kandungan kad zikir",
+  "showPrefix": {
+    "title": "Tunjuk pembukaan",
+    "hint": "Baris sebelum zikir, seperti basmalah"
+  },
+  "showSuffix": {
+    "title": "Tunjuk catatan",
+    "hint": "Rujukan atau catatan selepas zikir"
+  },
+  "showVirtue": {
+    "title": "Tunjuk kelebihan",
+    "hint": "Ganjaran dan kelebihan zikir"
+  },
+  "showSource": {
+    "title": "Tunjuk sumber",
+    "hint": "Kitab hadis atau ayat yang menjadi sumbernya"
+  },
+  "sources": "Sumber",
+  "externalSources": "Sumber dalam talian",
+  "sourcesHint": "Semua yang lain dalam aplikasi disimpan dalam peranti anda dan berfungsi tanpa talian. Perkhidmatan ini hanya digunakan untuk ciri di bawah.",
+  "sourceList": {
+    "everyayah": {
+      "name": "EveryAyah",
+      "usage": "Audio bacaan al-Quran, disimpan dalam peranti anda selepas dimainkan kali pertama"
+    },
+    "dorar": {
+      "name": "Dorar.net",
+      "usage": "Carian hadis dalam talian dengan darjat kesahihan"
+    },
+    "openstreetmap": {
+      "name": "OpenStreetMap",
+      "usage": "Nama bandar anda untuk waktu solat"
+    }
+  },
+  "privacy": {
+    "title": "Privasi",
+    "policy": "Dasar privasi",
+    "hint": "Apa yang disimpan oleh aplikasi dan perkhidmatan yang dihubunginya"
+  },
+  "lockScreenPrayer": {
+    "title": "Solat seterusnya di skrin kunci",
+    "hint": "Pemberitahuan senyap dengan kiraan detik langsung ke solat seterusnya"
+  },
+  "dataHint": "Kosongkan kemajuan yang disimpan, bacaan yang dimuat turun dan tetapan. Setiap pilihan meminta pengesahan terlebih dahulu, dan data yang dikosongkan tidak boleh dipulihkan.",
+  "resetOptions": "Pilihan set semula",
+  "followDeveloper": "Ikuti pembangun",
+  "followDeveloperHint": "Hubungi, kongsi maklum balas atau ikuti kemas kini terbaharu",
+  "reminders": {
+    "title": "Peringatan",
+    "off": "Mati",
+    "interval": "Ulang",
+    "window": "Peringatan hanya dihantar antara 7 PG hingga 10 MLM",
+    "channel": "Peringatan zikir dan al-Quran",
+    "dhikrTitle": "Ingatlah Allah",
+    "quranTitle": "{{surah}} · Ayat {{ayah}}",
+    "every_other": "Setiap {{n}} jam",
+    "dhikr": {
+      "group": "Peringatan zikir",
+      "title": "Pemberitahuan zikir",
+      "hint": "Zikir atau doa ringkas pada selang masa pilihan anda",
+      "short": "Zikir"
+    },
+    "quran": {
+      "group": "Peringatan al-Quran",
+      "title": "Pemberitahuan ayat",
+      "hint": "Satu ayat al-Quran pada selang masa pilihan anda",
+      "short": "Al-Quran"
+    }
+  },
+  "paletteApplying": "Menukar warna…",
+  "paletteApplyingHint": "Sebentar, aplikasi sedang mengemas kini warnanya",
+  "paletteIconHint": "Ikon skrin utama dikemas kini sebaik sahaja anda keluar dari aplikasi.",
+  "prayerCardStyle": "Kad waktu solat",
+  "prayerCardStyles": {
+    "modern": {
+      "title": "Moden",
+      "hint": "Kad cerah dengan kiraan detik langsung"
+    },
+    "classic": {
+      "title": "Klasik",
+      "hint": "Kad berwarna dengan tingkap masjid"
+    }
+  },
+  "prayerAlerts": "Amaran azan bagi setiap solat",
+  "sameAdhan": {
+    "title": "Azan yang sama untuk semua solat",
+    "hint": "Matikan untuk memilih azan berbeza bagi setiap solat"
+  },
+  "prayerAdhans": "Azan bagi setiap solat",
+  "prayerAdhanFor": "Azan {{prayer}}",
+  "startup": "Apabila aplikasi dibuka",
+  "showSplash": {
+    "title": "Tunjuk skrin pembuka",
+    "hint": "Mainkan animasi pembuka setiap kali anda membuka aplikasi"
+  },
+  "display": "Paparan",
+  "fullScreen": {
+    "title": "Skrin penuh",
+    "hint": "Sembunyikan bar status dan bar navigasi. Leret dari tepi skrin untuk memaparkannya seketika"
+  },
+  "recitation": "Tilawah",
+  "playback": "Main balik",
+  "recitationInApp": {
+    "title": "Terus main dalam aplikasi",
+    "hint": "Tilawah diteruskan selepas keluar dari mushaf, dengan bar kawalan kecil"
+  },
+  "recitationLockScreen": {
+    "title": "Main di skrin kunci",
+    "hint": "Tilawah terus dimainkan semasa skrin dikunci, dengan kawalan di skrin kunci"
+  }
+}

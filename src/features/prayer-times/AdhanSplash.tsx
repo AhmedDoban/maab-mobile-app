@@ -5,7 +5,7 @@ import PressableScale from "@/components/ui/PressableScale";
 import useDirection from "@/hooks/useDirection";
 import useThemeColors from "@/hooks/useThemeColors";
 import { useTranslation } from "react-i18next";
-import { Modal, View } from "react-native";
+import { Modal, useWindowDimensions, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import usePrayerLabels from "./_components/usePrayerLabels";
@@ -34,6 +34,8 @@ export default function AdhanSplash({
   const { isDark } = useThemeColors();
   const { direction } = useDirection();
   const insets = useSafeAreaInsets();
+  const { height } = useWindowDimensions();
+  const side = Math.max(insets.left, insets.right);
   const { label, formatTime } = usePrayerLabels();
   const p = ADHAN_PALETTE[isDark ? "dark" : "light"];
 
@@ -82,7 +84,7 @@ export default function AdhanSplash({
 
               <Animated.View
                 entering={FadeInDown.duration(600)}
-                style={{ marginTop: insets.top + 150 }}
+                style={{ marginTop: insets.top + Math.min(150, height * 0.18) }}
               >
                 <AppText
                   weight="bold"
@@ -97,8 +99,11 @@ export default function AdhanSplash({
 
               <Animated.View
                 entering={FadeInDown.delay(250).duration(700)}
-                className="items-center gap-4 px-6"
-                style={{ paddingBottom: insets.bottom + 28 }}
+                className="w-full max-w-md items-center gap-4 self-center"
+                style={{
+                  paddingBottom: insets.bottom + 28,
+                  paddingHorizontal: side + 24,
+                }}
               >
                 <CrescentDivider color={p.text} />
                 <AppText

@@ -1,0 +1,17 @@
+{
+  "dailyHadith": "Günün Hadisi",
+  "searchPlaceholder": "Hadis ara (Arapça kelimeler)",
+  "searchHint": "Hadisteki Arapça kelimeleri yazarak Dorar ansiklopedisinde arayın.",
+  "dorarResults": "Dorar sonuçları",
+  "collection": "Sahih Derleme",
+  "offlineResults": "Çevrimdışı derlemeden sonuçlar",
+  "narrator": "Ravi",
+  "scholar": "Âlim",
+  "number": "Numara",
+  "grade": "Derece",
+  "noResults": "Hadis bulunamadı",
+  "dorarError": "Dorar'a ulaşılamadı. Çevrimdışı derlemedeki eşleşmeler gösteriliyor.",
+  "hadithNo": "No. {{number}}",
+  "saveHadith": "Favorilere kaydet",
+  "tagline": "Peygamber ﷺ'in rehberliğinden"
+}

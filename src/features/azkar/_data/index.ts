@@ -57,10 +57,7 @@ export function getZikr(key: string) {
 
 const featuredCategories = categories.filter((c) => c.featured);
 
-export const isFriday = (date = new Date()) => date.getDay() === 5;
-
-export const dailyCategories = (date = new Date()) =>
-  featuredCategories.filter((c) => !c.fridayOnly || isFriday(date));
+export const dailyCategories = () => featuredCategories;
 
 export const perPrayerCategoryIds = categories
   .filter((c) => c.resetEachPrayer)

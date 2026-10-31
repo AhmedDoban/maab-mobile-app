@@ -25,11 +25,16 @@ export default function SheetHeader({
 
   return (
     <View className={cn("flex-row items-center px-1", className)}>
-      <View className="flex-1 items-start">{leading}</View>
-      <AppText weight="bold" className="text-lg" style={{ color: colors.ink }}>
+      <View className="min-w-9 flex-1 items-start">{leading}</View>
+      <AppText
+        weight="bold"
+        className="shrink text-lg"
+        style={{ color: colors.ink }}
+        numberOfLines={1}
+      >
         {title}
       </AppText>
-      <View className="flex-1 items-end">
+      <View className="min-w-9 flex-1 items-end">
         <PressableScale
           onPress={onClose}
           accessibilityLabel={closeLabel}

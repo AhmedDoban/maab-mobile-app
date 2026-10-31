@@ -1,0 +1,255 @@
+{
+  "language": "Dil",
+  "appearance": "Görünüm",
+  "system": "Sistem",
+  "light": "Açık",
+  "dark": "Koyu",
+  "textSize": "Zikir yazı boyutu",
+  "textSizeGlyph": "A",
+  "textSizePreview": "Allah'ı hamd ile tesbih ederim",
+  "languageNames": {
+    "ar": "Arapça",
+    "en": "İngilizce",
+    "ur": "Urduca",
+    "id": "Endonezce",
+    "bn": "Bengalce",
+    "tr": "Türkçe",
+    "fa": "Farsça",
+    "ms": "Malayca",
+    "fr": "Fransızca"
+  },
+  "data": "Veriler",
+  "resetProgress": "Sayaçları sıfırla",
+  "reading": "Okuma ayarları",
+  "hapticOnComplete": {
+    "title": "Tamamlanınca titreşim",
+    "hint": "Bir zikrin sayısı sıfıra ulaştığında güçlü bir titreşim"
+  },
+  "hapticOnTap": {
+    "title": "Her dokunuşta titreşim",
+    "hint": "Bir karta her dokunduğunuzda hafif bir tık"
+  },
+  "hideCompleted": {
+    "title": "Tamamlanan kartları gizle",
+    "hint": "Sayısı sıfıra ulaşan kart kaybolur"
+  },
+  "cancel": "İptal",
+  "clearCache": "Önbelleği temizle",
+  "resetSettings": "Varsayılan ayarları geri yükle",
+  "resetAll": "Tüm uygulama verilerini sil",
+  "confirm": {
+    "progress": {
+      "title": "Tüm sayaçlar sıfırlansın mı?",
+      "message": "Bugünkü tüm zikir sayaçları sıfıra dönecek. Bu işlem geri alınamaz.",
+      "action": "Sıfırla",
+      "done": "Sayaçlar sıfırlandı"
+    },
+    "cache": {
+      "title": "Önbellek temizlensin mi?",
+      "message": "Kaydedilen arama sonuçları ve namaz vakitleri silinecek ve gerektiğinde yeniden yüklenecek. Favorileriniz ve ayarlarınız değişmez.",
+      "action": "Temizle",
+      "done": "Önbellek temizlendi"
+    },
+    "settings": {
+      "title": "Varsayılan ayarlar geri yüklensin mi?",
+      "message": "Tema, yazı boyutu, okuma seçenekleri ve ezan hatırlatıcıları varsayılanlara döner. Favorileriniz ve sayaçlarınız değişmez.",
+      "action": "Geri yükle",
+      "done": "Varsayılan ayarlar geri yüklendi"
+    },
+    "all": {
+      "title": "Tüm uygulama verileri silinsin mi?",
+      "message": "Favoriler, sayaçlar, ayarlar ve önbellek, uygulama yeni yüklenmiş gibi tamamen silinecek. Bu işlem geri alınamaz.",
+      "action": "Tümünü sil",
+      "done": "Tüm veriler silindi"
+    },
+    "recitations": {
+      "title": "Kaydedilen tilavetler silinsin mi?",
+      "message": "Cihazınıza kaydedilen tilavet dosyaları silinecek ve dinlediğinizde yeniden indirilecek.",
+      "action": "Sil",
+      "done": "Kaydedilen tilavetler silindi"
+    },
+    "quran": {
+      "title": "Kur'an verileri silinsin mi?",
+      "message": "Okuma işaretiniz, kaydedilen ayetler, vurgular ve mevcut hatminiz silinecek. Bu işlem geri alınamaz.",
+      "action": "Sil",
+      "done": "Kur'an verileri silindi"
+    }
+  },
+  "version": "Sürüm {{version}}",
+  "adhanSound": "Ezan sesi",
+  "previewAdhan": "Dinle",
+  "stopAdhan": "Durdur",
+  "sounds": {
+    "other": "Varsayılan ezan",
+    "qassas": "Muhammed Mervan Kassas",
+    "qatami": "Nasır el-Katami",
+    "sobhi": "İslam Subhi",
+    "custom": "Cihazdan yükle"
+  },
+  "soundHints": {
+    "other": "Uygulamanın varsayılan sesi",
+    "reciter": "Tam ezan",
+    "custom": "Cihazınızdan bir ses dosyası seçin",
+    "customNotice": "Uygulamada çalar; bildirimler varsayılan ezanı kullanır"
+  },
+  "changeFile": "Dosyayı değiştir",
+  "prayerTimes": "Namaz vakitleri",
+  "prayerLocation": "Konum",
+  "locationUnknown": "Konum henüz belirlenmedi",
+  "savedLocation": "Kayıtlı konum",
+  "updateLocation": "Güncelle",
+  "prayerMethod": "Hesaplama yöntemi",
+  "hanafiAsr": {
+    "title": "Hanefi İkindi",
+    "hint": "İkindi daha geç başlar; bir cismin gölgesi boyunun iki katı olduğunda"
+  },
+  "methods": {
+    "auto": "Bölgenize göre otomatik",
+    "UmmAlQura": "Ümmü'l-Kurâ, Mekke",
+    "Egyptian": "Mısır Genel Ölçüm Kurumu",
+    "MuslimWorldLeague": "Müslüman Dünya Birliği",
+    "Karachi": "İslami İlimler Üniversitesi, Karaçi",
+    "Dubai": "Dubai",
+    "Kuwait": "Kuveyt",
+    "Qatar": "Katar",
+    "NorthAmerica": "ISNA, Kuzey Amerika",
+    "MoonsightingCommittee": "Hilal Gözlem Komitesi",
+    "Singapore": "Singapur",
+    "Turkey": "Diyanet, Türkiye",
+    "Tehran": "Jeofizik Enstitüsü, Tahran"
+  },
+  "groups": {
+    "general": "Genel",
+    "worship": "İbadet",
+    "data": "Veriler"
+  },
+  "theme": "Tema",
+  "readingOptions": "Okuma seçenekleri",
+  "appColor": "Uygulama rengi",
+  "palettes": {
+    "emerald": "Zümrüt",
+    "teal": "Camgöbeği",
+    "ocean": "Okyanus",
+    "indigo": "Çivit",
+    "violet": "Menekşe",
+    "rose": "Gül",
+    "ruby": "Yakut",
+    "amber": "Kehribar",
+    "olive": "Zeytin",
+    "slate": "Arduvaz"
+  },
+  "surahFrame": "Sure başlığı çerçevesi",
+  "clearRecitations": "Kaydedilen tilavetler",
+  "resetQuran": "Kur'an verilerini sil",
+  "zikrContent": "Zikir kartı içeriği",
+  "showPrefix": {
+    "title": "Girişi göster",
+    "hint": "Zikirden önceki satır, besmele gibi"
+  },
+  "showSuffix": {
+    "title": "Notu göster",
+    "hint": "Zikirden sonraki kaynak veya not"
+  },
+  "showVirtue": {
+    "title": "Faziletini göster",
+    "hint": "Zikrin sevabı ve fazileti"
+  },
+  "showSource": {
+    "title": "Kaynağı göster",
+    "hint": "Geldiği hadis kitabı veya ayet"
+  },
+  "sources": "Kaynaklar",
+  "externalSources": "Çevrimiçi kaynaklar",
+  "sourcesHint": "Uygulamadaki diğer her şey cihazınızda saklanır ve çevrimdışı çalışır. Bu servisler yalnızca aşağıdaki özellikler için kullanılır.",
+  "sourceList": {
+    "everyayah": {
+      "name": "EveryAyah",
+      "usage": "Kur'an tilavet sesleri, ilk dinlemeden sonra cihazınıza kaydedilir"
+    },
+    "dorar": {
+      "name": "Dorar.net",
+      "usage": "Sıhhat dereceleriyle çevrimiçi hadis araması"
+    },
+    "openstreetmap": {
+      "name": "OpenStreetMap",
+      "usage": "Namaz vakitleri için şehir adınız"
+    }
+  },
+  "privacy": {
+    "title": "Gizlilik",
+    "policy": "Gizlilik politikası",
+    "hint": "Uygulamanın neleri sakladığı ve hangi servislere bağlandığı"
+  },
+  "lockScreenPrayer": {
+    "title": "Kilit ekranında sonraki namaz",
+    "hint": "Sonraki namaza canlı geri sayım gösteren sessiz bir bildirim"
+  },
+  "dataHint": "Kaydedilen ilerlemeyi, indirilen tilavetleri ve ayarları temizleyin. Her seçenek önce onay ister ve silinen veriler geri getirilemez.",
+  "resetOptions": "Sıfırlama seçenekleri",
+  "followDeveloper": "Geliştiriciyi takip et",
+  "followDeveloperHint": "İletişime geçin, geri bildirim gönderin veya yenilikleri takip edin",
+  "reminders": {
+    "title": "Hatırlatıcılar",
+    "off": "Kapalı",
+    "interval": "Tekrar",
+    "window": "Hatırlatıcılar yalnızca 07:00 ile 22:00 arasında gelir",
+    "channel": "Zikir ve Kur'an hatırlatıcıları",
+    "dhikrTitle": "Allah'ı an",
+    "quranTitle": "{{surah}} · Ayet {{ayah}}",
+    "every_one": "Her saat",
+    "every_other": "Her {{n}} saatte bir",
+    "dhikr": {
+      "group": "Zikir hatırlatıcıları",
+      "title": "Zikir bildirimleri",
+      "hint": "Seçtiğiniz aralıkta kısa bir zikir veya dua",
+      "short": "Zikir"
+    },
+    "quran": {
+      "group": "Kur'an hatırlatıcıları",
+      "title": "Ayet bildirimleri",
+      "hint": "Seçtiğiniz aralıkta Kur'an'dan bir ayet",
+      "short": "Kur'an"
+    }
+  },
+  "paletteApplying": "Renk uygulanıyor…",
+  "paletteApplyingHint": "Uygulama renklerini güncellerken bir dakika bekleyin",
+  "paletteIconHint": "Ana ekran simgesi uygulamadan çıkar çıkmaz güncellenir.",
+  "prayerCardStyle": "Namaz vakitleri kartı",
+  "prayerCardStyles": {
+    "modern": {
+      "title": "Modern",
+      "hint": "Canlı geri sayımlı açık kart"
+    },
+    "classic": {
+      "title": "Klasik",
+      "hint": "Cami penceresi olan renkli kart"
+    }
+  },
+  "prayerAlerts": "Her namaz için ezan uyarısı",
+  "sameAdhan": {
+    "title": "Tüm namazlar için aynı ezan",
+    "hint": "Her namaz için farklı bir ezan seçmek üzere kapatın"
+  },
+  "prayerAdhans": "Her namaz için ezan",
+  "prayerAdhanFor": "{{prayer}} ezanı",
+  "startup": "Uygulama açıldığında",
+  "showSplash": {
+    "title": "Açılış ekranını göster",
+    "hint": "Uygulamayı her açtığınızda açılış animasyonunu oynatır"
+  },
+  "display": "Ekran",
+  "fullScreen": {
+    "title": "Tam ekran",
+    "hint": "Durum çubuğunu ve gezinme çubuğunu gizler. Kısa süreliğine göstermek için ekranın kenarından kaydırın"
+  },
+  "recitation": "Tilavet",
+  "playback": "Oynatma",
+  "recitationInApp": {
+    "title": "Uygulamada çalmaya devam et",
+    "hint": "Mushaftan çıkınca tilavet küçük bir kontrol çubuğuyla devam eder"
+  },
+  "recitationLockScreen": {
+    "title": "Kilit ekranında çal",
+    "hint": "Ekran kilitliyken tilavet devam eder, kontroller kilit ekranında görünür"
+  }
+}

@@ -12,6 +12,7 @@ import { Pressable, View } from "react-native";
 import useLocalDigits from "../_components/useLocalDigits";
 import usePopupColors from "../_components/usePopupColors";
 import useSurahName from "../_components/useSurahName";
+import { contentLocale } from "@/i18n/config";
 
 export default function AyahPlayUntil({
   ayah,
@@ -21,7 +22,7 @@ export default function AyahPlayUntil({
   onPlay: (until: AyahRef | null) => void;
 }) {
   const { t, i18n } = useTranslation("azkar");
-  const ar = i18n.language === "ar";
+  const ar = contentLocale(i18n.language) === "ar";
   const c = usePopupColors();
   const num = useLocalDigits();
   const surahName = useSurahName();

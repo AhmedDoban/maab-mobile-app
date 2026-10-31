@@ -7,10 +7,11 @@ import { useAppDispatch, useAppSelector } from "@/store/Store";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import useSettingsColors from "../_components/useSettingsColors";
+import { contentLocale } from "@/i18n/config";
 
 export default function TextSizeSetting() {
   const { t, i18n } = useTranslation("settings");
-  const ar = i18n.language === "ar";
+  const ar = contentLocale(i18n.language) === "ar";
   const dispatch = useAppDispatch();
   const palette = useSettingsColors();
   const textSize = useAppSelector((s) => s.settings.textSize);

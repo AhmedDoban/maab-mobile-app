@@ -26,7 +26,7 @@ export default function useDueLabel(plan: KhatmaPlan) {
                     days: localDigits(days, ar),
                   });
     const date = wirdDate(plan, index).toLocaleDateString(
-      ar ? "ar-EG" : "en-US",
+      ar ? "ar-EG" : i18n.language === "en" ? "en-US" : i18n.language,
       { weekday: "long", day: "numeric", month: "long" },
     );
     return { title, date };

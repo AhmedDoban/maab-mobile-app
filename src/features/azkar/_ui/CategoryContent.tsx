@@ -1,12 +1,14 @@
 import useContentColumn from "@/hooks/useContentColumn";
+import useFloatingTabBarSpace from "@/hooks/useFloatingTabBarSpace";
 import useThemeColors from "@/hooks/useThemeColors";
 import { ListRenderItem, Platform } from "react-native";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { shallowEqual } from "react-redux";
 import { Stack } from "expo-router";
 import useDirection from "@/hooks/useDirection";
 import {
   progressKey,
+  recordCategoryOpen,
   resetCategory,
   toggleFavorite,
 } from "@/store/Slices/AzkarSlice";
@@ -28,7 +30,6 @@ import * as Haptics from "expo-haptics";
 const ENTERING = FadeIn.duration(250);
 const EXITING = FadeOut.duration(250);
 const LAYOUT = LinearTransition.duration(250).easing(Easing.out(Easing.cubic));
-const CONTENT_STYLE = { gap: 16, padding: 16, paddingBottom: 32 };
 const keyExtractor = (zikr: Zikr) => String(zikr.id);
 
 export default function CategoryContent({
@@ -65,6 +66,10 @@ export default function CategoryContent({
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     dispatch(resetCategory(categoryId));
   }, [dispatch, categoryId]);
+
+  useEffect(() => {
+    dispatch(recordCategoryOpen(categoryId));
+  }, [dispatch, categoryId]);
   const onToggleFavorite = useCallback(() => {
     Haptics.selectionAsync();
     dispatch(toggleFavorite(categoryId));
@@ -84,10 +89,15 @@ export default function CategoryContent({
   );
 
   const column = useContentColumn();
+  const tabBarSpace = useFloatingTabBarSpace();
+  const contentStyle = useMemo(
+    () => ({ gap: 16, paddingTop: 16, paddingBottom: 32 + tabBarSpace }),
+    [tabBarSpace],
+  );
   const renderItem = useCallback<ListRenderItem<Zikr>>(
     ({ item: zikr }) => (
       <Animated.View
-        className="w-full max-w-3xl self-center"
+        className="w-full max-w-3xl self-center px-4"
         style={column}
         entering={hideCompleted ? ENTERING : undefined}
         exiting={hideCompleted ? EXITING : undefined}
@@ -103,7 +113,7 @@ export default function CategoryContent({
       <Stack.Screen options={options} />
       <Animated.FlatList
         style={style}
-        contentContainerStyle={CONTENT_STYLE}
+        contentContainerStyle={contentStyle}
         contentInsetAdjustmentBehavior="automatic"
         data={items}
         keyExtractor={keyExtractor}

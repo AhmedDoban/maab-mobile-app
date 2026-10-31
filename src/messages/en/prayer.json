@@ -50,5 +50,29 @@
     ]
   },
   "untilPrayer": "Until the prayer",
-  "hijriYear": "{{year}} AH"
+  "hijriYear": "{{year}} AH",
+  "weekdays": [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ],
+  "hijriMonths": [
+    "Muharram",
+    "Safar",
+    "Rabi al-Awwal",
+    "Rabi al-Thani",
+    "Jumada al-Ula",
+    "Jumada al-Akhirah",
+    "Rajab",
+    "Shaban",
+    "Ramadan",
+    "Shawwal",
+    "Dhu al-Qadah",
+    "Dhu al-Hijjah"
+  ],
+  "dateComma": ","
 }

@@ -6,11 +6,11 @@ import usePrayerReset from "@/hooks/usePrayerReset";
 import useSettingsSync from "@/hooks/useSettingsSync";
 import { memo } from "react";
 
-export default memo(function AppEffects() {
+export default memo(function AppEffects({ ready }: { ready: boolean }) {
   useSettingsSync();
   useAppIconSync();
   useReminderSync();
   useDailyReset();
   usePrayerReset();
-  return <AdhanReminder />;
+  return <AdhanReminder ready={ready} />;
 });

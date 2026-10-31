@@ -38,7 +38,10 @@ export default memo(function IllustratedHero({
         style={{ paddingTop: insets.top + 8 }}
       >
         {leading ? (
-          <View className="absolute bottom-0 start-0 h-12 justify-center">
+          <View
+            className="absolute bottom-0 start-0 h-12 justify-center"
+            style={{ end: search ? (action ? 116 : 58) : 0 }}
+          >
             {leading}
           </View>
         ) : null}

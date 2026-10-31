@@ -5,7 +5,7 @@ import useDirection from "@/hooks/useDirection";
 import useThemeColors from "@/hooks/useThemeColors";
 import { Href, Link } from "expo-router";
 import { View } from "react-native";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "@/components/ui/ProgressBar";
 
 export default function WirdRowCard({
   href,

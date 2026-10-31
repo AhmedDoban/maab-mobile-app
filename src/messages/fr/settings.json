@@ -1,0 +1,256 @@
+{
+  "language": "Langue",
+  "appearance": "Apparence",
+  "system": "Système",
+  "light": "Clair",
+  "dark": "Sombre",
+  "textSize": "Taille du texte des adhkar",
+  "textSizeGlyph": "A",
+  "textSizePreview": "Gloire et louange à Allah",
+  "languageNames": {
+    "ar": "Arabe",
+    "en": "Anglais",
+    "ur": "Ourdou",
+    "id": "Indonésien",
+    "bn": "Bengali",
+    "tr": "Turc",
+    "fa": "Persan",
+    "ms": "Malais",
+    "fr": "Français"
+  },
+  "data": "Données",
+  "resetProgress": "Réinitialiser les compteurs",
+  "reading": "Réglages de lecture",
+  "hapticOnComplete": {
+    "title": "Vibration à la fin",
+    "hint": "Une forte vibration quand le compteur d'un dhikr atteint zéro"
+  },
+  "hapticOnTap": {
+    "title": "Vibration à chaque appui",
+    "hint": "Une légère vibration à chaque appui sur une carte"
+  },
+  "hideCompleted": {
+    "title": "Masquer les cartes terminées",
+    "hint": "Une carte disparaît dès que son compteur atteint zéro"
+  },
+  "cancel": "Annuler",
+  "clearCache": "Vider le cache",
+  "resetSettings": "Rétablir les réglages par défaut",
+  "resetAll": "Supprimer toutes les données",
+  "confirm": {
+    "progress": {
+      "title": "Réinitialiser tous les compteurs ?",
+      "message": "Tous les compteurs d'adhkar du jour reviendront à zéro. Cette action est irréversible.",
+      "action": "Réinitialiser",
+      "done": "Compteurs réinitialisés"
+    },
+    "cache": {
+      "title": "Vider le cache ?",
+      "message": "Les résultats de recherche et horaires de prière enregistrés seront supprimés puis rechargés au besoin. Vos favoris et réglages ne changeront pas.",
+      "action": "Vider",
+      "done": "Cache vidé"
+    },
+    "settings": {
+      "title": "Rétablir les réglages par défaut ?",
+      "message": "Le thème, la taille du texte, les options de lecture et les rappels de l'adhan reviennent à leurs valeurs par défaut. Vos favoris et compteurs ne changeront pas.",
+      "action": "Rétablir",
+      "done": "Réglages par défaut rétablis"
+    },
+    "all": {
+      "title": "Supprimer toutes les données ?",
+      "message": "Favoris, compteurs, réglages et cache seront tous supprimés, comme si l'application venait d'être installée. Cette action est irréversible.",
+      "action": "Tout supprimer",
+      "done": "Toutes les données supprimées"
+    },
+    "recitations": {
+      "title": "Supprimer les récitations enregistrées ?",
+      "message": "Les fichiers de récitation enregistrés sur votre appareil seront supprimés et téléchargés à nouveau lors de l'écoute.",
+      "action": "Supprimer",
+      "done": "Récitations enregistrées supprimées"
+    },
+    "quran": {
+      "title": "Supprimer les données du Coran ?",
+      "message": "Votre marque-page, vos versets enregistrés, vos surlignages et votre khatma en cours seront supprimés. Cette action est irréversible.",
+      "action": "Supprimer",
+      "done": "Données du Coran supprimées"
+    }
+  },
+  "version": "Version {{version}}",
+  "adhanSound": "Son de l'adhan",
+  "previewAdhan": "Écouter",
+  "stopAdhan": "Arrêter",
+  "sounds": {
+    "other": "Adhan par défaut",
+    "qassas": "Mohammed Marwan Qassas",
+    "qatami": "Nasser Al-Qatami",
+    "sobhi": "Islam Sobhi",
+    "custom": "Importer depuis l'appareil"
+  },
+  "soundHints": {
+    "other": "Le son par défaut de l'application",
+    "reciter": "Adhan complet",
+    "custom": "Choisissez un fichier audio sur votre appareil",
+    "customNotice": "Joué dans l'application ; les notifications utilisent l'adhan par défaut"
+  },
+  "changeFile": "Changer de fichier",
+  "prayerTimes": "Horaires de prière",
+  "prayerLocation": "Position",
+  "locationUnknown": "Position pas encore définie",
+  "savedLocation": "Position enregistrée",
+  "updateLocation": "Mettre à jour",
+  "prayerMethod": "Méthode de calcul",
+  "hanafiAsr": {
+    "title": "Asr hanafite",
+    "hint": "L'Asr commence plus tard, quand l'ombre d'un objet atteint deux fois sa longueur"
+  },
+  "methods": {
+    "auto": "Automatique selon votre région",
+    "UmmAlQura": "Umm al-Qura, La Mecque",
+    "Egyptian": "Autorité générale égyptienne d'arpentage",
+    "MuslimWorldLeague": "Ligue islamique mondiale",
+    "Karachi": "Université des sciences islamiques, Karachi",
+    "Dubai": "Dubaï",
+    "Kuwait": "Koweït",
+    "Qatar": "Qatar",
+    "NorthAmerica": "ISNA, Amérique du Nord",
+    "MoonsightingCommittee": "Comité d'observation du croissant",
+    "Singapore": "Singapour",
+    "Turkey": "Diyanet, Turquie",
+    "Tehran": "Institut de géophysique, Téhéran"
+  },
+  "groups": {
+    "general": "Général",
+    "worship": "Adoration",
+    "data": "Données"
+  },
+  "theme": "Thème",
+  "readingOptions": "Options de lecture",
+  "appColor": "Couleur de l'application",
+  "palettes": {
+    "emerald": "Émeraude",
+    "teal": "Sarcelle",
+    "ocean": "Océan",
+    "indigo": "Indigo",
+    "violet": "Violet",
+    "rose": "Rose",
+    "ruby": "Rubis",
+    "amber": "Ambre",
+    "olive": "Olive",
+    "slate": "Ardoise"
+  },
+  "surahFrame": "Cadre du titre de sourate",
+  "clearRecitations": "Récitations enregistrées",
+  "resetQuran": "Supprimer les données du Coran",
+  "zikrContent": "Contenu de la carte de dhikr",
+  "showPrefix": {
+    "title": "Afficher l'introduction",
+    "hint": "La ligne avant le dhikr, comme la basmala"
+  },
+  "showSuffix": {
+    "title": "Afficher la note",
+    "hint": "La référence ou la note après le dhikr"
+  },
+  "showVirtue": {
+    "title": "Afficher le mérite",
+    "hint": "La récompense et le mérite du dhikr"
+  },
+  "showSource": {
+    "title": "Afficher la source",
+    "hint": "Le recueil de hadiths ou le verset d'où il provient"
+  },
+  "sources": "Sources",
+  "externalSources": "Sources en ligne",
+  "sourcesHint": "Tout le reste de l'application est stocké sur votre appareil et fonctionne hors ligne. Ces services ne servent qu'aux fonctionnalités ci-dessous.",
+  "sourceList": {
+    "everyayah": {
+      "name": "EveryAyah",
+      "usage": "Audio de récitation du Coran, enregistré sur votre appareil après la première écoute"
+    },
+    "dorar": {
+      "name": "Dorar.net",
+      "usage": "Recherche de hadiths en ligne avec leur degré d'authenticité"
+    },
+    "openstreetmap": {
+      "name": "OpenStreetMap",
+      "usage": "Le nom de votre ville pour les horaires de prière"
+    }
+  },
+  "privacy": {
+    "title": "Confidentialité",
+    "policy": "Politique de confidentialité",
+    "hint": "Ce que l'application stocke et les services qu'elle contacte"
+  },
+  "lockScreenPrayer": {
+    "title": "Prochaine prière sur l'écran verrouillé",
+    "hint": "Une notification discrète avec un compte à rebours jusqu'à la prochaine prière"
+  },
+  "dataHint": "Effacez la progression enregistrée, les récitations téléchargées et les réglages. Chaque option demande une confirmation, et les données effacées ne peuvent pas être restaurées.",
+  "resetOptions": "Options de réinitialisation",
+  "followDeveloper": "Suivre le développeur",
+  "followDeveloperHint": "Prenez contact, donnez votre avis ou suivez les nouveautés",
+  "reminders": {
+    "title": "Rappels",
+    "off": "Désactivé",
+    "interval": "Fréquence",
+    "window": "Les rappels arrivent uniquement entre 7 h et 22 h",
+    "channel": "Rappels de dhikr et de Coran",
+    "dhikrTitle": "Souvenez-vous d'Allah",
+    "quranTitle": "{{surah}} · Verset {{ayah}}",
+    "every_one": "Toutes les heures",
+    "every_many": "Toutes les {{n}} heures",
+    "every_other": "Toutes les {{n}} heures",
+    "dhikr": {
+      "group": "Rappels de dhikr",
+      "title": "Notifications de dhikr",
+      "hint": "Un court dhikr ou une douâ à l'intervalle choisi",
+      "short": "Dhikr"
+    },
+    "quran": {
+      "group": "Rappels du Coran",
+      "title": "Notifications de versets",
+      "hint": "Un verset du Coran à l'intervalle choisi",
+      "short": "Coran"
+    }
+  },
+  "paletteApplying": "Application de la couleur…",
+  "paletteApplyingHint": "Un instant, l'application met à jour ses couleurs",
+  "paletteIconHint": "L'icône sur l'écran d'accueil change dès que vous quittez l'application.",
+  "prayerCardStyle": "Carte des horaires de prière",
+  "prayerCardStyles": {
+    "modern": {
+      "title": "Moderne",
+      "hint": "Carte claire avec compte à rebours en direct"
+    },
+    "classic": {
+      "title": "Classique",
+      "hint": "La carte colorée avec la fenêtre de mosquée"
+    }
+  },
+  "prayerAlerts": "Alerte de l'adhan pour chaque prière",
+  "sameAdhan": {
+    "title": "Même adhan pour toutes les prières",
+    "hint": "Désactivez pour choisir un adhan différent pour chaque prière"
+  },
+  "prayerAdhans": "Adhan de chaque prière",
+  "prayerAdhanFor": "Adhan de {{prayer}}",
+  "startup": "À l'ouverture de l'application",
+  "showSplash": {
+    "title": "Afficher l'écran de démarrage",
+    "hint": "Joue l'animation d'ouverture à chaque lancement de l'application"
+  },
+  "display": "Affichage",
+  "fullScreen": {
+    "title": "Plein écran",
+    "hint": "Masque la barre d'état et la barre de navigation. Balayez depuis le bord de l'écran pour les afficher un instant"
+  },
+  "recitation": "Récitation",
+  "playback": "Lecture",
+  "recitationInApp": {
+    "title": "Continuer dans l'application",
+    "hint": "La récitation continue après avoir quitté le mushaf, avec une petite barre de contrôle"
+  },
+  "recitationLockScreen": {
+    "title": "Lecture écran verrouillé",
+    "hint": "La récitation continue écran verrouillé, avec les commandes sur l'écran de verrouillage"
+  }
+}

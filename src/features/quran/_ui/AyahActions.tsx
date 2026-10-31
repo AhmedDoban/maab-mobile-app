@@ -24,6 +24,7 @@ import AyahActionTile from "./AyahActionTile";
 import AyahColorPicker from "./AyahColorPicker";
 import AyahSectionTitle from "./AyahSectionTitle";
 import AyahTafsir from "./AyahTafsir";
+import { contentLocale } from "@/i18n/config";
 
 export default function AyahActions({
   ayah,
@@ -45,7 +46,7 @@ export default function AyahActions({
   onClose: () => void;
 }) {
   const { t, i18n } = useTranslation(["azkar", "common"]);
-  const ar = i18n.language === "ar";
+  const ar = contentLocale(i18n.language) === "ar";
   const c = usePopupColors();
   const surahName = useSurahName();
   const dispatch = useAppDispatch();

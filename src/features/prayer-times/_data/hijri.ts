@@ -1,53 +1,8 @@
-const MONTHS = {
-  ar: [
-    "محرم",
-    "صفر",
-    "ربيع الأول",
-    "ربيع الآخر",
-    "جمادى الأولى",
-    "جمادى الآخرة",
-    "رجب",
-    "شعبان",
-    "رمضان",
-    "شوال",
-    "ذو القعدة",
-    "ذو الحجة",
-  ],
-  en: [
-    "Muharram",
-    "Safar",
-    "Rabi al-Awwal",
-    "Rabi al-Thani",
-    "Jumada al-Ula",
-    "Jumada al-Akhirah",
-    "Rajab",
-    "Shaban",
-    "Ramadan",
-    "Shawwal",
-    "Dhu al-Qadah",
-    "Dhu al-Hijjah",
-  ],
-};
-
-const WEEKDAYS = {
-  ar: ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"],
-  en: [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ],
-};
-
 export type HijriDate = {
   day: number;
   month: number;
   year: number;
-  weekday: { ar: string; en: string };
-  monthName: { ar: string; en: string };
+  weekday: number;
 };
 
 function fromIntl(date: Date) {
@@ -95,12 +50,5 @@ function tabular(date: Date) {
 
 export function toHijri(date: Date): HijriDate {
   const { day, month, year } = fromIntl(date) ?? tabular(date);
-  const weekday = date.getDay();
-  return {
-    day,
-    month,
-    year,
-    weekday: { ar: WEEKDAYS.ar[weekday], en: WEEKDAYS.en[weekday] },
-    monthName: { ar: MONTHS.ar[month - 1], en: MONTHS.en[month - 1] },
-  };
+  return { day, month, year, weekday: date.getDay() };
 }

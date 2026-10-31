@@ -1,5 +1,5 @@
 import { IconKey } from "@/components/ui/Icon";
-import { Locale } from "@/i18n/config";
+import { ContentLocale } from "@/i18n/config";
 
 export interface ZikrContent {
   title?: string;
@@ -10,7 +10,7 @@ export interface ZikrContent {
   source: string;
 }
 
-export interface Zikr extends Record<Locale, ZikrContent> {
+export interface Zikr extends Record<ContentLocale, ZikrContent> {
   id: number;
   count: number;
 }
@@ -22,10 +22,9 @@ interface ZikrGoal {
 
 export interface AzkarCategory {
   id: string;
-  title: Record<Locale, string>;
+  title: Record<ContentLocale, string>;
   featured: boolean;
   resetEachPrayer?: boolean;
-  fridayOnly?: boolean;
   goals: ZikrGoal[];
   icon?: IconKey;
 }

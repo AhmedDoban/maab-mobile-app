@@ -6,10 +6,11 @@ import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { memo } from "react";
 import useLocalDigits from "../_components/useLocalDigits";
+import { contentLocale } from "@/i18n/config";
 
 export default memo(function SurahRow({ surah }: { surah: SurahSummary }) {
   const { t, i18n } = useTranslation("azkar");
-  const ar = i18n.language === "ar";
+  const ar = contentLocale(i18n.language) === "ar";
   const num = useLocalDigits();
 
   return (

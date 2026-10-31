@@ -3,3 +3,24 @@ export const FLAG_SA =
 
 export const FLAG_US =
   '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">\n  <g clip-path="url(#clip0_439_11279)">\n    <path d="M0 0H24V24H0" fill="#BD3D44"/>\n    <path d="M0 2.71875H24H0ZM0 6.42188H24H0ZM0 10.125H24H0ZM0 13.8281H24H0ZM0 17.5312H24H0ZM0 21.2344H24H0Z" fill="black"/>\n    <path fill-rule="evenodd" clip-rule="evenodd" d="M24 3.65625H0V1.78125H24V3.65625ZM24 7.35938H0V5.48438H24V7.35938ZM24 11.0625H0V9.1875H24V11.0625ZM24 14.7656H0V12.8906H24V14.7656ZM24 18.4688H0V16.5938H24V18.4688ZM24 22.1719H0V20.2969H24V22.1719Z" fill="white"/>\n    <path d="M0 0H18.2812V12.8906H0V0Z" fill="#192F5D"/>\n  </g>\n  <defs>\n    <clipPath id="clip0_439_11279">\n      <rect width="24" height="24" rx="12" fill="white"/>\n    </clipPath>\n  </defs>\n</svg>';
+
+export const FLAG_PK =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" fill="#01411C"/><rect width="6" height="24" fill="#FFFFFF"/><circle cx="15" cy="12" r="5.2" fill="#FFFFFF"/><circle cx="16.3" cy="10.9" r="4.4" fill="#01411C"/><polygon points="18.25,8.13 17.99,9.34 19.06,9.95 17.83,10.08 17.58,11.29 17.08,10.16 15.85,10.29 16.76,9.46 16.26,8.34 17.33,8.95" fill="#FFFFFF"/></svg>';
+
+export const FLAG_ID =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="24" height="12" fill="#CE1126"/><rect y="12" width="24" height="12" fill="#FFFFFF"/></svg>';
+
+export const FLAG_BD =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" fill="#006A4E"/><circle cx="10.8" cy="12" r="5.4" fill="#F42A41"/></svg>';
+
+export const FLAG_TR =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" fill="#E30A17"/><circle cx="10" cy="12" r="5.4" fill="#FFFFFF"/><circle cx="11.4" cy="12" r="4.3" fill="#E30A17"/><polygon points="14.10,12.00 15.62,11.51 15.62,9.91 16.56,11.20 18.08,10.71 17.14,12.00 18.08,13.29 16.56,12.80 15.62,14.09 15.62,12.49" fill="#FFFFFF"/></svg>';
+
+export const FLAG_IR =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="24" height="8" fill="#239F40"/><rect y="8" width="24" height="8" fill="#FFFFFF"/><rect y="16" width="24" height="8" fill="#DA0000"/><circle cx="12" cy="12" r="2.2" stroke="#DA0000" stroke-width="0.9"/></svg>';
+
+export const FLAG_MY =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect y="0.000" width="24" height="1.714" fill="#CC0001"/><rect y="1.714" width="24" height="1.714" fill="#FFFFFF"/><rect y="3.429" width="24" height="1.714" fill="#CC0001"/><rect y="5.143" width="24" height="1.714" fill="#FFFFFF"/><rect y="6.857" width="24" height="1.714" fill="#CC0001"/><rect y="8.571" width="24" height="1.714" fill="#FFFFFF"/><rect y="10.286" width="24" height="1.714" fill="#CC0001"/><rect y="12.000" width="24" height="1.714" fill="#FFFFFF"/><rect y="13.714" width="24" height="1.714" fill="#CC0001"/><rect y="15.429" width="24" height="1.714" fill="#FFFFFF"/><rect y="17.143" width="24" height="1.714" fill="#CC0001"/><rect y="18.857" width="24" height="1.714" fill="#FFFFFF"/><rect y="20.571" width="24" height="1.714" fill="#CC0001"/><rect y="22.286" width="24" height="1.714" fill="#FFFFFF"/><rect width="13" height="13.71" fill="#010066"/><circle cx="5.6" cy="6.86" r="3.9" fill="#FFCC00"/><circle cx="6.6" cy="6.86" r="3.2" fill="#010066"/><polygon points="10.00,4.76 10.47,6.21 12.00,6.21 10.76,7.11 11.23,8.56 10.00,7.66 8.77,8.56 9.24,7.11 8.00,6.21 9.53,6.21" fill="#FFCC00"/></svg>';
+
+export const FLAG_FR =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><rect width="8" height="24" fill="#002395"/><rect x="8" width="8" height="24" fill="#FFFFFF"/><rect x="16" width="8" height="24" fill="#ED2939"/></svg>';

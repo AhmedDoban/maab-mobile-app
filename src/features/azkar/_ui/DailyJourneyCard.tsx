@@ -2,13 +2,13 @@ import AppText from "@/components/ui/AppText";
 import Icon from "@/components/ui/Icon";
 import useThemeColors from "@/hooks/useThemeColors";
 import { Image } from "expo-image";
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import useDailyJourney from "../_components/useDailyJourney";
 import { dailyCategories } from "../_data";
 import { JOURNEY_SPRIG } from "../_data/homeArt";
-import ProgressBar from "./ProgressBar";
+import ProgressBar from "@/components/ui/ProgressBar";
 
 const SPRIG = {
   position: "absolute",
@@ -19,10 +19,10 @@ const SPRIG = {
   opacity: 0.5,
 } as const;
 
-export default memo(function DailyJourneyCard({ friday }: { friday: boolean }) {
+export default memo(function DailyJourneyCard() {
   const { t } = useTranslation("azkar");
   const colors = useThemeColors();
-  const daily = useMemo(() => dailyCategories(), [friday]);
+  const daily = dailyCategories();
   const { done, total } = useDailyJourney(daily);
 
   return (

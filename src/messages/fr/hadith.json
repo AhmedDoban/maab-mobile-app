@@ -1,0 +1,17 @@
+{
+  "dailyHadith": "Hadith du jour",
+  "searchPlaceholder": "Rechercher un hadith (mots arabes)",
+  "searchHint": "Recherchez dans l'encyclopédie Dorar en tapant des mots arabes du hadith.",
+  "dorarResults": "Résultats de Dorar",
+  "collection": "Recueil authentique",
+  "offlineResults": "Résultats du recueil hors ligne",
+  "narrator": "Rapporteur",
+  "scholar": "Savant",
+  "number": "Numéro",
+  "grade": "Authenticité",
+  "noResults": "Aucun hadith trouvé",
+  "dorarError": "Impossible de joindre Dorar. Résultats du recueil hors ligne affichés.",
+  "hadithNo": "N° {{number}}",
+  "saveHadith": "Ajouter aux favoris",
+  "tagline": "De la guidance du Prophète ﷺ"
+}

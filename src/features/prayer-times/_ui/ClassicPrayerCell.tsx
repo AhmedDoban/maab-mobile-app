@@ -47,6 +47,8 @@ function ClassicPrayerCell({
         className="text-xs"
         style={{ color }}
         numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.8}
       >
         {label}
       </AppText>

@@ -1,0 +1,25 @@
+{
+  "appName": "Maab",
+  "tabs": {
+    "azkar": "Zikir",
+    "hadith": "Hadis",
+    "qibla": "Kiblat",
+    "favorites": "Kegemaran",
+    "settings": "Tetapan",
+    "quran": "Al-Quran"
+  },
+  "loading": "Memuatkan...",
+  "retry": "Cuba lagi",
+  "search": "Cari",
+  "clear": "Kosongkan",
+  "share": "Kongsi",
+  "somethingWrong": "Ada sesuatu yang tidak kena",
+  "copy": "Salin",
+  "copied": "Disalin",
+  "offline": {
+    "title": "Tiada sambungan internet",
+    "message": "Bacaan al-Quran memerlukan internet pada kali pertama, kemudian ia disimpan dalam peranti anda dan boleh dimainkan tanpa talian. Hidupkan Wi-Fi atau data mudah alih dan cuba lagi.",
+    "later": "Nanti",
+    "openSettings": "Buka tetapan"
+  }
+}

@@ -11,6 +11,7 @@ export interface AzkarState {
   favoriteAdhkar: string[];
   favoriteHadiths: SavedHadith[];
   progress: Record<string, number>;
+  categoryUsage: Record<string, number>;
   progressDate: string;
   prayerPeriod: string;
 }
@@ -24,6 +25,7 @@ const initialState: AzkarState = {
   favoriteAdhkar: [],
   favoriteHadiths: [],
   progress: {},
+  categoryUsage: {},
   progressDate: today(),
   prayerPeriod: "",
 };
@@ -32,6 +34,16 @@ const movedKey = (key: string) => {
   const [categoryId, itemId] = key.split(":");
   const target = categoryId === MOVED_FROM ? MOVED_TO[Number(itemId)] : null;
   return target ? progressKey(target, Number(itemId)) : key;
+};
+
+const usageFromProgress = (progress: Record<string, number>) => {
+  const usage: Record<string, number> = {};
+  for (const [key, count] of Object.entries(progress)) {
+    if (count <= 0) continue;
+    const categoryId = key.split(":")[0];
+    usage[categoryId] = (usage[categoryId] ?? 0) + 1;
+  }
+  return usage;
 };
 
 export const AzkarSlice = createSlice({
@@ -89,7 +101,16 @@ export const AzkarSlice = createSlice({
         state.progressDate = today();
       }
       const key = progressKey(categoryId, itemId);
-      state.progress[key] = Math.min((state.progress[key] ?? 0) + 1, max);
+      const before = state.progress[key] ?? 0;
+      state.progress[key] = Math.min(before + 1, max);
+      if (before < max && state.progress[key] === max) {
+        state.categoryUsage[categoryId] =
+          (state.categoryUsage[categoryId] ?? 0) + 1;
+      }
+    },
+    recordCategoryOpen(state, action: PayloadAction<string>) {
+      const id = action.payload;
+      state.categoryUsage[id] = (state.categoryUsage[id] ?? 0) + 1;
     },
     resetCategory(state, action: PayloadAction<string>) {
       const prefix = `${action.payload}:`;
@@ -116,6 +137,13 @@ export const AzkarSlice = createSlice({
           count,
         ]),
       );
+      const usage = action.payload.categoryUsage;
+      next.categoryUsage =
+        typeof usage === "object" &&
+        usage !== null &&
+        Object.keys(usage).length > 0
+          ? usage
+          : usageFromProgress(next.progress);
       if (next.progressDate !== today()) {
         next.progress = {};
         next.progressDate = today();
@@ -132,6 +160,7 @@ export const {
   incrementCount,
   startNewDay,
   startNewPrayer,
+  recordCategoryOpen,
   resetCategory,
   resetAllProgress,
   resetAzkarData,

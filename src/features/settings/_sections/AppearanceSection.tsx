@@ -1,5 +1,5 @@
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
-import { setShowSplash } from "@/store/Slices/SettingsSlice";
+import { setFullScreen, setShowSplash } from "@/store/Slices/SettingsSlice";
 import { useAppDispatch, useAppSelector } from "@/store/Store";
 import { useTranslation } from "react-i18next";
 import PalettePicker from "../_ui/PalettePicker";
@@ -11,6 +11,7 @@ export default function AppearanceSection() {
   const { t } = useTranslation("settings");
   const dispatch = useAppDispatch();
   const showSplash = useAppSelector((s) => s.settings.showSplash);
+  const fullScreen = useAppSelector((s) => s.settings.fullScreen);
 
   return (
     <>
@@ -22,6 +23,14 @@ export default function AppearanceSection() {
       </SettingsGroup>
       <SettingsGroup title={t("prayerCardStyle")}>
         <PrayerCardStylePicker />
+      </SettingsGroup>
+      <SettingsGroup title={t("display")}>
+        <SettingsSwitchRow
+          title={t("fullScreen.title")}
+          subtitle={t("fullScreen.hint")}
+          value={fullScreen}
+          onValueChange={(value) => dispatch(setFullScreen(value))}
+        />
       </SettingsGroup>
       <SettingsGroup title={t("startup")}>
         <SettingsSwitchRow

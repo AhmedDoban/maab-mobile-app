@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { router, useScrollToTop } from "expo-router";
 import HijriDateChip from "@/features/prayer-times/_ui/HijriDateChip";
 import ContentColumn from "@/components/ui/ContentColumn";
 import CompactHeroBar from "@/components/hero/CompactHeroBar";
@@ -9,9 +9,15 @@ import { normalizeQuran } from "@/features/azkar/_data/quran";
 import useCompactHero from "@/hooks/useCompactHero";
 import useDirection from "@/hooks/useDirection";
 import useTabBarSpace from "@/hooks/useTabBarSpace";
-import { useCallback, useDeferredValue, useMemo, useState } from "react";
+import {
+  useCallback,
+  useDeferredValue,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useTranslation } from "react-i18next";
-import { ListRenderItem, View } from "react-native";
+import { FlatList, ListRenderItem, View } from "react-native";
 import Animated from "react-native-reanimated";
 import useQuranRows from "./_components/useQuranRows";
 import useSurahSearch from "./_components/useSurahSearch";
@@ -20,6 +26,7 @@ import { QuranRow, quranRowKey } from "./_data/quranRows";
 import KhatmaTab from "./_ui/KhatmaTab";
 import QuranFilterChips from "./_ui/QuranFilterChips";
 import QuranListRow from "./_ui/QuranListRow";
+import QuranReadingCard from "./_ui/QuranReadingCard";
 import QuranSavedSection from "./_ui/QuranSavedSection";
 import QuranSearchResults from "./_ui/QuranSearchResults";
 import QuranSectionTabs, { QuranSection } from "./_ui/QuranSectionTabs";
@@ -41,6 +48,8 @@ export default function QuranHome() {
   const { direction } = useDirection();
   const tabBarSpace = useTabBarSpace();
   const { compact, onScroll } = useCompactHero(HERO);
+  const listRef = useRef<FlatList<QuranRow>>(null);
+  useScrollToTop(listRef);
   const [query, setQuery] = useState("");
   const [section, setSection] = useState<QuranSection>("surahs");
   const [byJuz, setByJuz] = useState(false);
@@ -97,6 +106,7 @@ export default function QuranHome() {
           <QuranSearchResults surahs={surahResults} verses={verseResults} />
         ) : (
           <>
+            <QuranReadingCard />
             <QuranSectionTabs
               value={section}
               onChange={setSection}
@@ -116,10 +126,11 @@ export default function QuranHome() {
   return (
     <View className="flex-1 bg-main-bg">
       <Animated.FlatList
+        ref={listRef}
         className="flex-1 bg-main-bg"
         style={{ direction }}
         contentContainerClassName="gap-2.5"
-        contentContainerStyle={{ paddingBottom: 12 + tabBarSpace }}
+        contentContainerStyle={{ paddingBottom: 24 + tabBarSpace }}
         scrollIndicatorInsets={{ bottom: tabBarSpace }}
         contentInsetAdjustmentBehavior="never"
         keyboardDismissMode="on-drag"

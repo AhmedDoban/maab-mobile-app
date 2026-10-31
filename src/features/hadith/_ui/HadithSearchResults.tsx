@@ -11,13 +11,14 @@ import { hasArabic, searchLocalHadiths } from "../_data";
 import DorarHadithCard from "./DorarHadithCard";
 import LocalHadithCard from "./LocalHadithCard";
 import HadithCardSkeleton from "./HadithCardSkeleton";
+import { contentLocale } from "@/i18n/config";
 
 const MAX_LOCAL = 30;
 
 export default function HadithSearchResults({ query }: { query: string }) {
   const { t, i18n } = useTranslation("hadith");
   const colors = useThemeColors();
-  const useDorar = i18n.language === "ar" && hasArabic(query);
+  const useDorar = contentLocale(i18n.language) === "ar" && hasArabic(query);
 
   const { data, isFetching, isError } = useSearchHadithQuery(query, {
     skip: !useDorar,

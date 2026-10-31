@@ -1,8 +1,7 @@
 import AppText from "@/components/ui/AppText";
 import Icon from "@/components/ui/Icon";
-import { Locale } from "@/i18n/config";
-import { useTranslation } from "react-i18next";
 import { View } from "react-native";
+import useHijriLabel from "../_components/useHijriLabel";
 import { HijriDate } from "../_data/hijri";
 
 export default function ClassicPrayerDateRow({
@@ -12,9 +11,7 @@ export default function ClassicPrayerDateRow({
   hijri: HijriDate;
   city: string | null;
 }) {
-  const { i18n } = useTranslation();
-  const locale = i18n.language as Locale;
-  const comma = locale === "ar" ? "،" : ",";
+  const hijriLabel = useHijriLabel();
 
   return (
     <View className="flex-row flex-wrap items-center gap-x-1.5 gap-y-1">
@@ -25,7 +22,7 @@ export default function ClassicPrayerDateRow({
           style={{ opacity: 0.85 }}
           numberOfLines={1}
         >
-          {`${hijri.weekday[locale]}${comma} ${hijri.day} ${hijri.monthName[locale]} ${hijri.year}`}
+          {hijriLabel.short(hijri)}
         </AppText>
       </View>
       {city ? (

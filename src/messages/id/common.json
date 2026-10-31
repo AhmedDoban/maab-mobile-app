@@ -1,0 +1,25 @@
+{
+  "appName": "Maab",
+  "tabs": {
+    "azkar": "Zikir",
+    "hadith": "Hadis",
+    "qibla": "Kiblat",
+    "favorites": "Favorit",
+    "settings": "Pengaturan",
+    "quran": "Al-Qur'an"
+  },
+  "loading": "Memuat...",
+  "retry": "Coba lagi",
+  "search": "Cari",
+  "clear": "Hapus",
+  "share": "Bagikan",
+  "somethingWrong": "Terjadi kesalahan",
+  "copy": "Salin",
+  "copied": "Disalin",
+  "offline": {
+    "title": "Tidak ada koneksi internet",
+    "message": "Murotal butuh internet saat pertama kali diputar, lalu disimpan di perangkat Anda dan bisa diputar secara offline. Nyalakan Wi-Fi atau data seluler, lalu coba lagi.",
+    "later": "Nanti",
+    "openSettings": "Buka pengaturan"
+  }
+}

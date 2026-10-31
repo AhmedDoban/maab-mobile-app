@@ -1,7 +1,9 @@
 import { Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import useBottomInset from "./useBottomInset";
 
 export default function useTabBarSpace() {
   const insets = useSafeAreaInsets();
-  return Platform.OS === "ios" ? insets.bottom + 52 : 0;
+  const bottomInset = useBottomInset();
+  return Platform.OS === "ios" ? insets.bottom : bottomInset + 88;
 }

@@ -1,5 +1,4 @@
 import { brandFor } from "@/constants/palettes";
-import { Locale } from "@/i18n/config";
 import { isRTLLocale } from "@/i18n/direction";
 import { useAppSelector } from "@/store/Store";
 import { useEffect } from "react";
@@ -16,6 +15,7 @@ import { shortTime } from "../_data/time";
 import { PrayerDay } from "../_data/schedule";
 import { PRAYER_ICONS, REMINDER_PRAYERS } from "../_data/types";
 import useCityName from "./useCityName";
+import useHijriLabel from "./useHijriLabel";
 import usePrayerLabels from "./usePrayerLabels";
 
 const WIDGET_DAYS = 7;
@@ -26,6 +26,7 @@ export default function usePrayerWidgets(
 ) {
   const { t, i18n } = useTranslation("prayer");
   const { label } = usePrayerLabels();
+  const hijriLabel = useHijriLabel();
   const palette = useAppSelector((s) => s.settings.palette);
   const lockScreen = useAppSelector((s) => s.settings.lockScreenPrayer);
   const city = useCityName(day?.city);
@@ -34,18 +35,15 @@ export default function usePrayerWidgets(
     if (!config) return;
     const brand = brandFor(palette);
     const start = new Date();
-    const locale = i18n.language as Locale;
-    const comma = locale === "ar" ? "،" : ",";
     const days = Array.from({ length: WIDGET_DAYS + 1 }, (_, offset) =>
       addDays(start, offset - 1),
     );
     const dates = days.map((date) => {
-      const hijri = toHijri(date);
       const midnight = new Date(date);
       midnight.setHours(0, 0, 0, 0);
       return {
         at: midnight.getTime(),
-        text: `${hijri.weekday[locale]}${comma} ${hijri.day} ${hijri.monthName[locale]} ${hijri.year}`,
+        text: hijriLabel.short(toHijri(date)),
       };
     });
     const prayers = days
@@ -61,7 +59,7 @@ export default function usePrayerWidgets(
       })
       .flat();
     updatePrayerWidgets({
-      rtl: isRTLLocale(locale),
+      rtl: isRTLLocale(i18n.language),
       color: brand.main,
       mid: brand.mid,
       deep: brand.deep,
@@ -78,5 +76,5 @@ export default function usePrayerWidgets(
       lockScreen,
       lockChannel: t("widget.lockChannel"),
     });
-  }, [config, day, palette, city, lockScreen, i18n.language]);
+  }, [config, day, palette, city, lockScreen, i18n.language, hijriLabel]);
 }

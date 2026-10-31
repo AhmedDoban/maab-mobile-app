@@ -1,0 +1,25 @@
+{
+  "appName": "Maab",
+  "tabs": {
+    "azkar": "Zikirler",
+    "hadith": "Hadis",
+    "qibla": "Kıble",
+    "favorites": "Favoriler",
+    "settings": "Ayarlar",
+    "quran": "Kur'an"
+  },
+  "loading": "Yükleniyor...",
+  "retry": "Tekrar dene",
+  "search": "Ara",
+  "clear": "Temizle",
+  "share": "Paylaş",
+  "somethingWrong": "Bir şeyler ters gitti",
+  "copy": "Kopyala",
+  "copied": "Kopyalandı",
+  "offline": {
+    "title": "İnternet bağlantısı yok",
+    "message": "Tilavetler ilk seferde internet gerektirir, ardından cihazınıza kaydedilir ve çevrimdışı çalınır. Wi-Fi'yi veya mobil veriyi açıp tekrar deneyin.",
+    "later": "Sonra",
+    "openSettings": "Ayarları aç"
+  }
+}

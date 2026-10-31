@@ -1,6 +1,6 @@
 import { getSurah, toArabicDigits } from "@/features/azkar/_data/quran";
 import { getItems } from "@/features/azkar/_data";
-import { Locale } from "@/i18n/config";
+import { contentLocale, Locale } from "@/i18n/config";
 import { ReminderKind } from "@/store/Slices/SettingsSlice";
 
 const FIRST_HOUR = 7;
@@ -37,9 +37,10 @@ const dhikrPools = new Map<Locale, string[]>();
 function getDhikrPool(locale: Locale, phrases: string[]) {
   const cached = dhikrPools.get(locale);
   if (cached) return cached;
+  const content = contentLocale(locale);
   const items = DHIKR_CATEGORIES.flatMap(getItems)
-    .filter((z) => z.ar.text.length <= MAX_DHIKR_LENGTH && z[locale].text)
-    .map((z) => clean(z[locale].text));
+    .filter((z) => z.ar.text.length <= MAX_DHIKR_LENGTH && z[content].text)
+    .map((z) => clean(z[content].text));
   const pool = [...phrases, ...items];
   dhikrPools.set(locale, pool);
   return pool;
@@ -83,12 +84,12 @@ export function quranContents(
   return Array.from({ length: count }, (_, i) => {
     const [surah, ayah, text, translation] = list[(start + i) % list.length];
     const info = getSurah(surah);
-    const name =
-      (locale === "ar" ? info?.name : info?.transliteration) ?? String(surah);
-    const number = locale === "ar" ? toArabicDigits(ayah) : String(ayah);
+    const arabic = contentLocale(locale) === "ar";
+    const name = (arabic ? info?.name : info?.transliteration) ?? String(surah);
+    const number = arabic ? toArabicDigits(ayah) : String(ayah);
     return {
       title: title(name, number),
-      body: locale === "ar" ? text : translation,
+      body: arabic ? text : translation,
     };
   });
 }

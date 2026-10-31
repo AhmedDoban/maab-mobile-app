@@ -14,8 +14,8 @@ export default memo(function MushafPageFooter({ page }: { page: number }) {
     <View
       className={
         rightPage
-          ? "flex-row items-center justify-between"
-          : "flex-row-reverse items-center justify-between"
+          ? "flex-row items-center justify-between px-5"
+          : "flex-row-reverse items-center justify-between px-5"
       }
       style={{ height: PAGE.bottomRow, marginTop: PAGE.gap }}
     >

@@ -123,7 +123,7 @@ export default memo(function MushafPage({
     return (
       <ScrollView
         style={{ width, height, direction: "rtl", backgroundColor: c.page }}
-        contentContainerStyle={padding}
+        contentContainerStyle={{ ...padding, paddingBottom: 0 }}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={16}
         onScroll={(e) => {

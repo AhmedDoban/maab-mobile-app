@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import Screen from "@/components/ui/Screen";
 import EmptyState from "@/components/ui/EmptyState";
-import { Locale } from "@/i18n/config";
+import { contentLocale } from "@/i18n/config";
 import { getCategory } from "./_data";
 import CategoryContent from "./_ui/CategoryContent";
 
@@ -21,7 +21,7 @@ export default function AzkarDetails({ id }: { id: string }) {
     <CategoryContent
       key={category.id}
       categoryId={category.id}
-      title={category.title[i18n.language as Locale]}
+      title={category.title[contentLocale(i18n.language)]}
     />
   );
 }

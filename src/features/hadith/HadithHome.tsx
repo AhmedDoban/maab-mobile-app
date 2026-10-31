@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { router, useScrollToTop } from "expo-router";
 import HijriDateChip from "@/features/prayer-times/_ui/HijriDateChip";
 import CompactHeroBar from "@/components/hero/CompactHeroBar";
 import HadithArt from "@/components/art/HadithArt";
@@ -7,9 +7,9 @@ import type { HeroBar } from "@/components/hero/heroTypes";
 import useCompactHero from "@/hooks/useCompactHero";
 import useDirection from "@/hooks/useDirection";
 import useTabBarSpace from "@/hooks/useTabBarSpace";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ListRenderItem, View } from "react-native";
+import { FlatList, ListRenderItem, View } from "react-native";
 import Animated from "react-native-reanimated";
 import useHadithPagination from "./_components/useHadithPagination";
 import { LocalHadith } from "./_data";
@@ -37,6 +37,8 @@ export default function HadithHome() {
   const { direction } = useDirection();
   const tabBarSpace = useTabBarSpace();
   const { compact, onScroll } = useCompactHero(HERO);
+  const listRef = useRef<FlatList>(null);
+  useScrollToTop(listRef);
   const { visible, hasMore, loading, loadMore } = useHadithPagination();
   const [draft, setDraft] = useState("");
   const [query, setQuery] = useState("");
@@ -86,6 +88,7 @@ export default function HadithHome() {
   return (
     <View className="flex-1 bg-main-bg">
       <Animated.FlatList
+        ref={listRef}
         className="flex-1 bg-main-bg"
         style={{ direction }}
         contentContainerClassName="gap-3"

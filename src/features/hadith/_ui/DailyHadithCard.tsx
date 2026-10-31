@@ -1,6 +1,6 @@
 import AppText from "@/components/ui/AppText";
 import Icon from "@/components/ui/Icon";
-import { Locale } from "@/i18n/config";
+import { contentLocale } from "@/i18n/config";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { savedLocal } from "../_data/hadithKey";
@@ -13,7 +13,7 @@ export default function DailyHadithCard() {
   const { t, i18n } = useTranslation("hadith");
   const p = useHadithColors();
   const hadith = getDailyHadith();
-  const locale = i18n.language as Locale;
+  const locale = contentLocale(i18n.language);
   const content = hadith[locale];
   const arabic = locale === "ar";
 

@@ -1,4 +1,4 @@
-import { Locale } from "@/i18n/config";
+import { ContentLocale } from "@/i18n/config";
 
 interface HadithContent {
   source: string;
@@ -6,7 +6,7 @@ interface HadithContent {
   text: string;
 }
 
-export interface LocalHadith extends Record<Locale, HadithContent> {
+export interface LocalHadith extends Record<ContentLocale, HadithContent> {
   id: string;
   number: number;
 }

@@ -1,0 +1,22 @@
+{
+  "locating": "Mencari lokasi Anda...",
+  "permissionTitle": "Kami memerlukan lokasi Anda",
+  "permissionHint": "Untuk menentukan arah kiblat dengan akurat, izinkan aplikasi mengakses lokasi Anda.",
+  "allow": "Izinkan akses",
+  "openSettings": "Buka Pengaturan",
+  "error": "Lokasi Anda tidak ditemukan",
+  "errorHint": "Pastikan layanan lokasi aktif, lalu coba lagi.",
+  "facing": "Anda sudah menghadap kiblat",
+  "turnRight": "Putar ke kanan {{deg}}°",
+  "turnLeft": "Putar ke kiri {{deg}}°",
+  "noCompass": "Kiblat berada {{deg}}° dari utara",
+  "hint": "Pegang ponsel mendatar dan putar hingga panah menunjuk ke Ka'bah",
+  "fromNorth": "{{deg}}° dari utara",
+  "km": "{{value}} km",
+  "calibrate": "Gerakkan ponsel membentuk angka 8 untuk mengkalibrasi kompas",
+  "interference": "Gangguan magnet dapat membuat arah tidak akurat. Jauhkan dari perangkat elektronik, logam, dan magnet (seperti casing atau pengisi daya), lalu gerakkan ponsel membentuk angka 8",
+  "north": "U",
+  "east": "T",
+  "south": "S",
+  "west": "B"
+}

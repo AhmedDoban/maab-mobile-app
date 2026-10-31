@@ -1,7 +1,7 @@
 import { memo } from "react";
 import AppText from "@/components/ui/AppText";
 import useArabicTextStyle from "@/hooks/useArabicTextStyle";
-import { Locale } from "@/i18n/config";
+import { contentLocale } from "@/i18n/config";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { savedLocal } from "../_data/hadithKey";
@@ -19,7 +19,7 @@ export default memo(function LocalHadithCard({
 }) {
   const { i18n } = useTranslation("hadith");
   const p = useHadithColors();
-  const locale = i18n.language as Locale;
+  const locale = contentLocale(i18n.language);
   const content = hadith[locale];
   const arabic = locale === "ar";
   const textStyle = useArabicTextStyle(arabic ? 0.85 : 0.75);

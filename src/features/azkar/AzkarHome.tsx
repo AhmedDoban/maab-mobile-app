@@ -9,15 +9,17 @@ import PrayerTimesCard from "@/features/prayer-times/PrayerTimesCard";
 import useCompactHero from "@/hooks/useCompactHero";
 import useDirection from "@/hooks/useDirection";
 import useTabBarSpace from "@/hooks/useTabBarSpace";
-import { router } from "expo-router";
-import { useMemo, useState } from "react";
+import { router, useScrollToTop } from "expo-router";
+import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { View } from "react-native";
+import { type ScrollViewInstance, View } from "react-native";
 import Animated from "react-native-reanimated";
-import { isFriday, searchCategories } from "./_data";
+import useKahfTime from "./_components/useKahfTime";
+import { searchCategories } from "./_data";
 import CategoryGrid from "./_ui/CategoryGrid";
 import DailyJourneyCard from "./_ui/DailyJourneyCard";
 import DailyWirdSection from "./_ui/DailyWirdSection";
+import QuranSection from "./_ui/QuranSection";
 import ExploreSection from "./_ui/ExploreSection";
 import VerseOfDayCard from "./_ui/VerseOfDayCard";
 
@@ -35,8 +37,10 @@ export default function AzkarHome() {
   const [query, setQuery] = useState("");
   const results = useMemo(() => searchCategories(query), [query]);
   const searching = query.trim().length > 0;
-  const friday = isFriday();
+  const kahf = useKahfTime();
   const { compact, onScroll } = useCompactHero(COMPACT_HEIGHT);
+  const scrollRef = useRef<ScrollViewInstance>(null);
+  useScrollToTop(scrollRef);
 
   const search = useMemo<HeroSearch>(
     () => ({
@@ -66,6 +70,7 @@ export default function AzkarHome() {
   return (
     <View className="flex-1 bg-main-bg">
       <Animated.ScrollView
+        ref={scrollRef}
         className="flex-1 bg-main-bg"
         style={{ direction }}
         contentContainerStyle={contentStyle}
@@ -93,10 +98,11 @@ export default function AzkarHome() {
           ) : (
             <>
               <PrayerTimesCard />
-              <DailyWirdSection friday={friday} />
+              <DailyWirdSection kahf={kahf} />
+              <QuranSection />
               <VerseOfDayCard />
               <ExploreSection />
-              <DailyJourneyCard friday={friday} />
+              <DailyJourneyCard />
             </>
           )}
         </ContentColumn>

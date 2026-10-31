@@ -1,4 +1,6 @@
+import AppText from "@/components/ui/AppText";
 import Icon from "@/components/ui/Icon";
+import NoInternetDialog from "@/components/ui/NoInternetDialog";
 import PressableScale from "@/components/ui/PressableScale";
 import {
   AyahRef,
@@ -7,36 +9,49 @@ import {
   PAGE_COUNT,
   pageOf,
 } from "@/features/azkar/_data/quran";
-import { setQuranBookmark } from "@/store/Slices/SettingsSlice";
+import useDirection from "@/hooks/useDirection";
+import useThemeColors from "@/hooks/useThemeColors";
+import {
+  setQuranBookmark,
+  setQuranLastPage,
+} from "@/store/Slices/SettingsSlice";
 import { useAppDispatch, useAppSelector } from "@/store/Store";
 import * as Haptics from "expo-haptics";
+import { useKeepAwake } from "expo-keep-awake";
 import { router, Stack } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Dimensions, ScaledSize, StyleSheet, View } from "react-native";
+import {
+  Dimensions,
+  Platform,
+  ScaledSize,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import AppText from "@/components/ui/AppText";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  initialWindowMetrics,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import { hitTest } from "./_components/pageHitTest";
 import useMushafColors from "./_components/useMushafColors";
-import useThemeColors from "@/hooks/useThemeColors";
-import useDirection from "@/hooks/useDirection";
-import useRecitation from "./_components/useRecitation";
+import usePageFade from "./_components/usePageFade";
+import useRecitationPlayer from "./_components/useRecitationPlayer";
+import useReadingTimer from "./_components/useReadingTimer";
+import useRotationCover from "./_components/useRotationCover";
 import useSurahName from "./_components/useSurahName";
 import { preloadTafsir } from "./_components/useTafsir";
-import { useKeepAwake } from "expo-keep-awake";
-import usePageFade from "./_components/usePageFade";
-import useRotationCover from "./_components/useRotationCover";
+import AyahSheet from "./_ui/AyahSheet";
 import MushafPage from "./_ui/MushafPage";
 import MushafPager from "./_ui/MushafPager";
-import { hitTest } from "./_components/pageHitTest";
+import { contentLocale } from "@/i18n/config";
 import PageSlider from "./_ui/PageSlider";
 import RecitationPlayer from "./_ui/RecitationPlayer";
-import NoInternetDialog from "@/components/ui/NoInternetDialog";
-import AyahSheet from "./_ui/AyahSheet";
 
 const TAFSIR_DELAY_MS = 800;
 const AREA_SETTLE_MS = 80;
@@ -51,7 +66,7 @@ export default function SurahReader({
   page?: number;
 }) {
   const { t, i18n } = useTranslation("azkar");
-  const ar = i18n.language === "ar";
+  const ar = contentLocale(i18n.language) === "ar";
   const surahName = useSurahName();
   const c = useMushafColors();
   const screenOptions = useMemo(
@@ -68,8 +83,31 @@ export default function SurahReader({
   const dispatch = useAppDispatch();
   const insets = useSafeAreaInsets();
   const side = Math.max(insets.left, insets.right);
+  const { width: windowW, height: windowH } = useWindowDimensions();
+  const landscape = windowW > windowH;
   const bookmark = useAppSelector((s) => s.settings.quranBookmark);
-  const recitation = useRecitation();
+  const fullScreen = useAppSelector((s) => s.settings.fullScreen);
+  const bottom =
+    Platform.OS === "android"
+      ? fullScreen
+        ? 8
+        : insets.bottom
+      : Math.min(
+          insets.bottom,
+          initialWindowMetrics?.insets.bottom ?? insets.bottom,
+        );
+  const recitation = useRecitationPlayer();
+  const keepPlaying = useAppSelector((s) => s.settings.recitationInApp);
+  const leave = useRef({ keepPlaying, stop: recitation.stop });
+  useEffect(() => {
+    leave.current = { keepPlaying, stop: recitation.stop };
+  }, [keepPlaying, recitation.stop]);
+  useEffect(
+    () => () => {
+      if (!leave.current.keepPlaying) leave.current.stop();
+    },
+    [],
+  );
 
   const initial = useMemo(
     () => startPage ?? pageOf(id, ayah ?? 1),
@@ -86,17 +124,22 @@ export default function SurahReader({
   const [chrome, setChrome] = useState(true);
 
   useKeepAwake();
+  useReadingTimer();
+
+  useEffect(() => {
+    dispatch(setQuranLastPage(page));
+  }, [dispatch, page]);
 
   useEffect(() => {
     const timer = setTimeout(() => preloadTafsir(ar, id), TAFSIR_DELAY_MS);
     return () => clearTimeout(timer);
   }, [ar, id]);
   const [sheetAyah, setSheetAyah] = useState<AyahRef | null>(null);
-  const fade = useSharedValue(1);
+  const fade = useSharedValue(0);
 
   useEffect(() => {
-    fade.set(withTiming(chrome ? 1 : 0, { duration: 200 }));
-  }, [chrome, fade]);
+    fade.set(withTiming(chrome && area ? 1 : 0, { duration: 200 }));
+  }, [chrome, area, fade]);
 
   const chromeStyle = useAnimatedStyle(() => ({ opacity: fade.get() }));
   const toggleChrome = useCallback(() => setChrome((v) => !v), []);
@@ -213,8 +256,7 @@ export default function SurahReader({
         className="flex-1"
         layout={rotation.layout}
         style={{
-          marginTop: insets.top,
-          marginBottom: insets.bottom,
+          marginTop: landscape ? 0 : insets.top,
           marginHorizontal: side,
         }}
         onLayout={(e) => {
@@ -297,7 +339,7 @@ export default function SurahReader({
         className="absolute inset-x-0 bottom-0 gap-3 pt-3"
         style={[
           {
-            paddingBottom: insets.bottom + 8,
+            paddingBottom: bottom + 8,
             paddingHorizontal: side + 16,
             backgroundColor: c.page,
           },

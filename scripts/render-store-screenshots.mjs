@@ -1,9 +1,6 @@
 import { Resvg } from "@resvg/resvg-js";
 import fs from "node:fs";
 import path from "node:path";
-import { createRequire } from "node:module";
-
-const Jimp = createRequire(import.meta.url)("jimp-compact");
 
 const ROOT = path.resolve(
   path.dirname(new URL(import.meta.url).pathname),
@@ -13,54 +10,50 @@ const RAW = process.env.STORE_SCREENS ?? path.join(ROOT, "store-screens");
 const OUT = process.env.STORE_OUT ?? ROOT;
 const FONTS = path.join(ROOT, "assets/fonts");
 
-const SCREENS = [
-  "home-dark-en",
-  "home-light-ar",
-  "mushaf-page",
-  "hadith-dark-en",
-  "quran-light-ar",
-  "quran-dark-en",
-  "fatiha-light",
-  "qibla-dark-en",
-];
-
 const SLIDES = [
   {
-    ar: "مواقيت الصلاة والأذكار",
-    en: "Prayer times & daily adhkar",
-    badge: "Light · Dark",
+    ar: "مواقيت الصلاة وأذكار يومك",
+    en: "Prayer times & your daily adhkar",
+    phones: ["home-ar"],
   },
-  { ar: "المصحف الشريف", en: "The Madinah Mushaf, page by page" },
-  { ar: "حديث كل يوم", en: "A hadith every day, offline" },
   {
-    ar: "بالعربية والإنجليزية",
-    en: "Fully in Arabic & English",
-    badge: "AR · EN",
+    ar: "المصحف الشريف",
+    en: "The Madinah Mushaf, page by page",
+    phones: ["mushaf-ar"],
   },
-  { ar: "القرآن والقبلة دون إنترنت", en: "Quran & qibla, no internet needed" },
+  { ar: "حديث كل يوم", en: "A hadith every day", phones: ["hadith-ar"] },
+  { ar: "اتجاه القبلة", en: "Find the qibla anywhere", phones: ["qibla-ar"] },
+  {
+    ar: "أذان لكل صلاة",
+    en: "Choose an adhan for each prayer",
+    phones: ["adhan-ar", "prayer-ar"],
+  },
+  {
+    ar: "ألوان وإطارات تناسبك",
+    en: "Themes, colors and surah frames",
+    phones: ["appearance-ar", "frames-ar"],
+  },
+  {
+    ar: "بتسع لغات",
+    en: "Available in 9 languages",
+    badge: "9 LANGUAGES",
+    phones: ["language-ar"],
+  },
+  {
+    ar: "يعمل دون إنترنت",
+    en: "Works offline, privacy first",
+    phones: ["settings-ar", "sources-ar"],
+  },
 ];
 
-const PHONES = [
-  { screen: "home-dark-en", x: 20, y: 470, w: 600 },
-  { screen: "home-light-ar", x: 430, y: 580, w: 690 },
-  { screen: "mushaf-page", x: 1650, y: 340, w: 1000 },
-  { screen: "hadith-dark-en", x: 2590, y: 580, w: 650 },
-  { screen: "quran-light-ar", x: 3210, y: 540, w: 600 },
-  { screen: "quran-dark-en", x: 3685, y: 620, w: 650 },
-  { screen: "fatiha-light", x: 4320, y: 567, w: 520 },
-  { screen: "qibla-dark-en", x: 4765, y: 620, w: 620 },
-];
+const SCREENS = [...new Set(SLIDES.flatMap((slide) => slide.phones))];
 
-const STORES = [
-  { dir: "google-play-screenshots", slideW: 1080, slideH: 1920 },
-  { dir: "app-store-screenshots", slideW: 1320, slideH: 2868 },
-];
+const STORES = [{ dir: "google-play-screenshots", slideW: 1080, slideH: 1920 }];
 
 const INK = "#0e3a33";
 const GRAY = "#4b5a57";
 const GOLD = "#b8924f";
 const PILL = "#0e3a33";
-const TILT = 5;
 
 const esc = (s) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -101,59 +94,56 @@ const arabicText = (str, x, y, size, color) =>
 const latinText = (str, x, y, size, color, weight = 400) =>
   `<text x="${x}" y="${y}" font-family="Space Grotesk" font-size="${size}" font-weight="${weight}" fill="${color}" text-anchor="middle" letter-spacing="${size * 0.02}">${esc(str)}</text>`;
 
-function phone(file, x, y, w, s, id) {
+function phone(file, x, y, w, tilt, id) {
   const size = imageSize(file);
-  const pw = w * s;
-  const ph = pw * (size.h / size.w);
-  const bezel = pw * 0.032;
-  const r = pw * 0.12;
-  const px = x;
-  const py = y;
-  const cx = px + pw / 2;
-  const cy = py + ph / 2;
-  return `<g transform="rotate(${TILT} ${cx} ${cy})">
-<rect x="${px - bezel}" y="${py - bezel}" width="${pw + bezel * 2}" height="${ph + bezel * 2}" rx="${r + bezel}" fill="#0b100f"/>
-<rect x="${px - bezel * 0.6}" y="${py - bezel * 0.6}" width="${pw + bezel * 1.2}" height="${ph + bezel * 1.2}" rx="${r + bezel * 0.6}" fill="none" stroke="#2f3a37" stroke-width="${bezel * 0.25}"/>
-<clipPath id="${id}"><rect x="${px}" y="${py}" width="${pw}" height="${ph}" rx="${r}"/></clipPath>
-<image href="${dataUri(file)}" x="${px}" y="${py}" width="${pw}" height="${ph}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/>
+  const ph = w * (size.h / size.w);
+  const bezel = w * 0.032;
+  const r = w * 0.12;
+  const cx = x + w / 2;
+  const cy = y + ph / 2;
+  return `<g transform="rotate(${tilt} ${cx} ${cy})">
+<rect x="${x - bezel}" y="${y - bezel}" width="${w + bezel * 2}" height="${ph + bezel * 2}" rx="${r + bezel}" fill="#0b100f"/>
+<rect x="${x - bezel * 0.6}" y="${y - bezel * 0.6}" width="${w + bezel * 1.2}" height="${ph + bezel * 1.2}" rx="${r + bezel * 0.6}" fill="none" stroke="#2f3a37" stroke-width="${bezel * 0.25}"/>
+<clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${ph}" rx="${r}"/></clipPath>
+<image href="${dataUri(file)}" x="${x}" y="${y}" width="${w}" height="${ph}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/>
 </g>`;
 }
 
-function panorama(store, files) {
-  const kx = store.slideW / 1080;
-  const ky = store.slideH / 1920;
-  const s = (kx + ky) / 2;
-  const W = store.slideW * SLIDES.length;
+function slideSvg(store, slide, files) {
+  const W = store.slideW;
   const H = store.slideH;
+  const s = W / 1080;
+  const cx = W / 2;
+  const top = (slide.badge ? 430 : 360) * s;
   const parts = [
     `<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7f3e8"/><stop offset="1" stop-color="#eef1ea"/></linearGradient></defs>`,
     `<rect width="${W}" height="${H}" fill="url(#bg)"/>`,
+    `<circle cx="${cx}" cy="${-420 * s}" r="${900 * s}" fill="#f0e2bf" opacity="0.35"/>`,
+    `<circle cx="${cx}" cy="${-420 * s}" r="${900 * s}" fill="none" stroke="${GOLD}" stroke-opacity="0.18" stroke-width="${2 * s}"/>`,
+    arabicText(slide.ar, cx, 170 * s, 84 * s, INK),
+    latinText(slide.en, cx, 245 * s, 36 * s, GRAY),
+    `<rect x="${cx - 32 * s}" y="${282 * s}" width="${64 * s}" height="${5 * s}" rx="${2.5 * s}" fill="${GOLD}"/>`,
   ];
-  SLIDES.forEach((slide, i) => {
-    const cx = store.slideW * (i + 0.5);
+  if (slide.badge) {
+    const bw = (slide.badge.length * 19 + 56) * s;
     parts.push(
-      `<circle cx="${cx}" cy="${-420 * s}" r="${900 * s}" fill="#f0e2bf" opacity="0.35"/>`,
-      `<circle cx="${cx}" cy="${-420 * s}" r="${900 * s}" fill="none" stroke="${GOLD}" stroke-opacity="0.18" stroke-width="${2 * s}"/>`,
-      arabicText(slide.ar, cx, 170 * s, 84 * s, INK),
-      latinText(slide.en, cx, 245 * s, 36 * s, GRAY),
-      `<rect x="${cx - 32 * s}" y="${282 * s}" width="${64 * s}" height="${5 * s}" rx="${2.5 * s}" fill="${GOLD}"/>`,
+      `<rect x="${cx - bw / 2}" y="${330 * s}" width="${bw}" height="${62 * s}" rx="${31 * s}" fill="${PILL}"/>`,
+      latinText(slide.badge, cx, 372 * s, 30 * s, "#ffffff", 700),
     );
-    if (slide.badge) {
-      const bw = (slide.badge.length * 19 + 56) * s;
-      parts.push(
-        `<rect x="${cx - bw / 2}" y="${330 * s}" width="${bw}" height="${62 * s}" rx="${31 * s}" fill="${PILL}"/>`,
-        latinText(slide.badge, cx, 372 * s, 30 * s, "#ffffff", 700),
-      );
-    }
-  });
-  PHONES.forEach((p, i) => {
-    parts.push(phone(files[p.screen], p.x * kx, p.y * ky, p.w, s, `p${i}`));
-  });
-  return {
-    W,
-    H,
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${parts.join("\n")}</svg>`,
-  };
+  }
+  const room = H - top - 60 * s;
+  if (slide.phones.length === 1) {
+    const w = Math.min(640 * s, room / (2340 / 1080));
+    parts.push(phone(files[slide.phones[0]], cx - w / 2, top, w, 0, "p0"));
+  } else {
+    const w = Math.min(470 * s, room / (2340 / 1080));
+    const y = top + Math.max(0, (room - w * (2340 / 1080) - 80 * s) / 2);
+    parts.push(
+      phone(files[slide.phones[1]], cx - w * 0.02, y + 80 * s, w, 6, "p1"),
+      phone(files[slide.phones[0]], cx - w * 0.92, y, w, -4, "p0"),
+    );
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${parts.join("\n")}</svg>`;
 }
 
 function featureGraphic(files) {
@@ -167,8 +157,8 @@ ${arabicText("راحة للقلب", 250, 205, 64, INK)}
 ${arabicText("وطمأنينة للروح", 250, 290, 64, INK)}
 <rect x="60" y="322" width="90" height="5" rx="2.5" fill="${GOLD}"/>
 ${latinText("Adhkar · Quran · Hadith · Prayer · Qibla", 260, 380, 26, GRAY)}
-${phone(files["home-dark-en"], 560, 150, 190, 1, "f0")}
-${phone(files["mushaf-page"], 760, 80, 230, 1, "f1")}
+${phone(files["home-ar"], 590, 115, 168, 5, "f0")}
+${phone(files["mushaf-ar"], 790, 45, 196, 5, "f1")}
 </svg>`;
 }
 
@@ -197,23 +187,17 @@ if (missing.length) {
 
 for (const store of STORES) {
   const out = path.join(OUT, store.dir);
+  fs.rmSync(out, { recursive: true, force: true });
   fs.mkdirSync(out, { recursive: true });
-  const { W, H, svg } = panorama(store, files);
-  const full = path.join(out, "panorama-full.png");
-  fs.writeFileSync(full, renderPng(svg));
-  const panoramaImage = await Jimp.read(full);
-  for (let i = 0; i < SLIDES.length; i++) {
-    await panoramaImage
-      .clone()
-      .crop(store.slideW * i, 0, store.slideW, H)
-      .writeAsync(path.join(out, `${String(i + 1).padStart(2, "0")}.png`));
-  }
-  await panoramaImage
-    .clone()
-    .resize(2400, Jimp.AUTO)
-    .quality(88)
-    .writeAsync(path.join(out, "panorama-preview.jpg"));
-  console.log(`${store.dir}: ${SLIDES.length} slides, panorama ${W}x${H}`);
+  SLIDES.forEach((slide, i) => {
+    fs.writeFileSync(
+      path.join(out, `${String(i + 1).padStart(2, "0")}.png`),
+      renderPng(slideSvg(store, slide, files)),
+    );
+  });
+  console.log(
+    `${store.dir}: ${SLIDES.length} slides at ${store.slideW}x${store.slideH}`,
+  );
 }
 
 fs.writeFileSync(

@@ -14,6 +14,7 @@ import {
 import usePrayerLabels from "./_components/usePrayerLabels";
 import usePrayerLocation from "./_components/usePrayerLocation";
 import usePrayerWidgets from "./_components/usePrayerWidgets";
+import useStartupNotificationPermission from "./_components/useStartupNotificationPermission";
 import {
   useClock,
   usePrayerConfig,
@@ -28,9 +29,10 @@ import AdhanSplash from "./AdhanSplash";
 
 const ALERT_DAYS = 7;
 
-export default function AdhanReminder() {
+export default function AdhanReminder({ ready }: { ready: boolean }) {
   const { t, i18n } = useTranslation(["prayer", "settings"]);
   const { label } = usePrayerLabels();
+  const notificationsAllowed = useStartupNotificationPermission(ready);
   usePrayerLocation();
   const config = usePrayerConfig();
   const day = usePrayerDay(config);
@@ -128,7 +130,7 @@ export default function AdhanReminder() {
         t("notificationTitle", { prayer: label(prayer, date.getDay() === 5) }),
       body: t("notificationBody"),
     });
-  }, [config, day, reminders, adhan, i18n.language]);
+  }, [config, day, reminders, adhan, i18n.language, notificationsAllowed]);
 
   return (
     <AdhanSplash

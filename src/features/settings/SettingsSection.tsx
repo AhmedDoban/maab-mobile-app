@@ -14,6 +14,7 @@ import DataSection from "./_sections/DataSection";
 import LanguageSection from "./_sections/LanguageSection";
 import PrayerSection from "./_sections/PrayerSection";
 import ReadingSection from "./_sections/ReadingSection";
+import RecitationSection from "./_sections/RecitationSection";
 import RemindersSection from "./_sections/RemindersSection";
 import SourcesSection from "./_sections/SourcesSection";
 import SurahFrameSection from "./_sections/SurahFrameSection";
@@ -26,6 +27,7 @@ const CONTENT: Record<SettingsSectionId, ComponentType> = {
   reminders: RemindersSection,
   reading: ReadingSection,
   surahFrame: SurahFrameSection,
+  recitation: RecitationSection,
   data: DataSection,
   sources: SourcesSection,
 };

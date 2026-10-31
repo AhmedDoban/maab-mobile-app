@@ -3,7 +3,7 @@ import Icon from "@/components/ui/Icon";
 import PressableScale from "@/components/ui/PressableScale";
 import useDirection from "@/hooks/useDirection";
 import useThemeColors from "@/hooks/useThemeColors";
-import { Locale } from "@/i18n/config";
+import { contentLocale } from "@/i18n/config";
 import { cn } from "@/lib/utils";
 import { Link } from "expo-router";
 import { memo } from "react";
@@ -51,7 +51,7 @@ export default memo(function CategoryTile({
             className="text-sm leading-5 text-ink"
             numberOfLines={2}
           >
-            {category.title[i18n.language as Locale]}
+            {category.title[contentLocale(i18n.language)]}
           </AppText>
           <AppText
             weight={finished ? "bold" : "regular"}

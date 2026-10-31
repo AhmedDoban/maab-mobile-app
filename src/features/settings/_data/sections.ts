@@ -5,6 +5,7 @@ export const SETTINGS_SECTIONS = [
   { id: "appearance", icon: "paint", title: "appearance", group: "general" },
   { id: "reading", icon: "textFont", title: "reading", group: "general" },
   { id: "surahFrame", icon: "quran", title: "surahFrame", group: "general" },
+  { id: "recitation", icon: "play", title: "recitation", group: "general" },
   {
     id: "prayer",
     icon: "personPraying",

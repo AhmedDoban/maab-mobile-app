@@ -1,5 +1,6 @@
 import useDirection from "@/hooks/useDirection";
 import useThemeColors from "@/hooks/useThemeColors";
+import { useAppSelector } from "@/store/Store";
 import { Stack } from "expo-router";
 import { type ComponentProps, useMemo } from "react";
 import { Platform, View } from "react-native";
@@ -16,6 +17,7 @@ const TAB_ROOTS = ["index", "hadith", "quran", "qibla", "settings"];
 export default function StackLayout() {
   const colors = useThemeColors();
   const { isRTL } = useDirection();
+  const fullScreen = useAppSelector((s) => s.settings.fullScreen);
 
   const titleStyle = useMemo(
     () => ({
@@ -38,6 +40,10 @@ export default function StackLayout() {
         headerStyle: { backgroundColor: colors.bg },
         headerBackButtonDisplayMode: "minimal",
         contentStyle: { backgroundColor: colors.bg },
+        autoHideHomeIndicator: true,
+        ...(fullScreen && Platform.OS === "android"
+          ? { statusBarHidden: true, navigationBarHidden: true }
+          : null),
       })}
     />
   );

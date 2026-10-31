@@ -64,6 +64,7 @@ export default function PageSlider({
   }, [width, progress, dragging, shown, onChange]);
 
   const thumb = useAnimatedStyle(() => ({
+    opacity: width.get() > 0 ? 1 : 0,
     transform: [
       {
         translateX: (1 - progress.get()) * Math.max(width.get() - THUMB_W, 0),

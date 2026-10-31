@@ -35,6 +35,23 @@ const isAyahBookmark = (value: unknown): value is AyahBookmark =>
   typeof (value as AyahBookmark).surah === "number" &&
   typeof (value as AyahBookmark).ayah === "number";
 
+export type QuranReadingDay = { day: string; pages: number[]; seconds: number };
+
+const isQuranReadingDay = (value: unknown): value is QuranReadingDay =>
+  typeof value === "object" &&
+  value !== null &&
+  typeof (value as QuranReadingDay).day === "string" &&
+  Array.isArray((value as QuranReadingDay).pages) &&
+  typeof (value as QuranReadingDay).seconds === "number";
+
+const readingDay = (
+  state: { quranToday: QuranReadingDay | null },
+  day: string,
+): QuranReadingDay =>
+  state.quranToday?.day === day
+    ? state.quranToday
+    : { day, pages: [], seconds: 0 };
+
 export type KhatmaPlan = {
   fromJuz: number;
   toJuz: number;
@@ -136,6 +153,9 @@ export interface SettingsState {
   palette: PaletteId;
   textSize: TextSize;
   quranBookmark: AyahBookmark | null;
+  quranLastPage: number | null;
+  quranLastReadAt: number | null;
+  quranToday: QuranReadingDay | null;
   savedAyahs: string[];
   khatma: KhatmaPlan | null;
   surahFrame: number;
@@ -146,6 +166,9 @@ export interface SettingsState {
   lockScreenPrayer: boolean;
   prayerCardStyle: PrayerCardStyle;
   showSplash: boolean;
+  fullScreen: boolean;
+  recitationInApp: boolean;
+  recitationLockScreen: boolean;
   adhanSound: AdhanSoundId;
   customAdhan: CustomAdhan | null;
   adhanPerPrayer: boolean;
@@ -163,6 +186,9 @@ const defaultSettings = (locale: Locale = defaultLocale): SettingsState => ({
   palette: DEFAULT_PALETTE,
   textSize: TEXT_SIZE.default,
   quranBookmark: null,
+  quranLastPage: null,
+  quranLastReadAt: null,
+  quranToday: null,
   savedAyahs: [],
   khatma: null,
   surahFrame: 1,
@@ -173,6 +199,9 @@ const defaultSettings = (locale: Locale = defaultLocale): SettingsState => ({
   lockScreenPrayer: false,
   prayerCardStyle: "modern",
   showSplash: true,
+  fullScreen: true,
+  recitationInApp: false,
+  recitationLockScreen: true,
   adhanSound: DEFAULT_ADHAN,
   customAdhan: null,
   adhanPerPrayer: false,
@@ -202,6 +231,15 @@ export const SettingsSlice = createSlice({
     setShowSplash(state, action: PayloadAction<boolean>) {
       state.showSplash = action.payload;
     },
+    setFullScreen(state, action: PayloadAction<boolean>) {
+      state.fullScreen = action.payload;
+    },
+    setRecitationInApp(state, action: PayloadAction<boolean>) {
+      state.recitationInApp = action.payload;
+    },
+    setRecitationLockScreen(state, action: PayloadAction<boolean>) {
+      state.recitationLockScreen = action.payload;
+    },
     setReminder(
       state,
       action: PayloadAction<{
@@ -220,6 +258,32 @@ export const SettingsSlice = createSlice({
     },
     setQuranBookmark(state, action: PayloadAction<AyahBookmark | null>) {
       state.quranBookmark = action.payload;
+    },
+    setQuranLastPage: {
+      reducer(
+        state,
+        action: PayloadAction<{ page: number; day: string; at: number }>,
+      ) {
+        const { page, day, at } = action.payload;
+        const today = readingDay(state, day);
+        if (!today.pages.includes(page)) today.pages.push(page);
+        state.quranToday = today;
+        state.quranLastPage = page;
+        state.quranLastReadAt = at;
+      },
+      prepare: (page: number) => ({
+        payload: { page, day: new Date().toDateString(), at: Date.now() },
+      }),
+    },
+    addQuranReadingTime: {
+      reducer(state, action: PayloadAction<{ seconds: number; day: string }>) {
+        const today = readingDay(state, action.payload.day);
+        today.seconds += action.payload.seconds;
+        state.quranToday = today;
+      },
+      prepare: (seconds: number) => ({
+        payload: { seconds, day: new Date().toDateString() },
+      }),
     },
     startKhatma(
       state,
@@ -314,6 +378,9 @@ export const SettingsSlice = createSlice({
     },
     resetQuranData(state) {
       state.quranBookmark = null;
+      state.quranLastPage = null;
+      state.quranLastReadAt = null;
+      state.quranToday = null;
       state.savedAyahs = [];
       state.ayahColors = {};
       state.khatma = null;
@@ -323,6 +390,9 @@ export const SettingsSlice = createSlice({
         ...defaultSettings(state.locale),
         prayerLocation: state.prayerLocation,
         quranBookmark: state.quranBookmark,
+        quranLastPage: state.quranLastPage,
+        quranLastReadAt: state.quranLastReadAt,
+        quranToday: state.quranToday,
         savedAyahs: state.savedAyahs,
         khatma: state.khatma,
         ayahColors: state.ayahColors,
@@ -364,6 +434,18 @@ export const SettingsSlice = createSlice({
           typeof action.payload.showSplash === "boolean"
             ? action.payload.showSplash
             : state.showSplash,
+        fullScreen:
+          typeof action.payload.fullScreen === "boolean"
+            ? action.payload.fullScreen
+            : state.fullScreen,
+        recitationInApp:
+          typeof action.payload.recitationInApp === "boolean"
+            ? action.payload.recitationInApp
+            : state.recitationInApp,
+        recitationLockScreen:
+          typeof action.payload.recitationLockScreen === "boolean"
+            ? action.payload.recitationLockScreen
+            : state.recitationLockScreen,
         prayerCardStyle: isPrayerCardStyle(action.payload.prayerCardStyle)
           ? action.payload.prayerCardStyle
           : state.prayerCardStyle,
@@ -390,6 +472,19 @@ export const SettingsSlice = createSlice({
         quranBookmark: isAyahBookmark(action.payload.quranBookmark)
           ? action.payload.quranBookmark
           : null,
+        quranLastPage:
+          typeof action.payload.quranLastPage === "number" &&
+          action.payload.quranLastPage >= 1 &&
+          action.payload.quranLastPage <= 604
+            ? action.payload.quranLastPage
+            : state.quranLastPage,
+        quranLastReadAt:
+          typeof action.payload.quranLastReadAt === "number"
+            ? action.payload.quranLastReadAt
+            : state.quranLastReadAt,
+        quranToday: isQuranReadingDay(action.payload.quranToday)
+          ? action.payload.quranToday
+          : state.quranToday,
         surahFrame:
           typeof action.payload.surahFrame === "number" &&
           action.payload.surahFrame >= 1 &&
@@ -412,10 +507,15 @@ export const {
   setTheme,
   setPrayerCardStyle,
   setShowSplash,
+  setFullScreen,
+  setRecitationInApp,
+  setRecitationLockScreen,
   setPalette,
   setReminder,
   setTextSize,
   setQuranBookmark,
+  setQuranLastPage,
+  addQuranReadingTime,
   toggleSavedAyah,
   startKhatma,
   completeWird,

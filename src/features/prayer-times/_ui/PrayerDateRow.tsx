@@ -1,9 +1,8 @@
 import AppText from "@/components/ui/AppText";
 import Icon from "@/components/ui/Icon";
 import useThemeColors from "@/hooks/useThemeColors";
-import { Locale } from "@/i18n/config";
-import { useTranslation } from "react-i18next";
 import { View } from "react-native";
+import useHijriLabel from "../_components/useHijriLabel";
 import { HijriDate } from "../_data/hijri";
 
 export default function PrayerDateRow({
@@ -15,9 +14,8 @@ export default function PrayerDateRow({
   city: string | null;
   inline?: boolean;
 }) {
-  const { t, i18n } = useTranslation("prayer");
+  const hijriLabel = useHijriLabel();
   const colors = useThemeColors();
-  const locale = i18n.language as Locale;
 
   return (
     <View
@@ -41,7 +39,7 @@ export default function PrayerDateRow({
           className="shrink text-xs text-main-gray"
           numberOfLines={inline ? 1 : 2}
         >
-          {`${hijri.weekday[locale]} ${hijri.day} ${hijri.monthName[locale]} ${t("hijriYear", { year: hijri.year })}`}
+          {hijriLabel.full(hijri)}
         </AppText>
       </View>
     </View>

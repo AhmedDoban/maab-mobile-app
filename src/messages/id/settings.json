@@ -1,0 +1,254 @@
+{
+  "language": "Bahasa",
+  "appearance": "Tampilan",
+  "system": "Sistem",
+  "light": "Terang",
+  "dark": "Gelap",
+  "textSize": "Ukuran teks zikir",
+  "textSizeGlyph": "A",
+  "textSizePreview": "Mahasuci Allah dan segala puji bagi-Nya",
+  "languageNames": {
+    "ar": "Arab",
+    "en": "Inggris",
+    "ur": "Urdu",
+    "id": "Indonesia",
+    "bn": "Bengali",
+    "tr": "Turki",
+    "fa": "Persia",
+    "ms": "Melayu",
+    "fr": "Prancis"
+  },
+  "data": "Data",
+  "resetProgress": "Atur ulang penghitung",
+  "reading": "Pengaturan bacaan",
+  "hapticOnComplete": {
+    "title": "Getar saat selesai",
+    "hint": "Getaran kuat saat hitungan zikir mencapai nol"
+  },
+  "hapticOnTap": {
+    "title": "Getar setiap ketukan",
+    "hint": "Getaran ringan setiap kali Anda mengetuk kartu"
+  },
+  "hideCompleted": {
+    "title": "Sembunyikan kartu selesai",
+    "hint": "Kartu memudar setelah hitungannya mencapai nol"
+  },
+  "cancel": "Batal",
+  "clearCache": "Hapus cache",
+  "resetSettings": "Pulihkan pengaturan bawaan",
+  "resetAll": "Hapus semua data aplikasi",
+  "confirm": {
+    "progress": {
+      "title": "Atur ulang semua penghitung?",
+      "message": "Semua penghitung zikir hari ini akan kembali ke nol. Tindakan ini tidak dapat dibatalkan.",
+      "action": "Atur ulang",
+      "done": "Penghitung diatur ulang"
+    },
+    "cache": {
+      "title": "Hapus cache?",
+      "message": "Hasil pencarian dan jadwal salat yang tersimpan akan dihapus dan dimuat ulang saat diperlukan. Favorit dan pengaturan Anda tidak berubah.",
+      "action": "Hapus",
+      "done": "Cache dihapus"
+    },
+    "settings": {
+      "title": "Pulihkan pengaturan bawaan?",
+      "message": "Tema, ukuran teks, opsi bacaan, dan pengingat azan kembali ke bawaan. Favorit dan penghitung Anda tidak berubah.",
+      "action": "Pulihkan",
+      "done": "Pengaturan bawaan dipulihkan"
+    },
+    "all": {
+      "title": "Hapus semua data aplikasi?",
+      "message": "Favorit, penghitung, pengaturan, dan cache akan dihapus semuanya, seperti aplikasi baru dipasang. Tindakan ini tidak dapat dibatalkan.",
+      "action": "Hapus semua",
+      "done": "Semua data dihapus"
+    },
+    "recitations": {
+      "title": "Hapus murotal tersimpan?",
+      "message": "File murotal yang tersimpan di perangkat Anda akan dihapus dan diunduh lagi saat Anda mendengarkan.",
+      "action": "Hapus",
+      "done": "Murotal tersimpan dihapus"
+    },
+    "quran": {
+      "title": "Hapus data Al-Qur'an?",
+      "message": "Penanda bacaan, ayat tersimpan, sorotan, dan khatam saat ini akan dihapus. Tindakan ini tidak dapat dibatalkan.",
+      "action": "Hapus",
+      "done": "Data Al-Qur'an dihapus"
+    }
+  },
+  "version": "Versi {{version}}",
+  "adhanSound": "Suara azan",
+  "previewAdhan": "Dengarkan",
+  "stopAdhan": "Berhenti",
+  "sounds": {
+    "other": "Azan bawaan",
+    "qassas": "Mohammed Marwan Qassas",
+    "qatami": "Nasser Al-Qatami",
+    "sobhi": "Islam Sobhi",
+    "custom": "Unggah dari perangkat"
+  },
+  "soundHints": {
+    "other": "Suara bawaan aplikasi",
+    "reciter": "Azan lengkap",
+    "custom": "Pilih file audio dari perangkat Anda",
+    "customNotice": "Diputar di aplikasi; notifikasi memakai azan bawaan"
+  },
+  "changeFile": "Ganti file",
+  "prayerTimes": "Jadwal salat",
+  "prayerLocation": "Lokasi",
+  "locationUnknown": "Lokasi belum diatur",
+  "savedLocation": "Lokasi tersimpan",
+  "updateLocation": "Perbarui",
+  "prayerMethod": "Metode perhitungan",
+  "hanafiAsr": {
+    "title": "Asar Hanafi",
+    "hint": "Asar dimulai lebih lambat, saat bayangan benda dua kali panjangnya"
+  },
+  "methods": {
+    "auto": "Otomatis sesuai wilayah Anda",
+    "UmmAlQura": "Ummul Qura, Makkah",
+    "Egyptian": "Otoritas Survei Umum Mesir",
+    "MuslimWorldLeague": "Liga Muslim Dunia",
+    "Karachi": "Universitas Ilmu Islam, Karachi",
+    "Dubai": "Dubai",
+    "Kuwait": "Kuwait",
+    "Qatar": "Qatar",
+    "NorthAmerica": "ISNA, Amerika Utara",
+    "MoonsightingCommittee": "Moonsighting Committee",
+    "Singapore": "Singapura",
+    "Turkey": "Diyanet, Turki",
+    "Tehran": "Institut Geofisika, Teheran"
+  },
+  "groups": {
+    "general": "Umum",
+    "worship": "Ibadah",
+    "data": "Data"
+  },
+  "theme": "Tema",
+  "readingOptions": "Opsi bacaan",
+  "appColor": "Warna aplikasi",
+  "palettes": {
+    "emerald": "Zamrud",
+    "teal": "Hijau toska",
+    "ocean": "Samudra",
+    "indigo": "Nila",
+    "violet": "Ungu",
+    "rose": "Mawar",
+    "ruby": "Delima",
+    "amber": "Kuning amber",
+    "olive": "Zaitun",
+    "slate": "Batu tulis"
+  },
+  "surahFrame": "Bingkai judul surah",
+  "clearRecitations": "Murotal tersimpan",
+  "resetQuran": "Hapus data Al-Qur'an",
+  "zikrContent": "Isi kartu zikir",
+  "showPrefix": {
+    "title": "Tampilkan pembuka",
+    "hint": "Baris sebelum zikir, seperti basmalah"
+  },
+  "showSuffix": {
+    "title": "Tampilkan catatan",
+    "hint": "Rujukan atau catatan setelah zikir"
+  },
+  "showVirtue": {
+    "title": "Tampilkan keutamaan",
+    "hint": "Pahala dan keutamaan zikir"
+  },
+  "showSource": {
+    "title": "Tampilkan sumber",
+    "hint": "Kitab hadis atau ayat asalnya"
+  },
+  "sources": "Sumber",
+  "externalSources": "Sumber online",
+  "sourcesHint": "Semua isi aplikasi lainnya tersimpan di perangkat Anda dan berfungsi offline. Layanan ini hanya digunakan untuk fitur di bawah.",
+  "sourceList": {
+    "everyayah": {
+      "name": "EveryAyah",
+      "usage": "Audio murotal Al-Qur'an, disimpan di perangkat setelah diputar pertama kali"
+    },
+    "dorar": {
+      "name": "Dorar.net",
+      "usage": "Pencarian hadis online dengan derajat kesahihan"
+    },
+    "openstreetmap": {
+      "name": "OpenStreetMap",
+      "usage": "Nama kota Anda untuk jadwal salat"
+    }
+  },
+  "privacy": {
+    "title": "Privasi",
+    "policy": "Kebijakan privasi",
+    "hint": "Apa yang disimpan aplikasi dan layanan mana yang dihubunginya"
+  },
+  "lockScreenPrayer": {
+    "title": "Salat berikutnya di layar kunci",
+    "hint": "Notifikasi senyap dengan hitung mundur langsung ke salat berikutnya"
+  },
+  "dataHint": "Hapus progres tersimpan, murotal yang diunduh, dan pengaturan. Setiap opsi meminta konfirmasi terlebih dahulu, dan data yang dihapus tidak dapat dipulihkan.",
+  "resetOptions": "Opsi atur ulang",
+  "followDeveloper": "Ikuti pengembang",
+  "followDeveloperHint": "Hubungi kami, kirim masukan, atau ikuti pembaruan terbaru",
+  "reminders": {
+    "title": "Pengingat",
+    "off": "Mati",
+    "interval": "Ulangi",
+    "window": "Pengingat hanya muncul antara pukul 07.00 dan 22.00",
+    "channel": "Pengingat zikir dan Al-Qur'an",
+    "dhikrTitle": "Ingatlah Allah",
+    "quranTitle": "{{surah}} · Ayat {{ayah}}",
+    "every_other": "Setiap {{n}} jam",
+    "dhikr": {
+      "group": "Pengingat zikir",
+      "title": "Notifikasi zikir",
+      "hint": "Zikir atau doa singkat sesuai interval pilihan Anda",
+      "short": "Zikir"
+    },
+    "quran": {
+      "group": "Pengingat Al-Qur'an",
+      "title": "Notifikasi ayat",
+      "hint": "Satu ayat Al-Qur'an sesuai interval pilihan Anda",
+      "short": "Al-Qur'an"
+    }
+  },
+  "paletteApplying": "Menerapkan warna…",
+  "paletteApplyingHint": "Tunggu sebentar, aplikasi sedang memperbarui warnanya",
+  "paletteIconHint": "Ikon di layar utama akan berubah begitu Anda keluar dari aplikasi.",
+  "prayerCardStyle": "Kartu jadwal salat",
+  "prayerCardStyles": {
+    "modern": {
+      "title": "Modern",
+      "hint": "Kartu terang dengan hitung mundur langsung"
+    },
+    "classic": {
+      "title": "Klasik",
+      "hint": "Kartu berwarna dengan jendela masjid"
+    }
+  },
+  "prayerAlerts": "Peringatan azan tiap salat",
+  "sameAdhan": {
+    "title": "Azan yang sama untuk semua salat",
+    "hint": "Matikan untuk memilih azan berbeda untuk tiap salat"
+  },
+  "prayerAdhans": "Azan untuk tiap salat",
+  "prayerAdhanFor": "Azan {{prayer}}",
+  "startup": "Saat aplikasi dibuka",
+  "showSplash": {
+    "title": "Tampilkan layar pembuka",
+    "hint": "Memutar animasi pembuka setiap kali Anda membuka aplikasi"
+  },
+  "display": "Layar",
+  "fullScreen": {
+    "title": "Layar penuh",
+    "hint": "Menyembunyikan bilah status dan bilah navigasi. Geser dari tepi layar untuk menampilkannya sejenak"
+  },
+  "recitation": "Tilawah",
+  "playback": "Pemutaran",
+  "recitationInApp": {
+    "title": "Tetap putar di aplikasi",
+    "hint": "Tilawah berlanjut setelah keluar dari mushaf, dengan bilah kontrol kecil"
+  },
+  "recitationLockScreen": {
+    "title": "Putar di layar kunci",
+    "hint": "Tilawah tetap diputar saat layar terkunci, dengan kontrol di layar kunci"
+  }
+}

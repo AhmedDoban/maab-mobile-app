@@ -9,6 +9,7 @@ import * as Haptics from "expo-haptics";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
 import useLocalDigits from "../_components/useLocalDigits";
+import { contentLocale } from "@/i18n/config";
 
 export default function JuzPicker({
   visible,
@@ -30,7 +31,7 @@ export default function JuzPicker({
   const { t, i18n } = useTranslation("azkar");
   const colors = useThemeColors();
   const palette = useSettingsColors();
-  const ar = i18n.language === "ar";
+  const ar = contentLocale(i18n.language) === "ar";
   const num = useLocalDigits();
 
   return (

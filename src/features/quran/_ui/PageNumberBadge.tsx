@@ -10,8 +10,8 @@ import {
   PAGE_BADGE_VIEWBOX,
 } from "../_data/ayahMarker";
 
-const HEIGHT = 32;
-const WIDTH = HEIGHT * 1.75;
+const HEIGHT = 24;
+const WIDTH = HEIGHT * 3;
 
 export default memo(function PageNumberBadge({ page }: { page: number }) {
   const c = useMushafColors();

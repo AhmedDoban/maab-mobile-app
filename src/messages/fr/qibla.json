@@ -1,0 +1,22 @@
+{
+  "locating": "Localisation en cours...",
+  "permissionTitle": "Nous avons besoin de votre position",
+  "permissionHint": "Pour trouver la direction de la qibla avec précision, autorisez l'application à accéder à votre position.",
+  "allow": "Autoriser l'accès",
+  "openSettings": "Ouvrir les réglages",
+  "error": "Impossible de trouver votre position",
+  "errorHint": "Vérifiez que la localisation est activée, puis réessayez.",
+  "facing": "Vous êtes face à la qibla",
+  "turnRight": "Tournez à droite de {{deg}}°",
+  "turnLeft": "Tournez à gauche de {{deg}}°",
+  "noCompass": "La qibla est à {{deg}}° du nord",
+  "hint": "Tenez votre téléphone à plat et tournez jusqu'à ce que la flèche pointe vers la Kaaba",
+  "fromNorth": "{{deg}}° du nord",
+  "km": "{{value}} km",
+  "calibrate": "Décrivez un 8 avec votre téléphone pour calibrer la boussole",
+  "interference": "Des interférences magnétiques peuvent fausser la direction. Éloignez-vous des appareils électroniques, du métal et des aimants (comme une coque ou un chargeur), puis décrivez un 8 avec votre téléphone",
+  "north": "N",
+  "east": "E",
+  "south": "S",
+  "west": "O"
+}

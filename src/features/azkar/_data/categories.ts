@@ -125,7 +125,6 @@ const categories: AzkarCategory[] = [
     id: "friday_salawat",
     title: { ar: "الصلاة على النبي ﷺ", en: "Salawat on the Prophet ﷺ" },
     featured: true,
-    fridayOnly: true,
     goals: [{ id: 1, count: 100 }],
     icon: "muhammad",
   },

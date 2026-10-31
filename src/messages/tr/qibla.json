@@ -1,0 +1,22 @@
+{
+  "locating": "Konumunuz bulunuyor...",
+  "permissionTitle": "Konumunuza ihtiyacımız var",
+  "permissionHint": "Kıble yönünü doğru bulmak için uygulamanın konumunuza erişmesine izin verin.",
+  "allow": "Erişime izin ver",
+  "openSettings": "Ayarları Aç",
+  "error": "Konumunuz bulunamadı",
+  "errorHint": "Konum servislerinin açık olduğundan emin olun ve tekrar deneyin.",
+  "facing": "Kıbleye dönüksünüz",
+  "turnRight": "Sağa {{deg}}° dönün",
+  "turnLeft": "Sola {{deg}}° dönün",
+  "noCompass": "Kıble, kuzeyden {{deg}}°",
+  "hint": "Telefonunuzu düz tutun ve ok Kâbe'yi gösterene kadar dönün",
+  "fromNorth": "Kuzeyden {{deg}}°",
+  "km": "{{value}} km",
+  "calibrate": "Pusulayı kalibre etmek için telefonunuzu 8 çizerek hareket ettirin",
+  "interference": "Manyetik parazit yönün yanlış görünmesine neden olabilir. Elektronik cihazlardan, metallerden ve mıknatıslardan (kılıf veya şarj cihazı gibi) uzaklaşın, ardından telefonunuzu 8 çizerek hareket ettirin",
+  "north": "K",
+  "east": "D",
+  "south": "G",
+  "west": "B"
+}

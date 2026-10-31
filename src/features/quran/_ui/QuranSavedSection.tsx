@@ -2,7 +2,7 @@ import EmptyState from "@/components/ui/EmptyState";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import useHasSavedAyahs from "../_components/useHasSavedAyahs";
-import ContinueReadingCard from "./ContinueReadingCard";
+import BookmarkCard from "./BookmarkCard";
 import SavedAyahs from "./SavedAyahs";
 
 export default function QuranSavedSection() {
@@ -20,7 +20,7 @@ export default function QuranSavedSection() {
   }
   return (
     <View className="gap-4">
-      <ContinueReadingCard />
+      <BookmarkCard />
       <SavedAyahs />
     </View>
   );

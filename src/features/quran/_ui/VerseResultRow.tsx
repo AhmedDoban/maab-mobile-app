@@ -12,10 +12,11 @@ import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import useLocalDigits from "../_components/useLocalDigits";
 import useSurahName from "../_components/useSurahName";
+import { contentLocale } from "@/i18n/config";
 
 export default memo(function VerseResultRow({ verse }: { verse: VerseMatch }) {
   const { t, i18n } = useTranslation("azkar");
-  const ar = i18n.language === "ar";
+  const ar = contentLocale(i18n.language) === "ar";
   const num = useLocalDigits();
   const surahName = useSurahName();
 

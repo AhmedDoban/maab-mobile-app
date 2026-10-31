@@ -20,11 +20,12 @@ import useLocalDigits from "../_components/useLocalDigits";
 import { khatmaWirds, scheduledDay, wirdLabel } from "../_data/khatma";
 import KhatmaCard from "./KhatmaCard";
 import KhatmaDone from "./KhatmaDone";
+import { contentLocale } from "@/i18n/config";
 
 export default function KhatmaProgress({ plan }: { plan: KhatmaPlan }) {
   const { t, i18n } = useTranslation("azkar");
   const dispatch = useAppDispatch();
-  const ar = i18n.language === "ar";
+  const ar = contentLocale(i18n.language) === "ar";
   const num = useLocalDigits();
 
   const wirds = khatmaWirds(plan);
@@ -132,15 +133,23 @@ export default function KhatmaProgress({ plan }: { plan: KhatmaPlan }) {
         </View>
       ) : null}
 
-      <View className="flex-row justify-between px-2">
+      <View className="flex-row justify-between">
         {plan.done > 0 ? (
-          <PressableScale onPress={() => dispatch(undoWird())}>
+          <PressableScale
+            onPress={() => dispatch(undoWird())}
+            hitSlop={8}
+            className="px-3 py-2.5"
+          >
             <AppText className="text-main-gray">{t("khatmaUndo")}</AppText>
           </PressableScale>
         ) : (
           <View />
         )}
-        <PressableScale onPress={() => setConfirming(true)}>
+        <PressableScale
+          onPress={() => setConfirming(true)}
+          hitSlop={8}
+          className="px-3 py-2.5"
+        >
           <AppText className="text-error">{t("khatmaEnd")}</AppText>
         </PressableScale>
       </View>

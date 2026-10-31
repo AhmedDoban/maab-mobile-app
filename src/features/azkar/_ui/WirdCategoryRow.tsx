@@ -1,4 +1,4 @@
-import { Locale } from "@/i18n/config";
+import { contentLocale } from "@/i18n/config";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import useCategoryProgress from "../_components/useCategoryProgress";
@@ -17,7 +17,7 @@ export default memo(function WirdCategoryRow({
     <WirdRowCard
       href={`/category/${category.id}`}
       icon={category.icon ?? "tabAzkar"}
-      title={category.title[i18n.language as Locale]}
+      title={category.title[contentLocale(i18n.language)]}
       subtitle={
         complete ? t("done") : t("progressCount", { done, count: total })
       }

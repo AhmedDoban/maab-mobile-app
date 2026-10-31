@@ -6,8 +6,8 @@ import useAppFonts from "@/hooks/useAppFonts";
 import "@/i18n";
 import StoreProvider from "@/store/StoreProvider";
 import * as SplashScreen from "expo-splash-screen";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useCallback, useState } from "react";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 SplashScreen.setOptions({ fade: false, duration: 0 });
@@ -26,7 +26,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <StoreProvider onReady={onStoreReady}>
         <ThemeProvider>
-          <AppTabs />
+          <AppTabs ready={splashDone} />
           {splashDone ? null : <StartupSplash onDone={onSplashDone} />}
         </ThemeProvider>
       </StoreProvider>

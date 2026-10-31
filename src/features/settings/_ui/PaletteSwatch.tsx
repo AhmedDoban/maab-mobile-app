@@ -38,7 +38,8 @@ export default function PaletteSwatch({
         className="items-center justify-center rounded-full"
         style={{
           width: SIZE + 8,
-          height: SIZE + 8,
+          maxWidth: "100%",
+          aspectRatio: 1,
           borderWidth: 2,
           borderColor: selected ? color : "transparent",
         }}

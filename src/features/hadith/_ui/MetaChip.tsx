@@ -13,13 +13,17 @@ export default function MetaChip({
 
   return (
     <View
-      className="flex-row gap-1 rounded-full px-3 py-1.5"
+      className="max-w-full flex-row gap-1 rounded-full px-3 py-1.5"
       style={{ backgroundColor: p.chip }}
     >
       <AppText className="text-xs" style={{ color: p.muted }}>
         {label}:
       </AppText>
-      <AppText weight="bold" className="text-xs" style={{ color: p.ink }}>
+      <AppText
+        weight="bold"
+        className="shrink text-xs"
+        style={{ color: p.ink }}
+      >
         {value}
       </AppText>
     </View>

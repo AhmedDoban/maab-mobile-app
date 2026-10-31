@@ -11,6 +11,7 @@ import { useState } from "react";
 import { ScrollView, TextInput } from "react-native";
 import usePopupColors from "../_components/usePopupColors";
 import { RECITERS } from "../_data/reciters";
+import { contentLocale } from "@/i18n/config";
 
 export default function ReciterPicker({
   visible,
@@ -23,7 +24,7 @@ export default function ReciterPicker({
   const c = usePopupColors();
   const dispatch = useAppDispatch();
   const current = useAppSelector((s) => s.settings.reciter);
-  const ar = i18n.language === "ar";
+  const ar = contentLocale(i18n.language) === "ar";
   const [query, setQuery] = useState("");
   const q = query.trim().toLowerCase();
   const list = q

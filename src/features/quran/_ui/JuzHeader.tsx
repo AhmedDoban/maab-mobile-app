@@ -9,11 +9,12 @@ import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import useLocalDigits from "../_components/useLocalDigits";
 import type { JuzGroupData } from "../_data/juzGroups";
+import { contentLocale } from "@/i18n/config";
 
 export default memo(function JuzHeader({ group }: { group: JuzGroupData }) {
   const { t, i18n } = useTranslation("azkar");
   const colors = useThemeColors();
-  const ar = i18n.language === "ar";
+  const ar = contentLocale(i18n.language) === "ar";
   const num = useLocalDigits();
   const { juz, start, page } = group;
   const first = getSurah(start.surah);

@@ -13,6 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { scheduleOnRN } from "react-native-worklets";
 import useSplashPalette from "./useSplashPalette";
+import { contentLocale } from "@/i18n/config";
 
 const ANIMATION = require("@/assets/animations/splash.json");
 const SIZE = 300;
@@ -21,7 +22,7 @@ const FALLBACK_MS = 4000;
 
 export default function AnimatedSplash({ onDone }: { onDone: () => void }) {
   const { t, i18n } = useTranslation(["common", "azkar"]);
-  const ar = i18n.language === "ar";
+  const ar = contentLocale(i18n.language) === "ar";
   const palette = useSplashPalette();
   const opacity = useSharedValue(1);
   const leaving = useRef(false);

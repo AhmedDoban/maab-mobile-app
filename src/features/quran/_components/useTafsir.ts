@@ -1,6 +1,7 @@
 import { AyahRef, ayahTranslation } from "@/features/azkar/_data/quran";
 import { useTranslation } from "react-i18next";
 import MUYASSAR_CHUNKS from "../_data/chunks/muyassar";
+import { contentLocale } from "@/i18n/config";
 
 type Tafsir = { text: string; source: string; arabic: boolean };
 
@@ -15,7 +16,7 @@ export const preloadTafsir = (ar: boolean, surah: number) =>
 export default function useTafsir(ref: AyahRef | null): Tafsir | null {
   const { t, i18n } = useTranslation("azkar");
   if (!ref) return null;
-  if (i18n.language !== "ar") {
+  if (contentLocale(i18n.language) !== "ar") {
     const text = ayahTranslation(ref.surah, ref.ayah);
     return text
       ? { text, source: t("translationSource"), arabic: false }

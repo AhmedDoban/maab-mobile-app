@@ -2,7 +2,7 @@ import ContentActions from "@/components/ui/ContentActions";
 import PressableScale from "@/components/ui/PressableScale";
 import useHadithColors from "@/features/hadith/_components/useHadithColors";
 import useDirection from "@/hooks/useDirection";
-import { Locale } from "@/i18n/config";
+import { contentLocale } from "@/i18n/config";
 import {
   incrementCount,
   progressKey,
@@ -39,7 +39,7 @@ export default memo(function ZikrCard({
   counting = true,
 }: Props) {
   const { t, i18n } = useTranslation("azkar");
-  const locale = i18n.language as Locale;
+  const locale = contentLocale(i18n.language);
   const p = useHadithColors();
   const dispatch = useAppDispatch();
   const { isRTL } = useDirection();

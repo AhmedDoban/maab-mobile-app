@@ -9,7 +9,14 @@
   "textSizePreview": "Glory be to Allah and praise be to Him",
   "languageNames": {
     "ar": "Arabic",
-    "en": "English"
+    "en": "English",
+    "ur": "Urdu",
+    "id": "Indonesian",
+    "bn": "Bengali",
+    "tr": "Turkish",
+    "fa": "Persian",
+    "ms": "Malay",
+    "fr": "French"
   },
   "data": "Data",
   "resetProgress": "Reset counters",
@@ -229,5 +236,20 @@
   "showSplash": {
     "title": "Show the splash screen",
     "hint": "Plays the opening animation every time you open the app"
+  },
+  "display": "Display",
+  "fullScreen": {
+    "title": "Full screen",
+    "hint": "Hides the status bar and the navigation bar. Swipe from the screen edge to show them for a moment"
+  },
+  "recitation": "Recitation",
+  "playback": "Playback",
+  "recitationInApp": {
+    "title": "Keep playing in the app",
+    "hint": "Recitation continues after you leave the mushaf, with a small control bar"
+  },
+  "recitationLockScreen": {
+    "title": "Play on the lock screen",
+    "hint": "Recitation keeps playing when the screen is locked, with controls on the lock screen"
   }
 }

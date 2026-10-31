@@ -9,5 +9,6 @@ export default function useTabBarColors() {
     font: isRTL ? "LamaSans" : "SpaceGrotesk",
     active: colors.isDark ? "#ffffff" : colors.main,
     inactive: colors.gray,
+    pill: colors.isDark ? colors.brand.deep : colors.brand.main,
   };
 }
