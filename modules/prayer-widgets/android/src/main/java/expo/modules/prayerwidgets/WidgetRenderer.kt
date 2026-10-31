@@ -6,7 +6,10 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
+import android.os.Bundle
 import android.util.Log
+import android.util.SizeF
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
@@ -65,8 +68,10 @@ object WidgetRenderer {
 
   private const val COMPACT_WIDTH = 200f
   private const val TALL_HEIGHT = 230f
+  private const val TALL_RATIO = 0.85f
   private const val MODERN_SMALL_WIDTH = 280f
-  private const val MODERN_LIST_HEIGHT = 200f
+  private const val MODERN_LIST_HEIGHT = 250f
+  private const val MAX_SIZES = 3
 
   private fun update(
     context: Context,
@@ -76,15 +81,40 @@ object WidgetRenderer {
     payload: WidgetPayload?,
     now: Long
   ) {
-    val (w, h) = size(manager, id)
-    val views = when {
-      kind == Kind.MODERN -> modern(context, payload, now, w, h)
-      w < COMPACT_WIDTH -> nextSmall(context, payload, now)
-      h >= TALL_HEIGHT -> today(context, payload, now)
-      kind == Kind.TIMES || kind == Kind.TODAY -> prayerTimes(context, payload, now)
-      else -> nextPrayer(context, manager, id, payload, now)
+    val views = responsive(manager.getAppWidgetOptions(id)) { w, h ->
+      when {
+        kind == Kind.MODERN -> modern(context, payload, now, w, h)
+        w < COMPACT_WIDTH -> nextSmall(context, payload, now, h)
+        h >= TALL_HEIGHT && h >= w * TALL_RATIO -> today(context, payload, now, h)
+        kind == Kind.TIMES || kind == Kind.TODAY -> prayerTimes(context, payload, now, w, h)
+        else -> nextPrayer(context, payload, now, w, h)
+      }
     }
     manager.updateAppWidget(id, views)
+  }
+
+  private fun responsive(options: Bundle, build: (Float, Float) -> RemoteViews): RemoteViews {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      @Suppress("DEPRECATION")
+      val sizes = options.getParcelableArrayList<SizeF>(AppWidgetManager.OPTION_APPWIDGET_SIZES)
+        .orEmpty()
+        .filter { it.width > 0f && it.height > 0f }
+        .distinct()
+        .take(MAX_SIZES)
+      if (sizes.isNotEmpty()) {
+        return RemoteViews(sizes.associateWith { build(it.width, it.height) })
+      }
+    }
+    val minW = dimension(options, AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 320f)
+    val maxW = dimension(options, AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, minW)
+    val minH = dimension(options, AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 170f)
+    val maxH = dimension(options, AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, minH)
+    return RemoteViews(build(maxW, minH), build(minW, maxH))
+  }
+
+  private fun dimension(options: Bundle, key: String, fallback: Float): Float {
+    val value = options.getInt(key)
+    return if (value > 0) value.toFloat() else fallback
   }
 
   private fun ids(context: Context, manager: AppWidgetManager, type: Class<*>) =
@@ -104,13 +134,6 @@ object WidgetRenderer {
   }
 
   private fun iconOf(prayer: WidgetPrayer) = ICONS[prayer.icon] ?: R.drawable.widget_ic_dhuhr
-
-  private fun size(manager: AppWidgetManager, id: Int): Pair<Float, Float> {
-    val options = manager.getAppWidgetOptions(id)
-    val w = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
-    val h = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
-    return (if (w > 0) w.toFloat() else 320f) to (if (h > 0) h.toFloat() else 170f)
-  }
 
   private fun px(context: Context, dp: Int) =
     (dp * context.resources.displayMetrics.density).toInt()
@@ -173,21 +196,20 @@ object WidgetRenderer {
 
   private fun nextPrayer(
     context: Context,
-    manager: AppWidgetManager,
-    id: Int,
     payload: WidgetPayload?,
-    now: Long
+    now: Long,
+    w: Float,
+    h: Float
   ): RemoteViews {
     val views = RemoteViews(
       context.packageName,
       layout(payload, R.layout.widget_next_prayer, R.layout.widget_next_prayer_rtl)
     )
     background(views, payload)
-    val (w, h) = size(manager, id)
     val wide = w >= 320f
     val showTile = w >= 230f
-    val showStrip = h >= 110f
-    val showDate = h >= 165f
+    val showStrip = h >= 140f
+    val showDate = h >= 175f
     visible(views, R.id.divider, showTile)
     visible(views, R.id.tile, showTile)
     visible(views, R.id.arch, wide)
@@ -232,11 +254,18 @@ object WidgetRenderer {
     return views
   }
 
-  private fun prayerTile(context: Context, prayer: WidgetPrayer, next: WidgetPrayer?, now: Long): RemoteViews {
+  private fun prayerTile(
+    context: Context,
+    prayer: WidgetPrayer,
+    next: WidgetPrayer?,
+    now: Long,
+    showIcon: Boolean
+  ): RemoteViews {
     val tile = RemoteViews(context.packageName, R.layout.widget_prayer_tile)
     tile.setTextViewText(R.id.tileName, prayer.label)
     tile.setTextViewText(R.id.tileTime, prayer.time)
     tile.setImageViewResource(R.id.tileIcon, iconOf(prayer))
+    visible(tile, R.id.tileIcon, showIcon)
     when {
       prayer == next -> {
         tile.setImageViewResource(R.id.tileBg, R.drawable.widget_mint)
@@ -254,7 +283,13 @@ object WidgetRenderer {
     return tile
   }
 
-  private fun prayerTimes(context: Context, payload: WidgetPayload?, now: Long): RemoteViews {
+  private fun prayerTimes(
+    context: Context,
+    payload: WidgetPayload?,
+    now: Long,
+    w: Float,
+    h: Float
+  ): RemoteViews {
     val views = RemoteViews(
       context.packageName,
       layout(payload, R.layout.widget_prayer_times, R.layout.widget_prayer_times_rtl)
@@ -273,7 +308,8 @@ object WidgetRenderer {
       visible(views, R.id.row, true)
       views.setTextViewText(R.id.title, payload.todayTitle)
       city(views, payload.city)
-      visible(views, R.id.chip, next != null)
+      visible(views, R.id.cityRow, h >= 130f)
+      visible(views, R.id.chip, next != null && w >= 260f)
       if (next != null) {
         val minutes = payload.minutesLeft(now)
         views.setTextViewText(R.id.chipName, next.label)
@@ -282,7 +318,7 @@ object WidgetRenderer {
           "${payload.leftTitle} ${minutes / 60}:${(minutes % 60).toString().padStart(2, '0')}"
         )
       }
-      day.forEach { views.addView(R.id.row, prayerTile(context, it, next, now)) }
+      day.forEach { views.addView(R.id.row, prayerTile(context, it, next, now, h >= 150f)) }
     }
     views.setOnClickPendingIntent(R.id.root, openApp(context))
     return views
@@ -293,9 +329,12 @@ object WidgetRenderer {
     return "${payload.leftTitle} ${minutes / 60}:${(minutes % 60).toString().padStart(2, '0')}"
   }
 
-  private fun nextSmall(context: Context, payload: WidgetPayload?, now: Long): RemoteViews {
+  private fun nextSmall(context: Context, payload: WidgetPayload?, now: Long, h: Float): RemoteViews {
     val views = RemoteViews(context.packageName, R.layout.widget_next_small)
     background(views, payload)
+    visible(views, R.id.title, h >= 120f)
+    visible(views, R.id.icon, h >= 150f)
+    padding(context, views, R.id.content, if (h >= 120f) 12 else 8)
     val next = payload?.next(now)
     if (payload == null || next == null) {
       visible(views, R.id.content, false)
@@ -344,9 +383,13 @@ object WidgetRenderer {
     return row
   }
 
-  private fun today(context: Context, payload: WidgetPayload?, now: Long): RemoteViews {
+  private fun today(context: Context, payload: WidgetPayload?, now: Long, h: Float): RemoteViews {
     val views = RemoteViews(context.packageName, R.layout.widget_today)
     background(views, payload)
+    val showHeader = h >= 260f
+    visible(views, R.id.title, showHeader)
+    visible(views, R.id.left, showHeader)
+    visible(views, R.id.date, h >= 300f)
     views.removeAllViews(R.id.rows)
     val day = payload?.day(now).orEmpty()
     val next = payload?.next(now)
@@ -447,6 +490,8 @@ object WidgetRenderer {
       layout(payload, R.layout.widget_modern_small, R.layout.widget_modern_small_rtl)
     )
     views.removeAllViews(R.id.list)
+    padding(context, views, R.id.content, if (h >= 120f) 12 else 8)
+    visible(views, R.id.left, h >= 110f)
     val day = payload?.day(now).orEmpty()
     val next = payload?.next(now)
     if (payload == null || day.isEmpty() || next == null) {

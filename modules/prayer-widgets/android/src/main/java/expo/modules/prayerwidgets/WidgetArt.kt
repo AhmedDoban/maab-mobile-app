@@ -29,7 +29,12 @@ object WidgetArt {
 
   private var mosque: Bitmap? = null
 
+  private var gradientKey: Pair<Int, Int>? = null
+  private var gradientCache: Bitmap? = null
+
   fun gradient(start: Int, end: Int): Bitmap {
+    val key = start to end
+    gradientCache?.let { if (gradientKey == key) return it }
     val bitmap = Bitmap.createBitmap(GRADIENT_W, GRADIENT_H, Bitmap.Config.ARGB_8888)
     val w = GRADIENT_W.toFloat()
     val h = GRADIENT_H.toFloat()
@@ -38,6 +43,8 @@ object WidgetArt {
       shader = LinearGradient(0f, 0f, w, h, start, end, Shader.TileMode.CLAMP)
     }
     Canvas(bitmap).drawRect(0f, 0f, w, h, paint)
+    gradientKey = key
+    gradientCache = bitmap
     return bitmap
   }
 
@@ -96,7 +103,7 @@ object WidgetArt {
   fun arch(context: Context, widthDp: Float, heightDp: Float): Bitmap? {
     if (widthDp <= 0f || heightDp <= 0f) return null
     val density = context.resources.displayMetrics.density
-    val scale = min(density, 2.5f)
+    val scale = min(density, 1.5f)
     val bitmap = Bitmap.createBitmap(
       max(1, (widthDp * scale).roundToInt()),
       max(1, (heightDp * scale).roundToInt()),

@@ -28,8 +28,12 @@
 
     <TextView
       android:id="@+id/tileName"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:layout_height="15dp"
+      android:autoSizeMaxTextSize="11sp"
+      android:autoSizeMinTextSize="8sp"
+      android:autoSizeTextType="uniform"
+      android:gravity="center"
       android:layout_marginTop="4dp"
       android:ellipsize="end"
       android:maxLines="1"
@@ -38,8 +42,12 @@
 
     <TextView
       android:id="@+id/tileTime"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:layout_height="19dp"
+      android:autoSizeMaxTextSize="14sp"
+      android:autoSizeMinTextSize="8sp"
+      android:autoSizeTextType="uniform"
+      android:gravity="center"
       android:layout_marginTop="1dp"
       android:maxLines="1"
       android:textColor="#FFFFFFFF"

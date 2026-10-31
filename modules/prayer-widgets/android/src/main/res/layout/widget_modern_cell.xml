@@ -27,8 +27,12 @@
 
     <TextView
       android:id="@+id/cellName"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:layout_height="17dp"
+      android:autoSizeMaxTextSize="12sp"
+      android:autoSizeMinTextSize="8sp"
+      android:autoSizeTextType="uniform"
+      android:gravity="center"
       android:layout_marginTop="4dp"
       android:ellipsize="end"
       android:maxLines="1"
@@ -38,8 +42,12 @@
 
     <TextView
       android:id="@+id/cellTime"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:layout_height="16dp"
+      android:autoSizeMaxTextSize="12sp"
+      android:autoSizeMinTextSize="8sp"
+      android:autoSizeTextType="uniform"
+      android:gravity="center"
       android:maxLines="1"
       android:textColor="@color/widget_card_ink"
       android:textSize="12sp" />
