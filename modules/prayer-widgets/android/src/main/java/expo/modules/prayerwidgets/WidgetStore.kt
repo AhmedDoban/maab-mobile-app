@@ -45,7 +45,7 @@ data class WidgetPayload(
   val eveningProgress: String,
   val dates: List<WidgetDate>,
   val lockScreen: Boolean,
-  val lockChannel: String
+  val lockChannel: String,
   val mosques: List<WidgetMosque>
 ) {
   fun next(now: Long) = prayers.firstOrNull { it.at > now && it.icon != "sunrise" }
@@ -164,7 +164,7 @@ data class WidgetPayload(
           WidgetDate(item.getLong("at"), item.getString("text"))
         }.sortedBy { it.at },
         lockScreen = json.optBoolean("lockScreen"),
-        lockChannel = json.optString("lockChannel", json.getString("nextTitle"))
+        lockChannel = json.optString("lockChannel", json.getString("nextTitle")),
         mosques = if (mosques == null) emptyList() else (0 until mosques.length()).map {
           val mosque = mosques.getJSONObject(it)
           val schedule = mosque.optJSONArray("schedule")
