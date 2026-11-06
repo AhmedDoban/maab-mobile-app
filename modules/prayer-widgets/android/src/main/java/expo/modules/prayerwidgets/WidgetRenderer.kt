@@ -84,7 +84,7 @@ object WidgetRenderer {
     val budget = metrics.widthPixels.toFloat() * metrics.heightPixels * SCREEN_BUDGET / copies
     val build = { size: SizeF ->
       val scale = min(metrics.density, sqrt(budget / (size.width * size.height)))
-      views(context, kind, payload, now, size.width, size.height, scale)
+      views(context, kind, payload, now, size.width, size.height, scale, id)
     }
     val views = when {
       sizes.size == 1 -> build(sizes[0])
@@ -101,7 +101,8 @@ object WidgetRenderer {
     now: Long,
     w: Float,
     h: Float,
-    scale: Float
+    scale: Float,
+    id: Int
   ): RemoteViews {
     val views = if (kind == Kind.MODERN) {
       RemoteViews(context.packageName, R.layout.widget_canvas_themed).apply {
