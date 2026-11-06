@@ -10,6 +10,7 @@ import {
   progressKey,
   recordCategoryOpen,
   resetCategory,
+  completeCategory,
   toggleFavorite,
 } from "@/store/Slices/AzkarSlice";
 import { useAppDispatch, useAppSelector } from "@/store/Store";
@@ -67,6 +68,12 @@ export default function CategoryContent({
     dispatch(resetCategory(categoryId));
   }, [dispatch, categoryId]);
 
+  const onCompleteAll = useCallback(() => {
+    if (progress.complete) return;
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    dispatch(completeCategory({ categoryId, goals: category.goals }));
+  }, [category, categoryId, dispatch, progress.complete]);
+
   useEffect(() => {
     dispatch(recordCategoryOpen(categoryId));
   }, [dispatch, categoryId]);
@@ -79,7 +86,9 @@ export default function CategoryContent({
     title,
     isFavorite,
     canReset: progress.done > 0,
+    canComplete: !progress.complete,
     onReset,
+    onComplete: onCompleteAll,
     onToggleFavorite,
   });
 
@@ -123,7 +132,9 @@ export default function CategoryContent({
         removeClippedSubviews={Platform.OS === "android"}
         itemLayoutAnimation={hideCompleted ? LAYOUT : undefined}
         ListHeaderComponent={
-          progress.complete ? CategoryCompletedBanner : undefined
+          progress.complete ? (
+            CategoryCompletedBanner
+          ) : undefined
         }
         renderItem={renderItem}
       />

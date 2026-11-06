@@ -1,4 +1,13 @@
 {
+  "mosques": "Mosquées et heures de l'iqama",
+  "addMosque": "Ajouter une mosquée enregistrée",
+  "addFirstMosque": "Ajouter votre première mosquée",
+  "mosqueName": "Nom de la mosquée",
+  "saveCurrentMosque": "Enregistrer ma position comme mosquée",
+  "insideMosque": "Dans la mosquée",
+  "markInside": "Je suis à l'intérieur",
+  "nextIqama": "Prochaine iqama",
+  "deleteMosque": "Supprimer la mosquée",
   "language": "Langue",
   "appearance": "Apparence",
   "system": "Système",

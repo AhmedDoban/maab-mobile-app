@@ -1,4 +1,13 @@
 {
+  "mosques": "Camiler ve kamet vakitleri",
+  "addMosque": "Kayıtlı cami ekle",
+  "addFirstMosque": "İlk camini ekle",
+  "mosqueName": "Cami adı",
+  "saveCurrentMosque": "Konumumu cami olarak kaydet",
+  "insideMosque": "Camide",
+  "markInside": "İçerideyim",
+  "nextIqama": "Sonraki kamet",
+  "deleteMosque": "Camiyi sil",
   "language": "Dil",
   "appearance": "Görünüm",
   "system": "Sistem",

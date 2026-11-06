@@ -26,6 +26,7 @@ import { addDays, prayerDates } from "./_data/calculate";
 import { getPrayerStartingNow } from "./_data/schedule";
 import { PrayerName, REMINDER_PRAYERS } from "./_data/types";
 import AdhanSplash from "./AdhanSplash";
+import useMosquePresence from "./_components/useMosquePresence";
 
 const ALERT_DAYS = 7;
 
@@ -34,6 +35,7 @@ export default function AdhanReminder({ ready }: { ready: boolean }) {
   const { label } = usePrayerLabels();
   const notificationsAllowed = useStartupNotificationPermission(ready);
   usePrayerLocation();
+  useMosquePresence();
   const config = usePrayerConfig();
   const day = usePrayerDay(config);
   usePrayerWidgets(config, day);
@@ -41,6 +43,7 @@ export default function AdhanReminder({ ready }: { ready: boolean }) {
     day ? getPrayerStartingNow(day.times, now) : null,
   );
   const reminders = useAppSelector((s) => s.settings.prayerReminders);
+  const insideMosque = useAppSelector((s) => s.mosques.inside);
   const adhan = useAppSelector(
     (s) => ({
       adhanSound: s.settings.adhanSound,
@@ -89,16 +92,18 @@ export default function AdhanReminder({ ready }: { ready: boolean }) {
   useEffect(() => {
     if (
       startingNow &&
+      !insideMosque &&
       reminders[startingNow] !== false &&
       !adhanPlaysNatively()
     ) {
       show(startingNow);
     }
-  }, [startingNow, reminders]);
+  }, [startingNow, reminders, insideMosque]);
 
   useEffect(
     () =>
       onPrayerNotificationOpened((prayer, nativeAudio) => {
+        if (insideMosque) return;
         if (
           REMINDER_PRAYERS.includes(prayer as (typeof REMINDER_PRAYERS)[number])
         ) {
@@ -113,13 +118,15 @@ export default function AdhanReminder({ ready }: { ready: boolean }) {
   useEffect(() => {
     if (!config) return;
     const start = new Date();
-    const alerts = Array.from({ length: ALERT_DAYS }, (_, offset) =>
-      prayerDates(config, addDays(start, offset)),
-    ).flatMap((dates) =>
-      REMINDER_PRAYERS.filter((prayer) => reminders[prayer] !== false).map(
-        (prayer) => ({ prayer, date: dates[prayer] }),
-      ),
-    );
+    const alerts = insideMosque
+      ? []
+      : Array.from({ length: ALERT_DAYS }, (_, offset) =>
+          prayerDates(config, addDays(start, offset)),
+        ).flatMap((dates) =>
+          REMINDER_PRAYERS.filter((prayer) => reminders[prayer] !== false).map(
+            (prayer) => ({ prayer, date: dates[prayer] }),
+          ),
+        );
     syncPrayerNotifications({
       alerts,
       adhanFor: (prayer) => adhanFor(adhan, prayer),
@@ -130,7 +137,15 @@ export default function AdhanReminder({ ready }: { ready: boolean }) {
         t("notificationTitle", { prayer: label(prayer, date.getDay() === 5) }),
       body: t("notificationBody"),
     });
-  }, [config, day, reminders, adhan, i18n.language, notificationsAllowed]);
+  }, [
+    config,
+    day,
+    reminders,
+    adhan,
+    i18n.language,
+    notificationsAllowed,
+    insideMosque,
+  ]);
 
   return (
     <AdhanSplash

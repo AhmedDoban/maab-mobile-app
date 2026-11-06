@@ -4,6 +4,8 @@ import { useAppSelector } from "@/store/Store";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { updatePrayerWidgets } from "../../../../modules/prayer-widgets";
+import { contentLocale } from "@/i18n/config";
+import { getItems } from "@/features/azkar/_data";
 import {
   addDays,
   PrayerConfig,
@@ -13,7 +15,7 @@ import {
 import { toHijri } from "../_data/hijri";
 import { shortTime } from "../_data/time";
 import { PrayerDay } from "../_data/schedule";
-import { PRAYER_ICONS, REMINDER_PRAYERS } from "../_data/types";
+import { DISPLAY_PRAYERS, PRAYER_ICONS } from "../_data/types";
 import useCityName from "./useCityName";
 import useHijriLabel from "./useHijriLabel";
 import usePrayerLabels from "./usePrayerLabels";
@@ -50,7 +52,7 @@ export default function usePrayerWidgets(
       .map((date) => {
         const moments = prayerDates(config, date);
         const clock = prayerClock(config, date);
-        return REMINDER_PRAYERS.map((name) => ({
+        return DISPLAY_PRAYERS.map((name) => ({
           label: label(name, date.getDay() === 5),
           at: moments[name].getTime(),
           time: shortTime(clock[name]),
@@ -58,6 +60,13 @@ export default function usePrayerWidgets(
         }));
       })
       .flat();
+    const locale = contentLocale(i18n.language);
+    const morningDhikr = getItems("morning_azkar").map(
+      (item) => item[locale].text,
+    );
+    const eveningDhikr = getItems("evening_azkar").map(
+      (item) => item[locale].text,
+    );
     updatePrayerWidgets({
       rtl: isRTLLocale(i18n.language),
       color: brand.main,
@@ -69,9 +78,13 @@ export default function usePrayerWidgets(
       nextTitle: t("widget.next"),
       todayTitle: t("widget.today"),
       dhikrTitle: t("widget.dhikr"),
+      morningDhikrTitle: t("widget.morning"),
+      eveningDhikrTitle: t("widget.evening"),
       city: city ?? "",
       prayers,
       dhikr: t("widget.dhikrList", { returnObjects: true }) as string[],
+      morningDhikr,
+      eveningDhikr,
       dates,
       lockScreen,
       lockChannel: t("widget.lockChannel"),

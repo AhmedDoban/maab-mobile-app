@@ -9,13 +9,17 @@ export default function useCategoryScreenOptions({
   title,
   isFavorite,
   canReset,
+  canComplete,
   onReset,
+  onComplete,
   onToggleFavorite,
 }: {
   title: string;
   isFavorite: boolean;
   canReset: boolean;
+  canComplete: boolean;
   onReset: () => void;
+  onComplete: () => void;
   onToggleFavorite: () => void;
 }) {
   const { t } = useTranslation("azkar");
@@ -26,9 +30,12 @@ export default function useCategoryScreenOptions({
       <CategoryHeaderActions
         isFavorite={isFavorite}
         canReset={canReset}
+        canComplete={canComplete}
         resetLabel={t("reset")}
+        completeLabel={t("completeAll")}
         favoriteLabel={t("saveZikr")}
         onReset={onReset}
+        onComplete={onComplete}
         onToggleFavorite={onToggleFavorite}
       />
     );
@@ -39,6 +46,14 @@ export default function useCategoryScreenOptions({
       unstable_headerRightItems:
         Platform.OS === "ios"
           ? () => [
+              {
+                type: "button",
+                icon: { type: "sfSymbol", name: "checkmark.circle" },
+                tintColor: colors.ink,
+                disabled: !canComplete,
+                label: t("completeAll"),
+                onPress: onComplete,
+              },
               {
                 type: "button",
                 icon: {
@@ -64,10 +79,12 @@ export default function useCategoryScreenOptions({
     title,
     isFavorite,
     canReset,
+    canComplete,
     colors.love,
     colors.ink,
     t,
     onReset,
+    onComplete,
     onToggleFavorite,
   ]);
 }

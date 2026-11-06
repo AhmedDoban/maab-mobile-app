@@ -1,4 +1,13 @@
 {
+  "mosques": "مساجد اور اقامت کے اوقات",
+  "addMosque": "محفوظ مسجد شامل کریں",
+  "addFirstMosque": "اپنی پہلی مسجد شامل کریں",
+  "mosqueName": "مسجد کا نام",
+  "saveCurrentMosque": "میرا مقام مسجد کے طور پر محفوظ کریں",
+  "insideMosque": "مسجد کے اندر",
+  "markInside": "میں اندر ہوں",
+  "nextIqama": "اگلی اقامت",
+  "deleteMosque": "مسجد حذف کریں",
   "language": "زبان",
   "appearance": "ظاہری شکل",
   "system": "سسٹم",

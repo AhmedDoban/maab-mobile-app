@@ -21,9 +21,13 @@ export type WidgetPayload = {
   nextTitle: string;
   todayTitle: string;
   dhikrTitle: string;
+  morningDhikrTitle: string;
+  eveningDhikrTitle: string;
   city: string;
   prayers: WidgetPrayer[];
   dhikr: string[];
+  morningDhikr: string[];
+  eveningDhikr: string[];
   dates: WidgetDate[];
   lockScreen: boolean;
   lockChannel: string;

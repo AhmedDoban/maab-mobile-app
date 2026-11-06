@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import Skeleton from "@/components/ui/Skeleton";
-import { REMINDER_PRAYERS } from "../_data/types";
+import { DISPLAY_PRAYERS } from "../_data/types";
 
 export default function PrayerTimesCardSkeleton() {
   const { t } = useTranslation("common");
@@ -27,7 +27,7 @@ export default function PrayerTimesCardSkeleton() {
         </View>
       </View>
       <View className="flex-row gap-3">
-        {REMINDER_PRAYERS.map((name) => (
+        {DISPLAY_PRAYERS.map((name) => (
           <Skeleton key={name} className="h-20 flex-1 rounded-2xl" />
         ))}
       </View>

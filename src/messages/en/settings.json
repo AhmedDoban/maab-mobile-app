@@ -1,4 +1,13 @@
 {
+  "mosques": "Mosques and iqama times",
+  "addMosque": "Add saved mosque",
+  "addFirstMosque": "Add your first mosque",
+  "mosqueName": "Mosque name",
+  "saveCurrentMosque": "Save my location as a mosque",
+  "insideMosque": "Inside mosque",
+  "markInside": "I'm inside",
+  "nextIqama": "Next iqama",
+  "deleteMosque": "Delete mosque",
   "language": "Language",
   "appearance": "Appearance",
   "system": "System",

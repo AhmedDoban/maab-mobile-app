@@ -28,7 +28,11 @@ object WidgetScheduler {
       set(Calendar.SECOND, 5)
       set(Calendar.MILLISECOND, 0)
     }.timeInMillis
-    val next = payload?.next(now)?.at?.plus(1000)
+    val next = listOfNotNull(
+      payload?.next(now)?.at,
+      payload?.prayers?.firstOrNull { it.icon == "fajr" && it.at > now }?.at,
+      payload?.prayers?.firstOrNull { it.icon == "maghrib" && it.at > now }?.at,
+    ).minOrNull()?.plus(1000)
     val minute = (now / MINUTE_MS + 1) * MINUTE_MS + 500
     val tick = if (everyMinute && payload != null) minute else now + TICK_MS
     val at = minOf(next ?: midnight, midnight, tick)

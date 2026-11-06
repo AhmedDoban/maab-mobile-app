@@ -7,7 +7,7 @@ import {
   channelId,
   notificationSound,
 } from "../_data/adhanSounds";
-import { PrayerName } from "../_data/types";
+import { PrayerName, REMINDER_PRAYERS } from "../_data/types";
 import {
   adhanAlarmAvailable,
   addAdhanEndListener,
@@ -141,6 +141,9 @@ async function reschedule(
     { prayer: PrayerName; date: Date; title: string; adhan: AdhanChoice }
   >();
   for (const { prayer, date } of alerts) {
+    if (!REMINDER_PRAYERS.includes(prayer as (typeof REMINDER_PRAYERS)[number])) {
+      continue;
+    }
     if (date.getTime() <= now) continue;
     const text = title(prayer, date);
     const adhan = adhanFor(prayer);

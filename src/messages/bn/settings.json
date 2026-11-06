@@ -1,4 +1,13 @@
 {
+  "mosques": "মসজিদ ও ইকামতের সময়",
+  "addMosque": "সংরক্ষিত মসজিদ যোগ করুন",
+  "addFirstMosque": "প্রথম মসজিদ যোগ করুন",
+  "mosqueName": "মসজিদের নাম",
+  "saveCurrentMosque": "আমার অবস্থান মসজিদ হিসেবে সংরক্ষণ করুন",
+  "insideMosque": "মসজিদের ভেতরে",
+  "markInside": "আমি ভেতরে আছি",
+  "nextIqama": "পরবর্তী ইকামত",
+  "deleteMosque": "মসজিদ মুছুন",
   "language": "ভাষা",
   "appearance": "চেহারা",
   "system": "সিস্টেম",

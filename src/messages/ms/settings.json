@@ -1,4 +1,13 @@
 {
+  "mosques": "Masjid dan waktu iqamah",
+  "addMosque": "Tambah masjid tersimpan",
+  "addFirstMosque": "Tambah masjid pertama",
+  "mosqueName": "Nama masjid",
+  "saveCurrentMosque": "Simpan lokasi saya sebagai masjid",
+  "insideMosque": "Di dalam masjid",
+  "markInside": "Saya di dalam",
+  "nextIqama": "Iqamah seterusnya",
+  "deleteMosque": "Padam masjid",
   "language": "Bahasa",
   "appearance": "Penampilan",
   "system": "Sistem",

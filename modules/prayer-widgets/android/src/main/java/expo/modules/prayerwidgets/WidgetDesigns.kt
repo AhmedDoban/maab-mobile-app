@@ -391,7 +391,7 @@ object WidgetDesigns {
     val p = WidgetPainter(context, w, h, scale, payload?.rtl ?: rtl(context))
     p.fill(payload?.deep ?: DEFAULT_DEEP)
     val k = min(w / 320f, h / 170f).coerceIn(0.75f, 1.5f)
-    val title = payload?.dhikrTitle ?: context.getString(R.string.widget_dhikr)
+    val title = payload?.dhikrTitleOf(now) ?: context.getString(R.string.widget_dhikr)
     val text = payload?.dhikrOf(now) ?: context.getString(R.string.widget_dhikr_default)
     val titleH = 17f * k
     val gap = 12f * k
@@ -562,7 +562,7 @@ object WidgetDesigns {
 
   fun describe(context: Context, payload: WidgetPayload?, now: Long, dhikr: Boolean): String {
     if (dhikr) {
-      val title = payload?.dhikrTitle ?: context.getString(R.string.widget_dhikr)
+      val title = payload?.dhikrTitleOf(now) ?: context.getString(R.string.widget_dhikr)
       return "$title: ${payload?.dhikrOf(now) ?: context.getString(R.string.widget_dhikr_default)}"
     }
     val next = payload?.next(now) ?: return context.getString(R.string.widget_open_app)

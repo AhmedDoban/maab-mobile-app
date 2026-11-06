@@ -5,16 +5,22 @@ import { View } from "react-native";
 export default function CategoryHeaderActions({
   isFavorite,
   canReset,
+  canComplete,
   resetLabel,
+  completeLabel,
   favoriteLabel,
   onReset,
+  onComplete,
   onToggleFavorite,
 }: {
   isFavorite: boolean;
   canReset: boolean;
+  canComplete: boolean;
   resetLabel: string;
+  completeLabel: string;
   favoriteLabel: string;
   onReset: () => void;
+  onComplete: () => void;
   onToggleFavorite: () => void;
 }) {
   const colors = useThemeColors();
@@ -25,6 +31,15 @@ export default function CategoryHeaderActions({
 
   return (
     <View className="flex-row gap-2">
+      <IconButton
+        icon="checkCircle"
+        color={iconColor}
+        className="size-9"
+        style={[background, { opacity: canComplete ? 1 : 0.4 }]}
+        accessibilityLabel={completeLabel}
+        disabled={!canComplete}
+        onPress={onComplete}
+      />
       <IconButton
         icon="reset"
         color={iconColor}

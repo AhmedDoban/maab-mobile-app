@@ -1,4 +1,13 @@
 {
+  "mosques": "مساجد و اوقات اقامه",
+  "addMosque": "افزودن مسجد ذخیره‌شده",
+  "addFirstMosque": "اولین مسجد را اضافه کنید",
+  "mosqueName": "نام مسجد",
+  "saveCurrentMosque": "موقعیت من را به‌عنوان مسجد ذخیره کن",
+  "insideMosque": "داخل مسجد",
+  "markInside": "داخل هستم",
+  "nextIqama": "اقامه بعدی",
+  "deleteMosque": "حذف مسجد",
   "language": "زبان",
   "appearance": "ظاهر",
   "system": "سیستم",

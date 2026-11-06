@@ -1,7 +1,7 @@
 import { addDays, PrayerConfig, prayerClock } from "./calculate";
 import { HijriDate, toHijri } from "./hijri";
 import { DAY_MINUTES, minutesOfDay, toMinutes } from "./time";
-import { PrayerName, REMINDER_PRAYERS } from "./types";
+import { DISPLAY_PRAYERS, PrayerName, REMINDER_PRAYERS } from "./types";
 
 export type PrayerStatus = "passed" | "next" | "upcoming";
 type PrayerClock = Record<PrayerName, string>;
@@ -55,7 +55,7 @@ export function getPrayerStartingNow(times: PrayerClock, now: Date) {
 export function getScheduledPrayers(day: PrayerDay, now: Date) {
   const next = getNextPrayer(day.times, day.tomorrow, now);
   const current = minutesOfDay(now);
-  const prayers: ScheduledPrayer[] = REMINDER_PRAYERS.map((name) => ({
+  const prayers: ScheduledPrayer[] = DISPLAY_PRAYERS.map((name) => ({
     name,
     time: day.times[name],
     status:

@@ -18,11 +18,13 @@ import RecitationSection from "./_sections/RecitationSection";
 import RemindersSection from "./_sections/RemindersSection";
 import SourcesSection from "./_sections/SourcesSection";
 import SurahFrameSection from "./_sections/SurahFrameSection";
+import MosquesSection from "./_sections/MosquesSection";
 
 const CONTENT: Record<SettingsSectionId, ComponentType> = {
   language: LanguageSection,
   appearance: AppearanceSection,
   prayer: PrayerSection,
+  mosques: MosquesSection,
   adhan: AdhanSection,
   reminders: RemindersSection,
   reading: ReadingSection,

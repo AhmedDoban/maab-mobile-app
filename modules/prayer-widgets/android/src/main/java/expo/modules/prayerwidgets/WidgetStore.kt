@@ -20,14 +20,18 @@ data class WidgetPayload(
   val nextTitle: String,
   val todayTitle: String,
   val dhikrTitle: String,
+  val morningDhikrTitle: String,
+  val eveningDhikrTitle: String,
   val city: String,
   val prayers: List<WidgetPrayer>,
   val dhikr: List<String>,
+  val morningDhikr: List<String>,
+  val eveningDhikr: List<String>,
   val dates: List<WidgetDate>,
   val lockScreen: Boolean,
   val lockChannel: String
 ) {
-  fun next(now: Long) = prayers.firstOrNull { it.at > now }
+  fun next(now: Long) = prayers.firstOrNull { it.at > now && it.icon != "sunrise" }
 
   fun previous(now: Long) = prayers.lastOrNull { it.at <= now }
 
@@ -53,9 +57,38 @@ data class WidgetPayload(
   }
 
   fun dhikrOf(now: Long): String? {
-    if (dhikr.isEmpty()) return null
+    val list = dhikrList(now)
+    if (list.isEmpty()) return null
     val day = Calendar.getInstance().apply { timeInMillis = now }.get(Calendar.DAY_OF_YEAR)
-    return dhikr[day % dhikr.size]
+    return list[day % list.size]
+  }
+
+  fun dhikrTitleOf(now: Long): String {
+    val fajr = prayers.lastOrNull { it.icon == "fajr" && it.at <= now }?.at
+    val maghrib = prayers.lastOrNull { it.icon == "maghrib" && it.at <= now }?.at
+    return if (fajr != null && maghrib != null && fajr > maghrib) {
+      morningDhikrTitle
+    } else {
+      eveningDhikrTitle
+    }
+  }
+
+  private fun dhikrList(now: Long): List<String> {
+    val fajr = prayers.lastOrNull { it.icon == "fajr" && it.at <= now }?.at
+    val maghrib = prayers.lastOrNull { it.icon == "maghrib" && it.at <= now }?.at
+    return if (
+      morningDhikr.isNotEmpty() &&
+      eveningDhikr.isNotEmpty() &&
+      fajr != null &&
+      maghrib != null &&
+      fajr > maghrib
+    ) {
+      morningDhikr
+    } else if (eveningDhikr.isNotEmpty()) {
+      eveningDhikr
+    } else {
+      dhikr
+    }
   }
 
   companion object {
@@ -82,6 +115,8 @@ data class WidgetPayload(
         nextTitle = json.getString("nextTitle"),
         todayTitle = json.getString("todayTitle"),
         dhikrTitle = json.getString("dhikrTitle"),
+        morningDhikrTitle = json.optString("morningDhikrTitle", json.getString("dhikrTitle")),
+        eveningDhikrTitle = json.optString("eveningDhikrTitle", json.getString("dhikrTitle")),
         city = json.optString("city"),
         prayers = (0 until prayers.length()).map {
           val item = prayers.getJSONObject(it)
@@ -93,6 +128,12 @@ data class WidgetPayload(
           )
         }.sortedBy { it.at },
         dhikr = (0 until dhikr.length()).map { dhikr.getString(it) },
+        morningDhikr = json.optJSONArray("morningDhikr")?.let { values ->
+          (0 until values.length()).map { values.getString(it) }
+        } ?: emptyList(),
+        eveningDhikr = json.optJSONArray("eveningDhikr")?.let { values ->
+          (0 until values.length()).map { values.getString(it) }
+        } ?: emptyList(),
         dates = if (dates == null) emptyList() else (0 until dates.length()).map {
           val item = dates.getJSONObject(it)
           WidgetDate(item.getLong("at"), item.getString("text"))

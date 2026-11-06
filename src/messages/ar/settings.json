@@ -1,4 +1,13 @@
 {
+  "mosques": "الجوامع ومواعيد الإقامة",
+  "addMosque": "إضافة جامع محفوظ",
+  "addFirstMosque": "أضف أول جامع",
+  "mosqueName": "اسم الجامع",
+  "saveCurrentMosque": "حفظ موقعي كجامع",
+  "insideMosque": "داخل الجامع",
+  "markInside": "أنا داخل الجامع",
+  "nextIqama": "الإقامة القادمة",
+  "deleteMosque": "حذف الجامع",
   "language": "اللغة",
   "appearance": "المظهر",
   "system": "النظام",

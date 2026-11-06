@@ -12,6 +12,15 @@ export const REMINDER_PRAYERS = [
   "Isha",
 ] as const satisfies readonly PrayerName[];
 
+export const DISPLAY_PRAYERS = [
+  "Fajr",
+  "Sunrise",
+  "Dhuhr",
+  "Asr",
+  "Maghrib",
+  "Isha",
+] as const satisfies readonly PrayerName[];
+
 export const PRAYER_ICONS: Record<PrayerName, IconKey> = {
   Fajr: "fajr",
   Sunrise: "sunrise",

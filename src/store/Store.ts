@@ -5,12 +5,14 @@ import { DorarSlice } from "./Slices/DorarSlice";
 import { SettingsSlice } from "./Slices/SettingsSlice";
 import { AzkarSlice } from "./Slices/AzkarSlice";
 import { persistMiddleware } from "./persist";
+import { MosquesSlice } from "./Slices/MosquesSlice";
 
 export const Store = configureStore({
   reducer: {
     [SettingsSlice.name]: SettingsSlice.reducer,
     [AzkarSlice.name]: AzkarSlice.reducer,
     [DorarSlice.reducerPath]: DorarSlice.reducer,
+    [MosquesSlice.name]: MosquesSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

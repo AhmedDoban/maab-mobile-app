@@ -283,13 +283,13 @@ struct DhikrWidgetView: View {
       Text(text)
     case .accessoryRectangular:
       VStack(alignment: .leading, spacing: 1) {
-        Text(payload.dhikrTitle ?? "").font(.caption2)
+        Text(payload.dhikrTitle(at: entry.date)).font(.caption2)
         Text(text).font(.caption.bold()).lineLimit(3).minimumScaleFactor(0.7)
       }
       .frame(maxWidth: .infinity, alignment: .leading)
     default:
       VStack(spacing: 6) {
-        Text(payload.dhikrTitle ?? "").font(.caption).opacity(0.8)
+        Text(payload.dhikrTitle(at: entry.date)).font(.caption).opacity(0.8)
         Text(text)
           .font(family == .systemSmall ? .subheadline.bold() : .title3.bold())
           .multilineTextAlignment(.center)

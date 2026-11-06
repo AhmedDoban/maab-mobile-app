@@ -12,6 +12,7 @@ export const SETTINGS_SECTIONS = [
     title: "prayerTimes",
     group: "worship",
   },
+  { id: "mosques", icon: "mosque", title: "mosques", group: "worship" },
   { id: "adhan", icon: "volume", title: "adhanSound", group: "worship" },
   { id: "reminders", icon: "bell", title: "reminders.title", group: "worship" },
   { id: "data", icon: "data", title: "data", group: "data" },

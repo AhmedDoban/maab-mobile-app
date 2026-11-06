@@ -28,14 +28,15 @@ function ClassicPrayerCell({
   const { enabled, toggle } = usePrayerReminder(prayer, onDenied);
   const isNext = status === "next";
   const color = isNext ? INK : "#ffffff";
+  const interactive = prayer !== "Sunrise";
 
   return (
     <PressableScale
       scaleTo={0.92}
-      onPress={toggle}
-      accessibilityRole="switch"
-      accessibilityState={{ checked: enabled }}
-      accessibilityLabel={`${label} ${time}, ${t(enabled ? "reminderOn" : "reminderOff")}`}
+      onPress={interactive ? toggle : undefined}
+      accessibilityRole={interactive ? "switch" : "text"}
+      accessibilityState={interactive ? { checked: enabled } : undefined}
+      accessibilityLabel={`${label} ${time}${interactive ? `, ${t(enabled ? "reminderOn" : "reminderOff")}` : ""}`}
       className="flex-1 items-center gap-1 rounded-2xl py-3"
       style={[
         isNext && { backgroundColor: MINT_FILL },
@@ -63,7 +64,7 @@ function ClassicPrayerCell({
       </AppText>
       <View>
         <Icon name={PRAYER_ICONS[prayer]} size={18} tintColor={color} />
-        <View
+        {interactive ? <View
           className="absolute -end-2.5 -top-1.5 size-3.5 items-center justify-center rounded-full"
           style={{
             backgroundColor: isNext ? INK : "#ffffff",
@@ -75,7 +76,7 @@ function ClassicPrayerCell({
             size={8}
             tintColor={isNext ? MINT_FILL : INK}
           />
-        </View>
+        </View> : null}
       </View>
     </PressableScale>
   );

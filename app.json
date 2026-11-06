@@ -2,7 +2,7 @@
   "expo": {
     "name": "Maab",
     "slug": "maab",
-    "version": "1.7.6",
+    "version": "1.8.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "maab",
@@ -19,6 +19,9 @@
         "UIStatusBarHidden": true,
         "ITSAppUsesNonExemptEncryption": false,
         "ExpoLocalization_supportsRTL": true,
+        "NSLocationWhenInUseUsageDescription": "The app uses your location to find the qibla direction, prayer times and nearby mosques.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "The app uses your location in the background to detect when you enter a saved mosque and pause prayer alerts.",
+        "NSLocationAlwaysUsageDescription": "The app uses your location in the background to detect when you enter a saved mosque and pause prayer alerts.",
         "CFBundleLocalizations": [
           "ar",
           "en"
@@ -97,7 +100,9 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "The app uses your location to find the qibla direction and prayer times."
+          "locationWhenInUsePermission": "The app uses your location to find the qibla direction, prayer times and nearby mosques.",
+          "locationAlwaysAndWhenInUsePermission": "The app uses your location in the background to detect when you enter a saved mosque and pause prayer alerts.",
+          "isAndroidBackgroundLocationEnabled": true
         }
       ],
       [

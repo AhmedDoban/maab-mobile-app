@@ -6,6 +6,7 @@ import type { HeroAction, HeroSearch } from "@/components/hero/heroTypes";
 import ContentColumn from "@/components/ui/ContentColumn";
 import EmptyState from "@/components/ui/EmptyState";
 import PrayerTimesCard from "@/features/prayer-times/PrayerTimesCard";
+import MosqueHomeCard from "@/features/prayer-times/_ui/MosqueHomeCard";
 import useCompactHero from "@/hooks/useCompactHero";
 import useDirection from "@/hooks/useDirection";
 import useTabBarSpace from "@/hooks/useTabBarSpace";
@@ -98,6 +99,7 @@ export default function AzkarHome() {
           ) : (
             <>
               <PrayerTimesCard />
+              <MosqueHomeCard />
               <DailyWirdSection kahf={kahf} />
               <QuranSection />
               <VerseOfDayCard />

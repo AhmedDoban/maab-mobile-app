@@ -28,6 +28,10 @@ struct PrayerPayload: Decodable {
   var todayTitle: String?
   var dhikrTitle: String?
   var dhikr: [String]?
+  var morningDhikrTitle: String?
+  var eveningDhikrTitle: String?
+  var morningDhikr: [String]?
+  var eveningDhikr: [String]?
   var dates: [WidgetDate]?
 
   static func load() -> PrayerPayload? {
@@ -72,6 +76,14 @@ struct PrayerPayload: Decodable {
           ? "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ"
           : "I seek forgiveness from Allah and turn to Him in repentance"
       ],
+      morningDhikrTitle: arabic ? "أذكار الصباح" : "Morning adhkar",
+      eveningDhikrTitle: arabic ? "أذكار المساء" : "Evening adhkar",
+      morningDhikr: [
+        arabic ? "اللّهُ لاَ إِلَـهَ إِلاَّ هُوَ الْحَيُّ الْقَيُّومُ" : "Allah—there is no deity except Him, the Ever-Living, the Sustainer of all"
+      ],
+      eveningDhikr: [
+        arabic ? "أَعُوذُ بِاللَّهِ مِنْ الشَّيْطَانِ الرَّجِيمِ" : "I seek refuge in Allah from Satan, the accursed"
+      ],
       dates: [
         WidgetDate(
           at: now.addingTimeInterval(-3600).timeIntervalSince1970 * 1000,
@@ -82,7 +94,7 @@ struct PrayerPayload: Decodable {
   }
 
   func next(after date: Date) -> WidgetPrayer? {
-    prayers.sorted { $0.at < $1.at }.first { $0.date > date }
+    prayers.sorted { $0.at < $1.at }.first { $0.date > date && $0.icon != "sunrise" }
   }
 
   func day(of date: Date) -> [WidgetPrayer] {
@@ -100,9 +112,33 @@ struct PrayerPayload: Decodable {
   }
 
   func dhikr(at date: Date) -> String? {
-    guard let list = dhikr, !list.isEmpty else { return nil }
+    let list = dhikrList(at: date)
+    guard !list.isEmpty else { return nil }
     let day = Calendar.current.ordinality(of: .day, in: .year, for: date) ?? 0
     return list[day % list.count]
+  }
+
+  func dhikrTitle(at date: Date) -> String {
+    let fajr = prayers.last { $0.icon == "fajr" && $0.date <= date }?.date
+    let maghrib = prayers.last { $0.icon == "maghrib" && $0.date <= date }?.date
+    if let fajr, let maghrib, fajr > maghrib {
+      return morningDhikrTitle ?? dhikrTitle ?? ""
+    }
+    return eveningDhikrTitle ?? dhikrTitle ?? ""
+  }
+
+  private func dhikrList(at date: Date) -> [String] {
+    let fajr = prayers.last { $0.icon == "fajr" && $0.date <= date }?.date
+    let maghrib = prayers.last { $0.icon == "maghrib" && $0.date <= date }?.date
+    if let morningDhikr, !morningDhikr.isEmpty,
+       let eveningDhikr, !eveningDhikr.isEmpty,
+       let fajr, let maghrib, fajr > maghrib {
+      return morningDhikr
+    }
+    if let eveningDhikr, !eveningDhikr.isEmpty {
+      return eveningDhikr
+    }
+    return dhikr ?? []
   }
 }
 

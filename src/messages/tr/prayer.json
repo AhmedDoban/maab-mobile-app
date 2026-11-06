@@ -36,6 +36,8 @@
     "next": "Sonraki namaz",
     "today": "Namaz vakitleri",
     "dhikr": "Günün zikri",
+    "morning": "Sabah zikirleri",
+    "evening": "Akşam zikirleri",
     "dhikrList": [
       "Allah'ı hamd ile tesbih ederim, yüce Allah'ı tesbih ederim",
       "Allah'tan başka ilah yoktur; O tektir, ortağı yoktur. Mülk O'nundur, hamd O'nadır ve O her şeye kadirdir",

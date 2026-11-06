@@ -108,6 +108,28 @@ export const AzkarSlice = createSlice({
           (state.categoryUsage[categoryId] ?? 0) + 1;
       }
     },
+    completeCategory(
+      state,
+      action: PayloadAction<{
+        categoryId: string;
+        goals: { id: number; count: number }[];
+      }>,
+    ) {
+      if (state.progressDate !== today()) {
+        state.progress = {};
+        state.progressDate = today();
+      }
+      const { categoryId, goals } = action.payload;
+      for (const goal of goals) {
+        const key = progressKey(categoryId, goal.id);
+        const before = state.progress[key] ?? 0;
+        state.progress[key] = goal.count;
+        if (before < goal.count) {
+          state.categoryUsage[categoryId] =
+            (state.categoryUsage[categoryId] ?? 0) + 1;
+        }
+      }
+    },
     recordCategoryOpen(state, action: PayloadAction<string>) {
       const id = action.payload;
       state.categoryUsage[id] = (state.categoryUsage[id] ?? 0) + 1;
@@ -158,6 +180,7 @@ export const {
   toggleFavoriteZikr,
   toggleFavoriteHadith,
   incrementCount,
+  completeCategory,
   startNewDay,
   startNewPrayer,
   recordCategoryOpen,
