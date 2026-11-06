@@ -19,7 +19,13 @@
   "reminderOff": "Adhan reminder off",
   "notificationTitle": "Time for {{prayer}}",
   "channelName": "Adhan · {{sound}}",
-  "notificationBody": "Come to prayer, come to success",
+  "notificationBody": {
+    "Fajr": "Begin your day with prayer and Allah's blessings.",
+    "Dhuhr": "Pause your day and return to Allah in prayer.",
+    "Asr": "Keep your heart connected to Allah with the Asr prayer.",
+    "Maghrib": "End your day with gratitude and the Maghrib prayer.",
+    "Isha": "Close your day with Isha and peaceful remembrance."
+  },
   "permissionDenied": "Allow notifications in Settings to get adhan reminders",
   "left": "Left",
   "hour": "hr",

@@ -84,7 +84,10 @@ export async function ensureNotificationPermission() {
   return (await Notifications.requestPermissionsAsync()).granted;
 }
 
-type PrayerAlert = { prayer: PrayerName; date: Date };
+type PrayerAlert = {
+  prayer: (typeof REMINDER_PRAYERS)[number];
+  date: Date;
+};
 
 type SyncOptions = {
   alerts: PrayerAlert[];
@@ -93,7 +96,7 @@ type SyncOptions = {
   playbackChannel: string;
   stopLabel: string;
   title: (prayer: PrayerName, date: Date) => string;
-  body: string;
+  body: (prayer: (typeof REMINDER_PRAYERS)[number]) => string;
 };
 
 const SYNC_DELAY = 500;
@@ -138,19 +141,34 @@ async function reschedule(
   const now = Date.now();
   const wanted = new Map<
     string,
-    { prayer: PrayerName; date: Date; title: string; adhan: AdhanChoice }
+    {
+      prayer: PrayerName;
+      date: Date;
+      title: string;
+      body: string;
+      adhan: AdhanChoice;
+    }
   >();
   for (const { prayer, date } of alerts) {
-    if (!REMINDER_PRAYERS.includes(prayer as (typeof REMINDER_PRAYERS)[number])) {
+    if (
+      !REMINDER_PRAYERS.includes(prayer as (typeof REMINDER_PRAYERS)[number])
+    ) {
       continue;
     }
     if (date.getTime() <= now) continue;
     const text = title(prayer, date);
     const adhan = adhanFor(prayer);
+    const notificationBody = body(prayer);
     const id = `${ID_PREFIX}${date.getTime()}-${prayer}-${signature(
-      `${adhan.sound}|${adhan.custom?.uri ?? ""}|${text}|${body}`,
+      `${adhan.sound}|${adhan.custom?.uri ?? ""}|${text}|${notificationBody}`,
     )}`;
-    wanted.set(id, { prayer, date, title: text, adhan });
+    wanted.set(id, {
+      prayer,
+      date,
+      title: text,
+      body: notificationBody,
+      adhan,
+    });
   }
 
   const scheduled = await Notifications.getAllScheduledNotificationsAsync();
@@ -167,18 +185,23 @@ async function reschedule(
     );
     if (stale()) return;
     scheduleAdhanAlarms(
-      [...wanted].map(([id, { prayer, date, title: text, adhan }]) => ({
-        id,
-        at: date.getTime(),
-        prayer,
-        title: text,
-        body,
-        channelId: channelId(adhan.sound),
-        sound: channelId(adhan.sound),
-        soundUri: adhan.sound === "custom" ? (adhan.custom?.uri ?? "") : "",
-        channelName: playbackChannel,
-        stopLabel,
-      })),
+      [...wanted].map(
+        ([
+          id,
+          { prayer, date, title: text, body: notificationBody, adhan },
+        ]) => ({
+          id,
+          at: date.getTime(),
+          prayer,
+          title: text,
+          body: notificationBody,
+          channelId: channelId(adhan.sound),
+          sound: channelId(adhan.sound),
+          soundUri: adhan.sound === "custom" ? (adhan.custom?.uri ?? "") : "",
+          channelName: playbackChannel,
+          stopLabel,
+        }),
+      ),
     );
     return;
   }
@@ -197,14 +220,17 @@ async function reschedule(
       ),
   );
 
-  for (const [identifier, { prayer, date, title: text, adhan }] of wanted) {
+  for (const [
+    identifier,
+    { prayer, date, title: text, body: notificationBody, adhan },
+  ] of wanted) {
     if (stale()) return;
     if (existing.has(identifier)) continue;
     await Notifications.scheduleNotificationAsync({
       identifier,
       content: {
         title: text,
-        body,
+        body: notificationBody,
         sound: notificationSound(adhan.sound, Platform.OS === "ios"),
         data: { prayer },
       },

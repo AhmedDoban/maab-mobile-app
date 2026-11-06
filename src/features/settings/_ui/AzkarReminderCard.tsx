@@ -104,7 +104,9 @@ export default function AzkarReminderCard({
                 onPress={saveTime}
                 className="flex-1 items-center rounded-2xl bg-main py-3"
               >
-                <AppText className="text-white">{t("saveTime")}</AppText>
+                <AppText className="text-white">
+                  {t("reminders.saveTime")}
+                </AppText>
               </PressableScale>
             </View>
           </Pressable>

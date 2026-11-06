@@ -19,7 +19,13 @@
   "reminderOff": "Rappel de l'adhan désactivé",
   "notificationTitle": "C'est l'heure de {{prayer}}",
   "channelName": "Adhan · {{sound}}",
-  "notificationBody": "Venez à la prière, venez à la réussite",
+  "notificationBody": {
+    "Fajr": "Commencez votre journée par la prière et les bénédictions d'Allah.",
+    "Dhuhr": "Faites une pause et revenez à Allah par la prière de Dhuhr.",
+    "Asr": "Gardez votre cœur proche d'Allah avec la prière d'Asr.",
+    "Maghrib": "Terminez votre journée par la gratitude et la prière du Maghrib.",
+    "Isha": "Terminez votre journée par la prière d'Isha et le rappel d'Allah."
+  },
   "permissionDenied": "Autorisez les notifications dans les réglages pour recevoir les rappels de l'adhan",
   "left": "Restant",
   "hour": "h",

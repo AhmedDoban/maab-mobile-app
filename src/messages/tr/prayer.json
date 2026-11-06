@@ -19,7 +19,13 @@
   "reminderOff": "Ezan hatırlatıcısı kapalı",
   "notificationTitle": "{{prayer}} vakti",
   "channelName": "Ezan · {{sound}}",
-  "notificationBody": "Haydi namaza, haydi kurtuluşa",
+  "notificationBody": {
+    "Fajr": "Gününüzü namaz ve Allah'ın bereketiyle başlatın.",
+    "Dhuhr": "Gününüzü durdurun ve öğle namazıyla Allah'a dönün.",
+    "Asr": "İkindi namazıyla kalbinizi Allah'a bağlı tutun.",
+    "Maghrib": "Gününüzü şükür ve akşam namazıyla tamamlayın.",
+    "Isha": "Gününüzü yatsı namazı ve Allah'ı anarak tamamlayın."
+  },
   "permissionDenied": "Ezan hatırlatıcıları için Ayarlar'dan bildirimlere izin verin",
   "left": "Kaldı",
   "hour": "sa",

@@ -135,7 +135,20 @@ export default function AdhanReminder({ ready }: { ready: boolean }) {
       stopLabel: t("stopAdhan"),
       title: (prayer, date) =>
         t("notificationTitle", { prayer: label(prayer, date.getDay() === 5) }),
-      body: t("notificationBody"),
+      body: (prayer) => {
+        switch (prayer) {
+          case "Fajr":
+            return t("notificationBody.Fajr");
+          case "Dhuhr":
+            return t("notificationBody.Dhuhr");
+          case "Asr":
+            return t("notificationBody.Asr");
+          case "Maghrib":
+            return t("notificationBody.Maghrib");
+          case "Isha":
+            return t("notificationBody.Isha");
+        }
+      },
     });
   }, [
     config,

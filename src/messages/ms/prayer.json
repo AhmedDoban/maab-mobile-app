@@ -19,7 +19,13 @@
   "reminderOff": "Peringatan azan dimatikan",
   "notificationTitle": "Waktu {{prayer}}",
   "channelName": "Azan · {{sound}}",
-  "notificationBody": "Marilah menunaikan solat, marilah menuju kejayaan",
+  "notificationBody": {
+    "Fajr": "Mulakan hari anda dengan solat dan keberkatan Allah.",
+    "Dhuhr": "Berhenti seketika dan kembali kepada Allah dengan solat Zohor.",
+    "Asr": "Kekalkan hubungan hati anda dengan Allah melalui solat Asar.",
+    "Maghrib": "Akhiri hari anda dengan kesyukuran dan solat Maghrib.",
+    "Isha": "Tutup hari anda dengan solat Isyak dan mengingati Allah."
+  },
   "permissionDenied": "Benarkan pemberitahuan dalam Tetapan untuk menerima peringatan azan",
   "left": "Lagi",
   "hour": "jam",
