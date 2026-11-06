@@ -5,6 +5,8 @@
   <string name="widget_next_prayer_hint">الصلاة القادمة مع عدّاد تنازلي</string>
   <string name="widget_prayer_times_hint">صلوات اليوم الخمس في سطر واحد</string>
   <string name="widget_dhikr_hint">ذكر قصير يتغير كل يوم</string>
+  <string name="widget_morning_evening">أذكار الصباح والمساء</string>
+  <string name="widget_morning_evening_hint">أذكار الصباح والمساء حسب وقت الصلاة</string>
   <string name="widget_open_app">افتح التطبيق لتحميل المواقيت</string>
   <string name="widget_next_small">الصلاة القادمة (مصغّرة)</string>
   <string name="widget_next_small_hint">الصلاة القادمة والوقت المتبقي في مربع صغير</string>

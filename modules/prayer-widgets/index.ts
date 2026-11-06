@@ -28,6 +28,8 @@ export type WidgetPayload = {
   dhikr: string[];
   morningDhikr: string[];
   eveningDhikr: string[];
+  morningProgress: string;
+  eveningProgress: string;
   dates: WidgetDate[];
   lockScreen: boolean;
   lockChannel: string;

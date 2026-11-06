@@ -18,6 +18,12 @@
       </intent-filter>
       <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_dhikr_info" />
     </receiver>
+    <receiver android:name="expo.modules.prayerwidgets.MorningEveningWidget" android:label="@string/widget_morning_evening" android:exported="false">
+      <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+      </intent-filter>
+      <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_morning_evening_info" />
+    </receiver>
     <receiver android:name="expo.modules.prayerwidgets.NextPrayerSmallWidget" android:label="@string/widget_next_small" android:exported="false">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

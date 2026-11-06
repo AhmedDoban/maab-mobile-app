@@ -30,12 +30,14 @@ object WidgetRenderer {
     val next = ids(context, manager, NextPrayerWidget::class.java)
     val times = ids(context, manager, PrayerTimesWidget::class.java)
     val dhikr = ids(context, manager, DhikrWidget::class.java)
+    val morningEvening = ids(context, manager, MorningEveningWidget::class.java)
     val small = ids(context, manager, NextPrayerSmallWidget::class.java)
     val today = ids(context, manager, TodayWidget::class.java)
     val modern = ids(context, manager, ModernPrayerWidget::class.java)
     next.forEach { update(context, manager, it, Kind.NEXT, payload, now) }
     times.forEach { update(context, manager, it, Kind.TIMES, payload, now) }
     dhikr.forEach { update(context, manager, it, Kind.DHIKR, payload, now) }
+    morningEvening.forEach { update(context, manager, it, Kind.MORNING_EVENING, payload, now) }
     small.forEach { update(context, manager, it, Kind.SMALL, payload, now) }
     today.forEach { update(context, manager, it, Kind.TODAY, payload, now) }
     modern.forEach { update(context, manager, it, Kind.MODERN, payload, now) }
@@ -43,14 +45,14 @@ object WidgetRenderer {
     val lockScreen = payload?.lockScreen == true
     val timed = next.isNotEmpty() || times.isNotEmpty() || small.isNotEmpty() ||
       today.isNotEmpty() || modern.isNotEmpty()
-    if (timed || dhikr.isNotEmpty() || lockScreen) {
+    if (timed || dhikr.isNotEmpty() || morningEvening.isNotEmpty() || lockScreen) {
       WidgetScheduler.schedule(context, payload, now, timed)
     } else {
       WidgetScheduler.cancel(context)
     }
   }
 
-  private enum class Kind { NEXT, TIMES, SMALL, TODAY, MODERN, DHIKR }
+  private enum class Kind { NEXT, TIMES, SMALL, TODAY, MODERN, DHIKR, MORNING_EVENING }
 
   private const val COMPACT_WIDTH = 200f
   private const val TALL_HEIGHT = 230f
@@ -102,7 +104,10 @@ object WidgetRenderer {
         setImageViewBitmap(R.id.canvas, classic(context, kind, payload, now, w, h, scale))
       }
     }
-    views.setContentDescription(R.id.root, WidgetDesigns.describe(context, payload, now, kind == Kind.DHIKR))
+    views.setContentDescription(
+      R.id.root,
+      WidgetDesigns.describe(context, payload, now, kind == Kind.DHIKR || kind == Kind.MORNING_EVENING)
+    )
     views.setOnClickPendingIntent(R.id.root, openApp(context))
     return views
   }
@@ -116,7 +121,8 @@ object WidgetRenderer {
     h: Float,
     scale: Float
   ): Bitmap = when {
-    kind == Kind.DHIKR -> WidgetDesigns.dhikr(context, payload, now, w, h, scale)
+    kind == Kind.DHIKR || kind == Kind.MORNING_EVENING ->
+      WidgetDesigns.dhikr(context, payload, now, w, h, scale, kind == Kind.MORNING_EVENING)
     w < COMPACT_WIDTH -> WidgetDesigns.nextSmall(context, payload, now, w, h, scale)
     tall(w, h) -> WidgetDesigns.today(context, payload, now, w, h, scale)
     kind == Kind.TIMES || kind == Kind.TODAY -> WidgetDesigns.prayerTimes(context, payload, now, w, h, scale)

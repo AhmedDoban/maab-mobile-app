@@ -33,10 +33,26 @@ struct PrayerTimesWidget: Widget {
 struct DhikrWidget: Widget {
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: "DhikrWidget", provider: PrayerTimeline()) { entry in
-      DhikrWidgetView(entry: entry)
+      DhikrWidgetView(entry: entry, showProgress: false)
     }
     .configurationDisplayName("widget.dhikr.name")
     .description("widget.dhikr.description")
+    .supportedFamilies([
+      .systemSmall,
+      .systemMedium,
+      .accessoryRectangular,
+      .accessoryInline,
+    ])
+  }
+}
+
+struct MorningEveningWidget: Widget {
+  var body: some WidgetConfiguration {
+    StaticConfiguration(kind: "MorningEveningWidget", provider: PrayerTimeline()) { entry in
+      DhikrWidgetView(entry: entry, showProgress: true)
+    }
+    .configurationDisplayName("widget.morningEvening.name")
+    .description("widget.morningEvening.description")
     .supportedFamilies([
       .systemSmall,
       .systemMedium,
@@ -63,6 +79,7 @@ struct MaabWidgets: WidgetBundle {
     NextPrayerWidget()
     PrayerTimesWidget()
     DhikrWidget()
+    MorningEveningWidget()
     ModernPrayerWidget()
   }
 }

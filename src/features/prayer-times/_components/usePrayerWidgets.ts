@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import { updatePrayerWidgets } from "../../../../modules/prayer-widgets";
 import { contentLocale } from "@/i18n/config";
 import { getItems } from "@/features/azkar/_data";
+import categories from "@/features/azkar/_data/categories";
+import { categoryDone, categoryTotal } from "@/features/azkar/_data/progress";
 import {
   addDays,
   PrayerConfig,
@@ -31,6 +33,7 @@ export default function usePrayerWidgets(
   const hijriLabel = useHijriLabel();
   const palette = useAppSelector((s) => s.settings.palette);
   const lockScreen = useAppSelector((s) => s.settings.lockScreenPrayer);
+  const azkarProgress = useAppSelector((s) => s.azkar.progress);
   const city = useCityName(day?.city);
 
   useEffect(() => {
@@ -67,6 +70,8 @@ export default function usePrayerWidgets(
     const eveningDhikr = getItems("evening_azkar").map(
       (item) => item[locale].text,
     );
+    const morningCategory = categories.find((item) => item.id === "morning_azkar");
+    const eveningCategory = categories.find((item) => item.id === "evening_azkar");
     updatePrayerWidgets({
       rtl: isRTLLocale(i18n.language),
       color: brand.main,
@@ -85,6 +90,14 @@ export default function usePrayerWidgets(
       dhikr: t("widget.dhikrList", { returnObjects: true }) as string[],
       morningDhikr,
       eveningDhikr,
+      morningProgress: t("widget.progress", {
+        done: morningCategory ? categoryDone(morningCategory, azkarProgress) : 0,
+        total: morningCategory ? categoryTotal(morningCategory) : 0,
+      }),
+      eveningProgress: t("widget.progress", {
+        done: eveningCategory ? categoryDone(eveningCategory, azkarProgress) : 0,
+        total: eveningCategory ? categoryTotal(eveningCategory) : 0,
+      }),
       dates,
       lockScreen,
       lockChannel: t("widget.lockChannel"),

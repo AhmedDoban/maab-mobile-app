@@ -27,6 +27,8 @@ data class WidgetPayload(
   val dhikr: List<String>,
   val morningDhikr: List<String>,
   val eveningDhikr: List<String>,
+  val morningProgress: String,
+  val eveningProgress: String,
   val dates: List<WidgetDate>,
   val lockScreen: Boolean,
   val lockChannel: String
@@ -134,6 +136,8 @@ data class WidgetPayload(
         eveningDhikr = json.optJSONArray("eveningDhikr")?.let { values ->
           (0 until values.length()).map { values.getString(it) }
         } ?: emptyList(),
+        morningProgress = json.optString("morningProgress"),
+        eveningProgress = json.optString("eveningProgress"),
         dates = if (dates == null) emptyList() else (0 until dates.length()).map {
           val item = dates.getJSONObject(it)
           WidgetDate(item.getLong("at"), item.getString("text"))

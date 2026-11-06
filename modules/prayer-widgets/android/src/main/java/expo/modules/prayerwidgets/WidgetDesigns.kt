@@ -386,13 +386,28 @@ object WidgetDesigns {
     now: Long,
     w: Float,
     h: Float,
-    scale: Float
+    scale: Float,
+    morningEvening: Boolean = false
   ): Bitmap {
     val p = WidgetPainter(context, w, h, scale, payload?.rtl ?: rtl(context))
     p.fill(payload?.deep ?: DEFAULT_DEEP)
     val k = min(w / 320f, h / 170f).coerceIn(0.75f, 1.5f)
-    val title = payload?.dhikrTitleOf(now) ?: context.getString(R.string.widget_dhikr)
+    val title = if (morningEvening) {
+      payload?.dhikrTitleOf(now)
+        ?: context.getString(R.string.widget_morning_evening)
+    } else {
+      payload?.dhikrTitle ?: context.getString(R.string.widget_dhikr)
+    }
     val text = payload?.dhikrOf(now) ?: context.getString(R.string.widget_dhikr_default)
+    val progress = if (morningEvening) {
+      val fajr = payload?.prayers?.lastOrNull { it.icon == "fajr" && it.at <= now }?.at
+      val maghrib = payload?.prayers?.lastOrNull { it.icon == "maghrib" && it.at <= now }?.at
+      if (fajr != null && maghrib != null && fajr > maghrib) {
+        payload?.morningProgress
+      } else {
+        payload?.eveningProgress
+      }
+    } else null
     val titleH = 17f * k
     val gap = 12f * k
     val layout = p.fit(
@@ -404,9 +419,13 @@ object WidgetDesigns {
       WHITE,
       true
     )
-    val top = (h - titleH - gap - layout.height) / 2
+    val progressH = if (progress.isNullOrEmpty()) 0f else 16f * k
+    val top = (h - titleH - gap - layout.height - progressH) / 2
     p.text(title, w / 2, top + 12f * k, 12f * k, WHITE, Paint.Align.CENTER, alpha = 0.8f, maxWidth = w - 32f * k)
     p.draw(layout, w / 2, top + titleH + gap)
+    if (!progress.isNullOrEmpty()) {
+      p.text(progress, w / 2, h - 12f * k, 10f * k, WHITE, Paint.Align.CENTER, alpha = 0.8f)
+    }
     return p.finish(radius(w, h))
   }
 

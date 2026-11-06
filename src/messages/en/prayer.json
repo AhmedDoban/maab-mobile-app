@@ -45,6 +45,7 @@
     "dhikr": "Dhikr of the day",
     "morning": "Morning adhkar",
     "evening": "Evening adhkar",
+    "progress": "{{done}} of {{total}}",
     "dhikrList": [
       "Glory be to Allah and praise be to Him, glory be to Allah the Almighty",
       "None has the right to be worshipped but Allah alone, without partner. His is the dominion and His is the praise, and He is over all things capable",

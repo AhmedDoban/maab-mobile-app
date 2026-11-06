@@ -4,6 +4,8 @@
 "widget.times.description" = "صلوات اليوم مع إبراز الصلاة القادمة";
 "widget.dhikr.name" = "ذكر اليوم";
 "widget.dhikr.description" = "ذكر قصير يتغير كل يوم";
+"widget.morningEvening.name" = "أذكار الصباح والمساء";
+"widget.morningEvening.description" = "أذكار الصباح والمساء حسب وقت الصلاة";
 "widget.openApp" = "افتح مآب لتحميل المواقيت";
 "widget.modern.name" = "مواقيت الصلاة";
 "widget.modern.description" = "بطاقة فاتحة بالصلاة القادمة والوقت المتبقي والصلوات الخمس";

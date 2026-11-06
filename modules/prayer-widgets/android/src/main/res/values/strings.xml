@@ -5,6 +5,8 @@
   <string name="widget_next_prayer_hint">The next prayer with a live countdown</string>
   <string name="widget_prayer_times_hint">Today\'s five prayers in one row</string>
   <string name="widget_dhikr_hint">A short dhikr that changes every day</string>
+  <string name="widget_morning_evening">Morning &amp; evening adhkar</string>
+  <string name="widget_morning_evening_hint">Morning and evening adhkar based on prayer time</string>
   <string name="widget_open_app">Open the app to load prayer times</string>
   <string name="widget_dhikr_default">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</string>
   <string name="widget_next_small">Next prayer (compact)</string>

@@ -263,6 +263,7 @@ struct PrayerTimesWidgetView: View {
 struct DhikrWidgetView: View {
   @Environment(\.widgetFamily) private var family
   let entry: PrayerEntry
+  let showProgress: Bool
 
   var body: some View {
     Group {
@@ -278,6 +279,7 @@ struct DhikrWidgetView: View {
 
   @ViewBuilder
   private func content(payload: PrayerPayload, text: String) -> some View {
+    let progress = payload.dhikrProgress(at: entry.date)
     switch family {
     case .accessoryInline:
       Text(text)
@@ -294,6 +296,9 @@ struct DhikrWidgetView: View {
           .font(family == .systemSmall ? .subheadline.bold() : .title3.bold())
           .multilineTextAlignment(.center)
           .minimumScaleFactor(0.6)
+        if showProgress, let progress {
+          Text(progress).font(.caption2).opacity(0.8)
+        }
       }
       .foregroundStyle(.white)
       .frame(maxWidth: .infinity, maxHeight: .infinity)

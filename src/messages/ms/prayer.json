@@ -45,6 +45,7 @@
     "dhikr": "Zikir hari ini",
     "morning": "Zikir pagi",
     "evening": "Zikir petang",
+    "progress": "{{done}} daripada {{total}}",
     "dhikrList": [
       "Maha Suci Allah dan segala puji bagi-Nya, Maha Suci Allah Yang Maha Agung",
       "Tiada Tuhan yang berhak disembah melainkan Allah Yang Maha Esa, tiada sekutu bagi-Nya. Bagi-Nya kerajaan dan bagi-Nya segala pujian, dan Dia Maha Berkuasa atas segala sesuatu",

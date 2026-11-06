@@ -45,6 +45,7 @@
     "dhikr": "Dhikr du jour",
     "morning": "Invocations du matin",
     "evening": "Invocations du soir",
+    "progress": "{{done}} sur {{total}}",
     "dhikrList": [
       "Gloire et louange à Allah, gloire à Allah l'Immense",
       "Nul ne mérite d'être adoré sauf Allah, Seul, sans associé. À Lui la royauté, à Lui la louange, et Il est capable de toute chose",

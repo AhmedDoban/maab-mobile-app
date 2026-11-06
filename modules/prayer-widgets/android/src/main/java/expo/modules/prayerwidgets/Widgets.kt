@@ -32,6 +32,8 @@ class PrayerTimesWidget : PrayerWidgetProvider()
 
 class DhikrWidget : PrayerWidgetProvider()
 
+class MorningEveningWidget : PrayerWidgetProvider()
+
 class NextPrayerSmallWidget : PrayerWidgetProvider()
 
 class TodayWidget : PrayerWidgetProvider()
