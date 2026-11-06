@@ -31,6 +31,7 @@ export default function useQibla() {
   const [accuracy, setAccuracy] = useState(3);
   const [interference, setInterference] = useState(false);
   const [attempt, setAttempt] = useState(0);
+  const [visited, setVisited] = useState(false);
   const bearing = useMemo(
     () => (coords ? qiblaBearing(coords) : null),
     [coords],
@@ -50,7 +51,10 @@ export default function useQibla() {
     if (rawHeading.current !== null) report.current?.(rawHeading.current);
   }, [bearing, coords]);
 
+  useFocusEffect(useCallback(() => setVisited(true), []));
+
   useEffect(() => {
+    if (!visited) return;
     let cancelled = false;
 
     (async () => {
@@ -101,7 +105,7 @@ export default function useQibla() {
     return () => {
       cancelled = true;
     };
-  }, [attempt]);
+  }, [attempt, visited]);
 
   useFocusEffect(
     useCallback(() => {

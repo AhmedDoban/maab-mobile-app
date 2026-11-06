@@ -5,6 +5,7 @@ import RecitationProvider from "@/features/quran/_components/RecitationProvider"
 import RecitationMiniBar from "@/features/quran/_ui/RecitationMiniBar";
 import useDirection from "@/hooks/useDirection";
 import useTabBarColors from "@/hooks/useTabBarColors";
+import useTabPreload from "@/hooks/useTabPreload";
 import useThemeColors from "@/hooks/useThemeColors";
 import { useLocales } from "expo-localization";
 import { LocaleProvider, useSegments } from "expo-router";
@@ -96,6 +97,7 @@ export default function AppTabs({ ready }: { ready: boolean }) {
   const systemDirection = useLocales()[0]?.textDirection ?? "ltr";
   const segments = useSegments() as string[];
   const hideTabs = segments.includes("mushaf") || segments.includes("surah");
+  useTabPreload(ready && Platform.OS === "android");
   const screenOptions = useMemo(
     () => ({
       headerShown: false,
