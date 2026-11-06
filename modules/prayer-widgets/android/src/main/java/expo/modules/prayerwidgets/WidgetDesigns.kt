@@ -401,7 +401,7 @@ object WidgetDesigns {
     val text = if (morningEvening) {
       val title = payload?.dhikrTitleOf(now)
       if (title == payload?.morningDhikrTitle) {
-        payload.morningSelectedText
+        payload?.morningSelectedText
       } else {
         payload?.eveningSelectedText
       }
