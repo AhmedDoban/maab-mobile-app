@@ -398,7 +398,8 @@ object WidgetDesigns {
     } else {
       payload?.dhikrTitle ?: context.getString(R.string.widget_dhikr)
     }
-    val text = payload?.dhikrOf(now) ?: context.getString(R.string.widget_dhikr_default)
+    val text = payload?.dhikrOf(now, morningEvening)
+      ?: context.getString(R.string.widget_dhikr_default)
     val progress = if (morningEvening) {
       val fajr = payload?.prayers?.lastOrNull { it.icon == "fajr" && it.at <= now }?.at
       val maghrib = payload?.prayers?.lastOrNull { it.icon == "maghrib" && it.at <= now }?.at
@@ -579,10 +580,22 @@ object WidgetDesigns {
     return p.finish(radius(w, h))
   }
 
-  fun describe(context: Context, payload: WidgetPayload?, now: Long, dhikr: Boolean): String {
-    if (dhikr) {
-      val title = payload?.dhikrTitleOf(now) ?: context.getString(R.string.widget_dhikr)
-      return "$title: ${payload?.dhikrOf(now) ?: context.getString(R.string.widget_dhikr_default)}"
+  fun describe(
+    context: Context,
+    payload: WidgetPayload?,
+    now: Long,
+    dhikr: Boolean,
+    morningEvening: Boolean
+  ): String {
+    if (dhikr && morningEvening) {
+      val title = payload?.dhikrTitleOf(now)
+        ?: context.getString(R.string.widget_morning_evening)
+      return "$title: ${payload?.dhikrOf(now)
+        ?: context.getString(R.string.widget_dhikr_default)}"
+    }
+    if (dhikr && payload != null) {
+      return "${payload.dhikrTitle}: ${payload.dhikrOf(now, false)
+        ?: context.getString(R.string.widget_dhikr_default)}"
     }
     val next = payload?.next(now) ?: return context.getString(R.string.widget_open_app)
     return "${payload.nextTitle}: ${next.label} ${next.time}, ${payload.leftTitle} ${countdown(payload, now)}"

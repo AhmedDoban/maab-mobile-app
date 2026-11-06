@@ -58,8 +58,8 @@ data class WidgetPayload(
     return prayers.filter { sameDay(it.at, next.at) }
   }
 
-  fun dhikrOf(now: Long): String? {
-    val list = dhikrList(now)
+  fun dhikrOf(now: Long, morningEvening: Boolean = true): String? {
+    val list = if (morningEvening) dhikrList(now) else dhikr
     if (list.isEmpty()) return null
     val day = Calendar.getInstance().apply { timeInMillis = now }.get(Calendar.DAY_OF_YEAR)
     return list[day % list.size]

@@ -106,7 +106,13 @@ object WidgetRenderer {
     }
     views.setContentDescription(
       R.id.root,
-      WidgetDesigns.describe(context, payload, now, kind == Kind.DHIKR || kind == Kind.MORNING_EVENING)
+      WidgetDesigns.describe(
+        context,
+        payload,
+        now,
+        kind == Kind.DHIKR || kind == Kind.MORNING_EVENING,
+        kind == Kind.MORNING_EVENING
+      )
     )
     views.setOnClickPendingIntent(R.id.root, openApp(context))
     return views
