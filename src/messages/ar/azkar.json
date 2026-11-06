@@ -9,6 +9,8 @@
   "done": "تم",
   "completed": "أتممت الأذكار — تقبّل الله منك",
   "addMosqueCard": "أضف جامعك",
+  "nearestMosqueCard": "أقرب جامع محفوظ",
+  "openMosqueLocation": "فتح موقع الجامع",
   "addMosqueCardHint": "احفظ جامعًا لعرض الإقامة القادمة",
   "nextIqamaCard": "الإقامة القادمة: {{prayer}} بعد {{minutes}} دقيقة",
   "insideMosqueCard": "أنت داخل الجامع · الإقامة: {{prayer}} بعد {{minutes}} دقيقة",

@@ -6,6 +6,8 @@
   "done": "Terminé",
   "completed": "C'est terminé — qu'Allah l'accepte de vous",
   "addMosqueCard": "Ajouter votre mosquée",
+  "nearestMosqueCard": "Mosquée enregistrée la plus proche",
+  "openMosqueLocation": "Ouvrir l'emplacement de la mosquée",
   "addMosqueCardHint": "Enregistrez une mosquée pour voir la prochaine iqama",
   "nextIqamaCard": "Prochaine iqama : {{prayer}} dans {{minutes}} min",
   "insideMosqueCard": "Vous êtes à l'intérieur · iqama {{prayer}} dans {{minutes}} min",

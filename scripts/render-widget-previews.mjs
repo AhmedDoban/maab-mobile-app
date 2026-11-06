@@ -25,6 +25,11 @@ const COPY = {
     next: "Next prayer",
     today: "Prayer times",
     dhikr: "Dhikr of the day",
+    morningEvening: "Morning & evening adhkar",
+    mosque: "Al Noor Mosque",
+    iqama: "Next iqama",
+    mosqueTimes: "Iqama times",
+    mosqueLocation: "Saved mosque",
     left: "Left",
     hour: "hr",
     minute: "min",
@@ -40,6 +45,11 @@ const COPY = {
     next: "الصلاة القادمة",
     today: "مواقيت الصلاة",
     dhikr: "ذكر اليوم",
+    morningEvening: "أذكار الصباح والمساء",
+    mosque: "جامع النور",
+    iqama: "الإقامة القادمة",
+    mosqueTimes: "مواقيت الإقامة",
+    mosqueLocation: "الجامع المحفوظ",
     left: "متبقي",
     hour: "ساعة",
     minute: "دقيقة",
@@ -54,7 +64,7 @@ const ICONS = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
 const NEXT = 2;
 
 const iconPaths = Object.fromEntries(
-  ["fajr", "dhuhr", "asr", "maghrib", "isha", "calendar", "location"].map(
+  ["fajr", "dhuhr", "asr", "maghrib", "isha", "calendar", "location", "person_praying"].map(
     (name) => {
       const xml = fs.readFileSync(
         path.join(RES, `drawable/widget_ic_${name}.xml`),
@@ -326,6 +336,82 @@ function dhikr(copy) {
   return c;
 }
 
+function morningEvening(copy) {
+  const c = canvas(320, 170);
+  c.add(`<rect width="320" height="170" fill="#ffffff"/>`);
+  c.add(`<circle cx="${copy.rtl ? 278 : 42}" cy="42" r="20" fill="${MID}"/>`);
+  icon(c, "person_praying", (copy.rtl ? 278 : 42) - 10, 32, 20, "#fff");
+  text(c, copy, copy.morningEvening, copy.rtl ? 250 : 70, 38, {
+    size: 13,
+    bold: true,
+    color: "#092B38",
+    anchor: copy.rtl ? "end" : "start",
+  });
+  c.add(`<rect x="18" y="72" width="284" height="76" rx="18" fill="#DFF3EA"/>`);
+  text(c, copy, copy.rtl ? "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ" : "I seek forgiveness from Allah", 160, 105, {
+    size: copy.rtl ? 17 : 16,
+    bold: true,
+    color: "#0E3A33",
+    anchor: "middle",
+  });
+  text(c, copy, copy.rtl ? "أذكار اليوم" : "Your daily remembrance", 160, 132, {
+    size: 11,
+    color: "#667176",
+    anchor: "middle",
+  });
+  return c;
+}
+
+function mosquePreview(copy, mode) {
+  const c = canvas(320, 170);
+  const ink = "#092B38";
+  const gray = "#667176";
+  c.add(`<rect width="320" height="170" fill="#ffffff"/>`);
+  text(c, copy, copy.mosque, copy.rtl ? 306 : 14, 28, {
+    size: 15,
+    bold: true,
+    color: ink,
+    anchor: copy.rtl ? "end" : "start",
+  });
+  text(c, copy, mode === "next" ? copy.iqama : mode === "times" ? copy.mosqueTimes : copy.mosqueLocation, copy.rtl ? 306 : 14, 47, {
+    size: 11,
+    color: gray,
+    anchor: copy.rtl ? "end" : "start",
+  });
+  if (mode === "location") {
+    c.add(`<rect x="14" y="62" width="292" height="94" rx="18" fill="#E5E7EB" fill-opacity="0.55"/>`);
+    c.add(`<circle cx="${copy.rtl ? 270 : 50}" cy="109" r="20" fill="${MID}"/>`);
+    icon(c, "location", (copy.rtl ? 270 : 50) - 10, 99, 20, "#fff");
+    text(c, copy, copy.mosqueLocation, copy.rtl ? 234 : 86, 115, {
+      size: 17,
+      bold: true,
+      color: ink,
+      anchor: copy.rtl ? "end" : "start",
+    });
+  } else {
+    const items = mode === "next" ? [["Maghrib", "5:38"]] : [["Fajr", "4:52"], ["Dhuhr", "11:52"], ["Asr", "3:12"]];
+    c.add(`<rect x="8" y="52" width="304" height="112" rx="22" fill="#E5E7EB" fill-opacity="0.22"/>`);
+    items.forEach(([label, time], i) => {
+      const y = mode === "next" ? 58 + i * 78 : 58 + i * 36;
+      const active = i === 0;
+      c.add(`<rect x="14" y="${y}" width="292" height="${mode === "next" ? 74 : 32}" rx="16" fill="${active ? MID : "#E5E7EB"}" fill-opacity="${active ? 1 : 0.6}"/>`);
+      text(c, copy, copy.rtl ? label : label, copy.rtl ? 286 : 42, y + (mode === "next" ? 32 : 22), {
+        size: mode === "next" ? 21 : 14,
+        bold: true,
+        color: active ? "#fff" : ink,
+        anchor: copy.rtl ? "end" : "start",
+      });
+      text(c, copy, time, copy.rtl ? 34 : 286, y + (mode === "next" ? 32 : 22), {
+        size: mode === "next" ? 21 : 14,
+        bold: true,
+        color: active ? "#fff" : ink,
+        anchor: copy.rtl ? "start" : "end",
+      });
+    });
+  }
+  return c;
+}
+
 function nextSmall(copy) {
   const c = canvas(170, 170);
   background(c);
@@ -485,9 +571,13 @@ const WIDGETS = {
   next_prayer: nextPrayer,
   prayer_times: prayerTimes,
   dhikr,
+  morning_evening: morningEvening,
   next_small: nextSmall,
   today,
   modern,
+  mosque_next: (copy) => mosquePreview(copy, "next"),
+  mosque_times: (copy) => mosquePreview(copy, "times"),
+  mosque_distance: (copy) => mosquePreview(copy, "location"),
 };
 
 for (const [lang, dir] of [

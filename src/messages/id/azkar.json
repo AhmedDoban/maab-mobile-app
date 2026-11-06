@@ -4,6 +4,8 @@
   "done": "Selesai",
   "completed": "Semua selesai — semoga Allah menerima amalmu",
   "addMosqueCard": "Tambah masjid Anda",
+  "nearestMosqueCard": "Masjid tersimpan terdekat",
+  "openMosqueLocation": "Buka lokasi masjid",
   "addMosqueCardHint": "Simpan masjid untuk melihat iqamah berikutnya",
   "nextIqamaCard": "Iqamah berikutnya: {{prayer}} dalam {{minutes}} menit",
   "insideMosqueCard": "Anda berada di dalam · iqamah {{prayer}} dalam {{minutes}} menit",

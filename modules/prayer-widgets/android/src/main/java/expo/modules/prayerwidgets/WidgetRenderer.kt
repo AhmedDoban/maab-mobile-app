@@ -104,10 +104,25 @@ object WidgetRenderer {
     scale: Float,
     id: Int
   ): RemoteViews {
-    val views = if (kind == Kind.MODERN) {
+    val mosqueKind = kind == Kind.MOSQUE_NEXT || kind == Kind.MOSQUE_TIMES || kind == Kind.MOSQUE_DISTANCE
+    val selectedMosque = payload?.mosques?.find {
+      it.id == context.getSharedPreferences("maab_widgets", Context.MODE_PRIVATE)
+        .getString("mosque_$id", null)
+    } ?: payload?.mosques?.firstOrNull()
+    val views = if (kind == Kind.MODERN || mosqueKind) {
       RemoteViews(context.packageName, R.layout.widget_canvas_themed).apply {
-        setImageViewBitmap(R.id.light, modern(context, payload, now, w, h, scale, WidgetDesigns.LIGHT))
-        setImageViewBitmap(R.id.dark, modern(context, payload, now, w, h, scale, WidgetDesigns.DARK))
+        if (kind == Kind.MODERN) {
+          setImageViewBitmap(R.id.light, modern(context, payload, now, w, h, scale, WidgetDesigns.LIGHT))
+          setImageViewBitmap(R.id.dark, modern(context, payload, now, w, h, scale, WidgetDesigns.DARK))
+        } else {
+          val mode = when (kind) {
+            Kind.MOSQUE_NEXT -> 0
+            Kind.MOSQUE_TIMES -> 1
+            else -> 2
+          }
+          setImageViewBitmap(R.id.light, WidgetDesigns.modernMosqueCard(context, payload, now, w, h, scale, mode, selectedMosque, WidgetDesigns.LIGHT))
+          setImageViewBitmap(R.id.dark, WidgetDesigns.modernMosqueCard(context, payload, now, w, h, scale, mode, selectedMosque, WidgetDesigns.DARK))
+        }
       }
     } else {
       RemoteViews(context.packageName, R.layout.widget_canvas).apply {
@@ -149,7 +164,11 @@ object WidgetRenderer {
     )
     views.setOnClickPendingIntent(
       R.id.root,
-      openApp(context, payload, kind == Kind.MORNING_EVENING)
+      if (kind == Kind.MOSQUE_DISTANCE && selectedMosque != null) {
+        openMaps(context, selectedMosque, id)
+      } else {
+        openApp(context, payload, kind == Kind.MORNING_EVENING)
+      }
     )
     return views
   }
@@ -233,6 +252,21 @@ object WidgetRenderer {
     return PendingIntent.getActivity(
       context,
       uri?.toString()?.hashCode() ?: 0,
+      intent,
+      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+  }
+
+  private fun openMaps(context: Context, mosque: WidgetMosque, widgetId: Int): PendingIntent {
+    val query = "${mosque.latitude},${mosque.longitude} (${mosque.name})"
+    val uri = android.net.Uri.parse(
+      "https://www.google.com/maps/search/?api=1&query=${android.net.Uri.encode(query)}"
+    )
+    val intent = Intent(Intent.ACTION_VIEW, uri)
+      .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    return PendingIntent.getActivity(
+      context,
+      widgetId,
       intent,
       PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )

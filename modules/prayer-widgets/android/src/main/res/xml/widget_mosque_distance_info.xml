@@ -1,4 +1,5 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
   android:minWidth="180dp" android:minHeight="110dp" android:resizeMode="horizontal|vertical"
   android:updatePeriodMillis="0" android:configure="expo.modules.prayerwidgets.MosqueWidgetConfigActivity"
+  android:previewImage="@drawable/widget_preview_mosque_distance"
   android:initialLayout="@layout/widget_canvas" />

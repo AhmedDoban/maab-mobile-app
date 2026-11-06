@@ -155,26 +155,91 @@ object WidgetDesigns {
     val p = classic(context, payload, w, h, scale)
     val mosque = selected
     val k = min(w / 320f, h / 170f).coerceIn(0.8f, 1.5f)
+    val pad = 12f * k
+    val showArch = w >= 250f
+    val archW = if (showArch) min((w - pad) * 0.26f, (h - pad) * 0.62f) else 0f
+    val archX = if (p.rtl) pad else w - pad - archW
+    if (showArch) p.arch(archX, pad, archW, h - pad)
+    val left = if (p.rtl && showArch) archX + archW + pad else pad
+    val right = if (!p.rtl && showArch) archX - pad else w - pad
+    val width = right - left
     if (mosque == null) {
-      empty(context, p, w / 2f, h / 2f, w - 32f * k, h - 24f * k, WHITE)
+      empty(context, p, (left + right) / 2f, h / 2f, width, h - pad * 2f, WHITE)
       return p.finish(radius(w, h))
     }
-    val left = 18f * k
-    val right = w - left
-    p.text(mosque.name, p.sx(0f, left, right), 30f * k, 18f * k, WHITE, p.startAlign, bold = true, maxWidth = w - 36f * k)
+    val title = when (mode) {
+      0 -> payload?.nextTitle.orEmpty()
+      1 -> context.getString(R.string.widget_mosque_times)
+      else -> context.getString(R.string.widget_mosque_distance)
+    }
     val next = mosque.next
-    if (mode == 0 && next != null) {
-      p.text(next.label, p.sx(0f, left, right), 74f * k, 24f * k, WHITE, p.startAlign, bold = true, maxWidth = w * 0.55f)
-      p.text(next.time, p.sx(0f, left, right), 104f * k, 20f * k, WHITE, p.startAlign, maxWidth = w * 0.55f)
-    } else if (mode == 1) {
-      mosque.schedule.filter { it.at > now }.take(5).forEachIndexed { index, item ->
-        val y = (64f + index * 23f) * k
-        p.text(item.label, p.sx(0f, left, right), y, 13f * k, WHITE, p.startAlign, maxWidth = w * 0.55f)
-        p.text(item.time, p.sx(0f, left, right), y, 13f * k, WHITE, p.endAlign, bold = true, maxWidth = w * 0.35f)
-      }
+    val stripH = 66f * k
+    val showStrip = mode == 1 && h >= 160f * k && mosque.schedule.isNotEmpty()
+    val top = if (showStrip) 28f * k else pad
+    val stripY = h - pad - stripH
+    val bottom = if (showStrip) stripY - 4f * k else h - pad
+    val main = top + (bottom - top - 42f * k) / 2
+    p.text(
+      mosque.name,
+      p.sx(0f, left, right),
+      if (showStrip) 21f * k else 24f * k,
+      11f * k,
+      WHITE,
+      p.startAlign,
+      bold = true,
+      maxWidth = width
+    )
+    if (mode == 2) {
+      p.icon(R.drawable.widget_ic_location, left, main - 8f * k, 22f * k, WHITE, 0.9f)
+      p.text(
+        title,
+        p.sx(30f * k, left, right),
+        main + 8f * k,
+        15f * k,
+        WHITE,
+        p.startAlign,
+        maxWidth = width - 30f * k
+      )
+      p.text(
+        context.getString(R.string.widget_mosque_location),
+        p.sx(30f * k, left, right),
+        main + 32f * k,
+        12f * k,
+        WHITE,
+        p.startAlign,
+        alpha = 0.75f,
+        maxWidth = width - 30f * k
+      )
+    } else if (mode == 0 && next != null) {
+      p.text(title, p.sx(0f, left, right), main + 9f * k, 11f * k, WHITE, p.startAlign, alpha = 0.75f, maxWidth = width * 0.58f)
+      p.text(next.label, p.sx(0f, left, right), main + 35f * k, 22f * k, WHITE, p.startAlign, bold = true, maxWidth = width * 0.58f)
+      p.text(next.time, if (p.rtl) left + 8f * k else right - 8f * k, main + 35f * k, 22f * k, WHITE, p.endAlign, bold = true, maxWidth = width * 0.36f)
     } else {
-      p.icon(R.drawable.widget_ic_location, left, 66f * k, 20f * k, WHITE, 0.9f)
-      p.text(context.getString(R.string.widget_mosque_location), left + 28f * k, 81f * k, 16f * k, WHITE, Paint.Align.LEFT, maxWidth = w - 56f * k)
+      p.text(title, p.sx(0f, left, right), main + 9f * k, 11f * k, WHITE, p.startAlign, alpha = 0.75f, maxWidth = width)
+      p.text(
+        mosque.schedule.firstOrNull { it.at > now }?.label ?: mosque.schedule.lastOrNull()?.label.orEmpty(),
+        p.sx(0f, left, right),
+        main + 35f * k,
+        22f * k,
+        WHITE,
+        p.startAlign,
+        bold = true,
+        maxWidth = width
+      )
+    }
+    if (showStrip) {
+      val stripX = left - 4f * k
+      val stripW = width + 8f * k
+      p.rect(stripX, stripY, stripW, stripH, 24f * k, WHITE, 0.1f)
+      p.outline(stripX, stripY, stripW, stripH, 24f * k, STRIP_LINE, 1f)
+      val items = mosque.schedule.take(5)
+      val cellW = (stripW - 8f * k) / items.size
+      items.forEachIndexed { i, item ->
+        val x = stripX + 4f * k + i * cellW
+        val cx = x + cellW / 2
+        p.text(item.label, cx, stripY + 21f * k, 10f * k, WHITE, Paint.Align.CENTER, maxWidth = cellW - 6f * k)
+        p.text(item.time, cx, stripY + 42f * k, 13f * k, WHITE, Paint.Align.CENTER, bold = true, maxWidth = cellW - 6f * k)
+      }
     }
     return p.finish(radius(w, h))
   }
@@ -495,6 +560,71 @@ object WidgetDesigns {
       empty(context, p, w / 2, h / 2, w - 28f * k, h - 28f * k, theme.ink)
       return p.finish(radius(w, h))
     }
+
+    fun modernMosque(
+      context: Context,
+      payload: WidgetPayload?,
+      now: Long,
+      w: Float,
+      h: Float,
+      scale: Float,
+      mode: Int,
+      mosque: WidgetMosque?,
+      theme: CardTheme
+    ): Bitmap {
+      val p = WidgetPainter(context, w, h, scale, payload?.rtl ?: rtl(context))
+      p.fill(theme.bg)
+      val k = min(w / 320f, h / 170f).coerceIn(0.75f, 1.5f)
+      if (mosque == null) {
+        empty(context, p, w / 2f, h / 2f, w - 28f * k, h - 28f * k, theme.ink)
+        return p.finish(radius(w, h))
+      }
+      val accent = payload?.color ?: DEFAULT_MID
+      val pad = 14f * k
+      val title = when (mode) {
+        0 -> context.getString(R.string.widget_mosque_next)
+        1 -> context.getString(R.string.widget_mosque_times)
+        else -> context.getString(R.string.widget_mosque_distance)
+      }
+      p.text(mosque.name, p.sx(pad), 28f * k, 15f * k, theme.ink, p.startAlign, bold = true, maxWidth = w - 2f * pad)
+      p.text(title, p.sx(pad), 47f * k, 11f * k, theme.gray, p.startAlign, maxWidth = w - 2f * pad)
+
+      if (mode == 2) {
+        val cy = h * 0.62f
+        p.circle(p.sx(34f * k), cy, 20f * k, accent)
+        p.icon(R.drawable.widget_ic_location, p.sx(24f * k) - 10f * k, cy - 10f * k, 20f * k, WHITE)
+        p.text(context.getString(R.string.widget_mosque_location), p.sx(66f * k), cy + 5f * k, 18f * k, theme.ink, p.startAlign, bold = true, maxWidth = w - 84f * k)
+        return p.finish(radius(w, h))
+      }
+
+      val items = if (mode == 0) {
+        listOfNotNull(mosque.next)
+      } else {
+        mosque.schedule.filter { it.at > now }.take(5)
+      }
+      if (items.isEmpty()) {
+        empty(context, p, w / 2f, h * 0.66f, w - 28f * k, h * 0.45f, theme.ink)
+        return p.finish(radius(w, h))
+      }
+      val rowTop = 60f * k
+      val rowH = min(42f * k, (h - rowTop - 12f * k) / items.size)
+      items.forEachIndexed { index, item ->
+        val y = rowTop + index * rowH
+        val isNext = index == 0
+        if (isNext) p.rect(pad, y, w - 2f * pad, rowH - 4f * k, 14f * k, accent)
+        val color = if (isNext) WHITE else theme.ink
+        p.icon(
+          R.drawable.widget_ic_dhuhr,
+          if (p.rtl) w - pad - 28f * k else pad + 10f * k,
+          y + (rowH - 20f * k) / 2,
+          20f * k,
+          if (isNext) WHITE else accent
+        )
+        p.text(item.label, p.sx(42f * k, pad, w - pad), y + rowH / 2 + 5f * k, 13f * k, color, p.startAlign, bold = isNext, maxWidth = w - 110f * k)
+        p.text(item.time, if (p.rtl) pad + 12f * k else w - pad - 12f * k, y + rowH / 2 + 5f * k, 13f * k, color, p.endAlign, bold = true, maxWidth = 64f * k)
+      }
+      return p.finish(radius(w, h))
+    }
     val accent = payload.color
     val showIcons = h >= 150f * k
     val cellH = (if (showIcons) 78f else 50f) * k
@@ -554,6 +684,98 @@ object WidgetDesigns {
     val next = payload?.next(now)
     if (payload == null || day.isEmpty() || next == null) {
       empty(context, p, w / 2, h / 2, w - 28f * k, h - 28f * k, theme.ink)
+      return p.finish(radius(w, h))
+    }
+
+    fun modernMosqueCard(
+      context: Context,
+      payload: WidgetPayload?,
+      now: Long,
+      w: Float,
+      h: Float,
+      scale: Float,
+      mode: Int,
+      mosque: WidgetMosque?,
+      theme: CardTheme
+    ): Bitmap {
+      val p = WidgetPainter(context, w, h, scale, payload?.rtl ?: rtl(context))
+      p.fill(theme.bg)
+      val k = min(w / 320f, h / 170f).coerceIn(0.75f, 1.5f)
+      val pad = 14f * k
+      if (mosque == null) {
+        empty(context, p, w / 2f, h / 2f, w - 28f * k, h - 28f * k, theme.ink)
+        return p.finish(radius(w, h))
+      }
+
+      p.text(mosque.name, p.sx(pad), 28f * k, 15f * k, theme.ink, p.startAlign, bold = true, maxWidth = w - pad * 2)
+      p.text(
+        when (mode) {
+          0 -> context.getString(R.string.widget_mosque_next)
+          1 -> context.getString(R.string.widget_mosque_times)
+          else -> context.getString(R.string.widget_mosque_distance)
+        },
+        p.sx(pad),
+        47f * k,
+        11f * k,
+        theme.gray,
+        p.startAlign,
+        maxWidth = w - pad * 2
+      )
+
+      if (mode == 2) {
+        val cardY = 62f * k
+        val cardH = h - cardY - pad
+        p.rect(pad, cardY, w - pad * 2, cardH, 18f * k, theme.line, 0.35f)
+        p.circle(p.sx(pad + 30f * k), cardY + cardH / 2, 20f * k, payload?.color ?: DEFAULT_MID)
+        p.icon(R.drawable.widget_ic_location, p.sx(pad + 20f * k) - 10f * k, cardY + cardH / 2 - 10f * k, 20f * k, WHITE)
+        p.text(
+          context.getString(R.string.widget_mosque_location),
+          p.sx(pad + 62f * k),
+          cardY + cardH / 2 + 6f * k,
+          17f * k,
+          theme.ink,
+          p.startAlign,
+          bold = true,
+          maxWidth = w - pad * 2 - 76f * k
+        )
+        return p.finish(radius(w, h))
+      }
+
+      val items = if (mode == 0) listOfNotNull(mosque.next) else mosque.schedule.filter { it.at > now }.take(5)
+      if (items.isEmpty()) {
+        empty(context, p, w / 2f, h * 0.68f, w - pad * 2, h * 0.4f, theme.ink)
+        return p.finish(radius(w, h))
+      }
+      val gap = 6f * k
+      val top = if (h >= 150f * k) 55f * k else 48f * k
+      p.rect(
+        pad - 4f * k,
+        top - 5f * k,
+        w - 2f * pad + 8f * k,
+        h - top - pad + 5f * k,
+        20f * k,
+        theme.line,
+        0.22f
+      )
+      val rowH = ((h - top - pad - gap * (items.size - 1)) / items.size)
+        .coerceAtMost(32f * k)
+      items.forEachIndexed { index, item ->
+        val y = top + index * (rowH + gap)
+        val active = index == 0
+        val cardColor = if (active) payload?.color ?: DEFAULT_MID else theme.line
+        val alpha = if (active) 1f else 0.4f
+        p.rect(pad, y, w - pad * 2, rowH, 16f * k, cardColor, alpha)
+        val color = if (active) WHITE else theme.ink
+        p.icon(
+          R.drawable.widget_ic_dhuhr,
+          if (p.rtl) w - pad - 28f * k else pad + 10f * k,
+          y + (rowH - 20f * k) / 2,
+          20f * k,
+          if (active) WHITE else payload?.color ?: DEFAULT_MID
+        )
+        p.text(item.label, p.sx(42f * k, pad, w - pad), y + rowH / 2 + 5f * k, 13f * k, color, p.startAlign, bold = active, maxWidth = w - 110f * k)
+        p.text(item.time, if (p.rtl) pad + 12f * k else w - pad - 12f * k, y + rowH / 2 + 5f * k, 13f * k, color, p.endAlign, bold = true, maxWidth = 64f * k)
+      }
       return p.finish(radius(w, h))
     }
     val pad = 14f * k

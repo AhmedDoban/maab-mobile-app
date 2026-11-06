@@ -5,6 +5,8 @@
   "done": "Done",
   "completed": "All done — may Allah accept from you",
   "addMosqueCard": "Add your mosque",
+  "nearestMosqueCard": "Nearest saved mosque",
+  "openMosqueLocation": "Open mosque location",
   "addMosqueCardHint": "Save a mosque to see the next iqama",
   "nextIqamaCard": "Next iqama: {{prayer}} in {{minutes}} min",
   "insideMosqueCard": "You are inside · {{prayer}} iqama in {{minutes}} min",

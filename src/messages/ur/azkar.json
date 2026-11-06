@@ -5,6 +5,8 @@
   "done": "مکمل",
   "completed": "سب مکمل — اللہ آپ سے قبول فرمائے",
   "addMosqueCard": "اپنی مسجد شامل کریں",
+  "nearestMosqueCard": "قریب ترین محفوظ مسجد",
+  "openMosqueLocation": "مسجد کا مقام کھولیں",
   "addMosqueCardHint": "اگلی اقامت دیکھنے کے لیے مسجد محفوظ کریں",
   "nextIqamaCard": "اگلی اقامت: {{prayer}}، {{minutes}} منٹ بعد",
   "insideMosqueCard": "آپ اندر ہیں · {{prayer}} کی اقامت {{minutes}} منٹ بعد",

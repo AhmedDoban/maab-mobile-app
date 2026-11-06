@@ -1,7 +1,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
   android:description="@string/widget_morning_evening_hint"
   android:initialLayout="@layout/widget_canvas"
-  android:previewImage="@drawable/widget_preview_dhikr"
+  android:previewImage="@drawable/widget_preview_morning_evening"
   android:minWidth="250dp"
   android:minHeight="110dp"
   android:minResizeWidth="110dp"

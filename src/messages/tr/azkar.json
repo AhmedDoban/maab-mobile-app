@@ -5,6 +5,8 @@
   "done": "Tamam",
   "completed": "Hepsi tamam — Allah kabul etsin",
   "addMosqueCard": "Caminizi ekleyin",
+  "nearestMosqueCard": "En yakın kayıtlı cami",
+  "openMosqueLocation": "Cami konumunu aç",
   "addMosqueCardHint": "Sonraki kameti görmek için cami kaydedin",
   "nextIqamaCard": "Sonraki kamet: {{prayer}}, {{minutes}} dk sonra",
   "insideMosqueCard": "İçeridesiniz · {{prayer}} kameti {{minutes}} dk sonra",

@@ -5,6 +5,8 @@
   "done": "সম্পন্ন",
   "completed": "সব সম্পন্ন — আল্লাহ আপনার পক্ষ থেকে কবুল করুন",
   "addMosqueCard": "আপনার মসজিদ যোগ করুন",
+  "nearestMosqueCard": "কাছের সংরক্ষিত মসজিদ",
+  "openMosqueLocation": "মসজিদের অবস্থান খুলুন",
   "addMosqueCardHint": "পরবর্তী ইকামত দেখতে একটি মসজিদ সংরক্ষণ করুন",
   "nextIqamaCard": "পরবর্তী ইকামত: {{prayer}}, {{minutes}} মিনিট পরে",
   "insideMosqueCard": "আপনি ভেতরে আছেন · {{prayer}} ইকামত {{minutes}} মিনিট পরে",

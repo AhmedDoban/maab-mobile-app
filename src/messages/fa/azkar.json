@@ -5,6 +5,8 @@
   "done": "انجام شد",
   "completed": "همه انجام شد — خدا از شما بپذیرد",
   "addMosqueCard": "مسجد خود را اضافه کنید",
+  "nearestMosqueCard": "نزدیک‌ترین مسجد ذخیره‌شده",
+  "openMosqueLocation": "باز کردن مکان مسجد",
   "addMosqueCardHint": "برای دیدن اقامه بعدی، مسجدی ذخیره کنید",
   "nextIqamaCard": "اقامه بعدی: {{prayer}} تا {{minutes}} دقیقه دیگر",
   "insideMosqueCard": "داخل هستید · اقامه {{prayer}} تا {{minutes}} دقیقه دیگر",
