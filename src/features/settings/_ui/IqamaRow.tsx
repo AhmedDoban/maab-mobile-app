@@ -4,8 +4,9 @@ import { updateMosque } from "@/store/Slices/MosquesSlice";
 import { useAppDispatch, useAppSelector } from "@/store/Store";
 import { IqamaPrayer } from "@/features/prayer-times/_data/mosques";
 import { TextInput, View } from "react-native";
+import { memo } from "react";
 
-export default function IqamaRow({
+function IqamaRow({
   mosqueId,
   prayer,
   label,
@@ -52,3 +53,5 @@ export default function IqamaRow({
     </View>
   );
 }
+
+export default memo(IqamaRow);

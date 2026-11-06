@@ -6,6 +6,9 @@
   "saveCurrentMosque": "Save my location as a mosque",
   "insideMosque": "Inside mosque",
   "markInside": "I'm inside",
+  "distanceFromMosque": "You are {{distance}} from the mosque",
+  "meters": "m",
+  "kilometers": "km",
   "nextIqama": "Next iqama",
   "deleteMosque": "Delete mosque",
   "language": "Language",
@@ -47,6 +50,12 @@
   "resetSettings": "Restore default settings",
   "resetAll": "Delete all app data",
   "confirm": {
+    "mosque": {
+      "title": "Delete this mosque?",
+      "message": "The saved mosque and its iqama times will be deleted.",
+      "action": "Delete",
+      "done": "Mosque deleted"
+    },
     "progress": {
       "title": "Reset all counters?",
       "message": "All of today's adhkar counters will go back to zero. This can't be undone.",

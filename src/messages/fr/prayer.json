@@ -30,6 +30,7 @@
   "left": "Restant",
   "hour": "h",
   "minute": "min",
+  "in": "dans",
   "locationNeeded": "Autorisez l'accès à la position pour calculer les horaires de prière",
   "openSettings": "Réglages",
   "notificationsTitle": "Activer les notifications",

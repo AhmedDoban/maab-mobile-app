@@ -6,6 +6,9 @@
   "saveCurrentMosque": "Enregistrer ma position comme mosquée",
   "insideMosque": "Dans la mosquée",
   "markInside": "Je suis à l'intérieur",
+  "distanceFromMosque": "Vous êtes à {{distance}} de la mosquée",
+  "meters": "m",
+  "kilometers": "km",
   "nextIqama": "Prochaine iqama",
   "deleteMosque": "Supprimer la mosquée",
   "language": "Langue",
@@ -47,6 +50,12 @@
   "resetSettings": "Rétablir les réglages par défaut",
   "resetAll": "Supprimer toutes les données",
   "confirm": {
+    "mosque": {
+      "title": "Supprimer cette mosquée ?",
+      "message": "La mosquée enregistrée et ses horaires d'iqama seront supprimés.",
+      "action": "Supprimer",
+      "done": "Mosquée supprimée"
+    },
     "progress": {
       "title": "Réinitialiser tous les compteurs ?",
       "message": "Tous les compteurs d'adhkar du jour reviendront à zéro. Cette action est irréversible.",

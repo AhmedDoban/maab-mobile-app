@@ -30,6 +30,7 @@
   "left": "Left",
   "hour": "hr",
   "minute": "min",
+  "in": "in",
   "locationNeeded": "Allow location access to calculate prayer times",
   "openSettings": "Settings",
   "notificationsTitle": "Turn on notifications",

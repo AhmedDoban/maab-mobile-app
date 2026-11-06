@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "@/store/Store";
 import * as Location from "expo-location";
 import Constants from "expo-constants";
 import { useState } from "react";
+import { useEffect } from "react";
 import { TextInput, View } from "react-native";
 import {
   createMosque,
@@ -21,10 +22,10 @@ import IqamaRow from "../_ui/IqamaRow";
 import IqamaCountdown from "../_ui/IqamaCountdown";
 import SettingsCard from "../_ui/SettingsCard";
 import { useTranslation } from "react-i18next";
-import {
-  usePrayerConfig,
-  useClock,
-} from "@/features/prayer-times/_components/usePrayerSchedule";
+import { usePrayerConfig } from "@/features/prayer-times/_components/usePrayerSchedule";
+import { distanceKm } from "@/features/prayer-times/_data/geo";
+import useLocalDigits from "@/features/quran/_components/useLocalDigits";
+import ResetDialog, { ResetDialogContent } from "../_ui/ResetDialog";
 
 export default function MosquesSection() {
   const colors = useThemeColors();
@@ -33,8 +34,21 @@ export default function MosquesSection() {
   const { label } = usePrayerLabels();
   const mosques = useAppSelector((state) => state.mosques);
   const prayerConfig = usePrayerConfig();
-  const now = useClock((value) => value.getTime());
+  const localDigits = useLocalDigits();
+  const [location, setLocation] =
+    useState<Location.LocationObjectCoords | null>(null);
   const [name, setName] = useState("");
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    Location.getLastKnownPositionAsync().then((position) => {
+      if (active && position) setLocation(position.coords);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const addCurrent = async () => {
     const mosqueName = name.trim();
@@ -55,6 +69,7 @@ export default function MosquesSection() {
         ),
       ),
     );
+    setLocation(position.coords);
     setName("");
     if (Constants.appOwnership !== "expo") {
       Location.requestBackgroundPermissionsAsync().catch((error) => {
@@ -104,55 +119,84 @@ export default function MosquesSection() {
         </PressableScale>
       </SettingsCard>
 
-      {mosques.items.map((mosque) => (
-        <SettingsCard
-          key={mosque.id}
-          className="gap-4"
-          style={{
-            borderColor:
-              mosques.activeId === mosque.id ? colors.main : colors.line,
-            borderWidth: mosques.activeId === mosque.id ? 1.5 : 1,
-          }}
-        >
-          {prayerConfig ? (
-            <IqamaCountdown
-              mosque={mosque}
-              config={prayerConfig}
-              now={new Date(now)}
-              label={label}
-              title={t("nextIqama")}
-              active={mosques.activeId === mosque.id}
-              onToggle={() =>
-                dispatch(
-                  setActiveMosque(
-                    mosques.activeId === mosque.id ? null : mosque.id,
-                  ),
-                )
-              }
-              insideLabel={
-                mosques.activeId === mosque.id
-                  ? t("insideMosque")
-                  : t("markInside")
-              }
-            />
-          ) : null}
-          {IQAMA_PRAYERS.map((prayer) => (
-            <IqamaRow
-              key={prayer}
-              mosqueId={mosque.id}
-              prayer={prayer}
-              label={label(prayer, false)}
-            />
-          ))}
-          <PressableScale
-            onPress={() => dispatch(removeMosque(mosque.id))}
-            className="flex-row items-center justify-center gap-2 rounded-2xl border border-error/30 px-3 py-3"
+      {mosques.items.map((mosque) => {
+        const distance = location ? distanceKm(location, mosque) * 1000 : null;
+        const distanceText =
+          distance === null
+            ? undefined
+            : distance < 1000
+              ? t("distanceFromMosque", {
+                  distance: `${localDigits(Math.round(distance))} ${t("meters")}`,
+                })
+              : t("distanceFromMosque", {
+                  distance: `${localDigits(Number((distance / 1000).toFixed(1)))} ${t("kilometers")}`,
+                });
+        return (
+          <SettingsCard
+            key={mosque.id}
+            className="gap-4"
+            style={{
+              borderColor:
+                mosques.activeId === mosque.id ? colors.main : colors.line,
+              borderWidth: mosques.activeId === mosque.id ? 1.5 : 1,
+            }}
           >
-            <Icon name="resetAll" size={18} tintColor={colors.error} />
-            <AppText className="text-error">{t("deleteMosque")}</AppText>
-          </PressableScale>
-        </SettingsCard>
-      ))}
+            {prayerConfig ? (
+              <IqamaCountdown
+                mosque={mosque}
+                config={prayerConfig}
+                label={label}
+                title={t("nextIqama")}
+                active={mosques.activeId === mosque.id}
+                onToggle={() =>
+                  dispatch(
+                    setActiveMosque(
+                      mosques.activeId === mosque.id ? null : mosque.id,
+                    ),
+                  )
+                }
+                insideLabel={
+                  mosques.activeId === mosque.id
+                    ? t("insideMosque")
+                    : t("markInside")
+                }
+                distanceText={distanceText}
+              />
+            ) : null}
+            {IQAMA_PRAYERS.map((prayer) => (
+              <IqamaRow
+                key={prayer}
+                mosqueId={mosque.id}
+                prayer={prayer}
+                label={label(prayer, false)}
+              />
+            ))}
+            <PressableScale
+              onPress={() => setPendingDeleteId(mosque.id)}
+              className="flex-row items-center justify-center gap-2 rounded-2xl border border-error/30 px-3 py-3"
+            >
+              <Icon name="resetAll" size={18} tintColor={colors.error} />
+              <AppText className="text-error">{t("deleteMosque")}</AppText>
+            </PressableScale>
+          </SettingsCard>
+        );
+      })}
+      <ResetDialog
+        content={
+          pendingDeleteId
+            ? ({
+                icon: "resetAll",
+                title: t("confirm.mosque.title"),
+                message: t("confirm.mosque.message"),
+                confirmLabel: t("confirm.mosque.action"),
+                doneText: t("confirm.mosque.done"),
+                danger: true,
+                onConfirm: () => dispatch(removeMosque(pendingDeleteId)),
+              } satisfies ResetDialogContent)
+            : null
+        }
+        onClose={() => setPendingDeleteId(null)}
+      />
     </View>
   );
 }

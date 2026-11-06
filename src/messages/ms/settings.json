@@ -6,6 +6,9 @@
   "saveCurrentMosque": "Simpan lokasi saya sebagai masjid",
   "insideMosque": "Di dalam masjid",
   "markInside": "Saya di dalam",
+  "distanceFromMosque": "Anda {{distance}} dari masjid",
+  "meters": "m",
+  "kilometers": "km",
   "nextIqama": "Iqamah seterusnya",
   "deleteMosque": "Padam masjid",
   "language": "Bahasa",
@@ -47,6 +50,12 @@
   "resetSettings": "Pulihkan tetapan lalai",
   "resetAll": "Padam semua data aplikasi",
   "confirm": {
+    "mosque": {
+      "title": "Padam masjid ini?",
+      "message": "Masjid tersimpan dan waktu iqamahnya akan dipadamkan.",
+      "action": "Padam",
+      "done": "Masjid dipadamkan"
+    },
     "progress": {
       "title": "Set semula semua pembilang?",
       "message": "Semua pembilang zikir hari ini akan kembali kepada sifar. Tindakan ini tidak boleh dibuat asal.",

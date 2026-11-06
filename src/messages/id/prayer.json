@@ -30,6 +30,7 @@
   "left": "Sisa",
   "hour": "jam",
   "minute": "mnt",
+  "in": "dalam",
   "locationNeeded": "Izinkan akses lokasi untuk menghitung jadwal salat",
   "openSettings": "Pengaturan",
   "notificationsTitle": "Nyalakan notifikasi",

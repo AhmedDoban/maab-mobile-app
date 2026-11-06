@@ -6,6 +6,9 @@
   "saveCurrentMosque": "حفظ موقعي كجامع",
   "insideMosque": "داخل الجامع",
   "markInside": "أنا داخل الجامع",
+  "distanceFromMosque": "أنت على بُعد {{distance}} من الجامع",
+  "meters": "متر",
+  "kilometers": "كم",
   "nextIqama": "الإقامة القادمة",
   "deleteMosque": "حذف الجامع",
   "language": "اللغة",
@@ -47,6 +50,12 @@
   "resetSettings": "استعادة الإعدادات الافتراضية",
   "resetAll": "حذف جميع بيانات التطبيق",
   "confirm": {
+    "mosque": {
+      "title": "حذف الجامع؟",
+      "message": "سيتم حذف الجامع المحفوظ ومواعيد الإقامة الخاصة به.",
+      "action": "حذف",
+      "done": "تم حذف الجامع"
+    },
     "progress": {
       "title": "إعادة تعيين العدادات؟",
       "message": "سيتم تصفير عدادات جميع الأذكار لهذا اليوم، ولا يمكن التراجع عن ذلك.",

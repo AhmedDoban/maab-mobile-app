@@ -6,6 +6,9 @@
   "saveCurrentMosque": "Konumumu cami olarak kaydet",
   "insideMosque": "Camide",
   "markInside": "İçerideyim",
+  "distanceFromMosque": "Camiye {{distance}} uzaktasınız",
+  "meters": "m",
+  "kilometers": "km",
   "nextIqama": "Sonraki kamet",
   "deleteMosque": "Camiyi sil",
   "language": "Dil",
@@ -47,6 +50,12 @@
   "resetSettings": "Varsayılan ayarları geri yükle",
   "resetAll": "Tüm uygulama verilerini sil",
   "confirm": {
+    "mosque": {
+      "title": "Bu cami silinsin mi?",
+      "message": "Kayıtlı cami ve kamet vakitleri silinecek.",
+      "action": "Sil",
+      "done": "Cami silindi"
+    },
     "progress": {
       "title": "Tüm sayaçlar sıfırlansın mı?",
       "message": "Bugünkü tüm zikir sayaçları sıfıra dönecek. Bu işlem geri alınamaz.",

@@ -7,33 +7,49 @@ import { PrayerName } from "@/features/prayer-times/_data/types";
 import useThemeColors from "@/hooks/useThemeColors";
 import { View } from "react-native";
 import { shortTime } from "@/features/prayer-times/_data/time";
+import { useClock } from "@/features/prayer-times/_components/usePrayerSchedule";
+import useLocalDigits from "@/features/quran/_components/useLocalDigits";
+import { useTranslation } from "react-i18next";
 
 export default function IqamaCountdown({
   mosque,
   config,
-  now,
   label,
   title,
   active,
   onToggle,
   insideLabel,
+  distanceText,
 }: {
   mosque: Mosque;
   config: PrayerConfig;
-  now: Date;
   label: (name: PrayerName, friday: boolean) => string;
   title: string;
   active: boolean;
   onToggle: () => void;
   insideLabel: string;
+  distanceText?: string;
 }) {
   const colors = useThemeColors();
-  const next = nextIqama(mosque, config, now);
+  const { t } = useTranslation("prayer");
+  const localDigits = useLocalDigits();
+  const now = useClock((value) => value.getTime());
+  const current = new Date(now);
+  const next = nextIqama(mosque, config, current);
   if (!next) return null;
   const minutes = Math.max(
     0,
-    Math.ceil((next.at.getTime() - now.getTime()) / 60000),
+    Math.ceil((next.at.getTime() - current.getTime()) / 60000),
   );
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  const delay = hours
+    ? `${localDigits(hours)} ${t("hour")}${
+        remainingMinutes
+          ? ` ${localDigits(remainingMinutes)} ${t("minute")}`
+          : ""
+      }`
+    : `${localDigits(minutes)} ${t("minute")}`;
   return (
     <View className="gap-3">
       <View className="flex-row items-center gap-3">
@@ -48,11 +64,16 @@ export default function IqamaCountdown({
             {mosque.name}
           </AppText>
           <AppText className="text-xs text-main-gray">{insideLabel}</AppText>
+          {distanceText ? (
+            <AppText className="text-xs text-main-gray">{distanceText}</AppText>
+          ) : null}
         </View>
         <PressableScale
           onPress={onToggle}
           className="h-10 w-10 items-center justify-center rounded-xl"
-          style={{ backgroundColor: active ? colors.mainSoft : colors.surfaceMuted }}
+          style={{
+            backgroundColor: active ? colors.mainSoft : colors.surfaceMuted,
+          }}
         >
           <Icon
             name={active ? "checkCircle" : "location"}
@@ -84,13 +105,13 @@ export default function IqamaCountdown({
           </View>
         </View>
         <View className="items-end">
-          <AppText className="text-xs text-main-gray">بعد</AppText>
+          <AppText className="text-xs text-main-gray">{t("in")}</AppText>
           <AppText
             weight="bold"
             className="text-lg text-main"
             style={{ writingDirection: "ltr" }}
           >
-            {minutes} د
+            {delay}
           </AppText>
         </View>
       </View>

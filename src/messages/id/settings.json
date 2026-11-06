@@ -6,6 +6,9 @@
   "saveCurrentMosque": "Simpan lokasi saya sebagai masjid",
   "insideMosque": "Di dalam masjid",
   "markInside": "Saya di dalam",
+  "distanceFromMosque": "Anda berjarak {{distance}} dari masjid",
+  "meters": "m",
+  "kilometers": "km",
   "nextIqama": "Iqamah berikutnya",
   "deleteMosque": "Hapus masjid",
   "language": "Bahasa",
@@ -47,6 +50,12 @@
   "resetSettings": "Pulihkan pengaturan bawaan",
   "resetAll": "Hapus semua data aplikasi",
   "confirm": {
+    "mosque": {
+      "title": "Hapus masjid ini?",
+      "message": "Masjid tersimpan dan waktu iqamahnya akan dihapus.",
+      "action": "Hapus",
+      "done": "Masjid dihapus"
+    },
     "progress": {
       "title": "Atur ulang semua penghitung?",
       "message": "Semua penghitung zikir hari ini akan kembali ke nol. Tindakan ini tidak dapat dibatalkan.",
