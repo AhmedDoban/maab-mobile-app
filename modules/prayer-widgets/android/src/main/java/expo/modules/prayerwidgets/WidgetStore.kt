@@ -27,6 +27,11 @@ data class WidgetPayload(
   val dhikr: List<String>,
   val morningDhikr: List<String>,
   val eveningDhikr: List<String>,
+  val morningSelectedText: String,
+  val eveningSelectedText: String,
+  val selectedCategory: String,
+  val selectedItemId: Int,
+  val selectedItemMax: Int,
   val morningProgress: String,
   val eveningProgress: String,
   val dates: List<WidgetDate>,
@@ -136,6 +141,11 @@ data class WidgetPayload(
         eveningDhikr = json.optJSONArray("eveningDhikr")?.let { values ->
           (0 until values.length()).map { values.getString(it) }
         } ?: emptyList(),
+        morningSelectedText = json.optString("morningSelectedText"),
+        eveningSelectedText = json.optString("eveningSelectedText"),
+        selectedCategory = json.optString("selectedCategory", "morning_azkar"),
+        selectedItemId = json.optInt("selectedItemId", 1),
+        selectedItemMax = json.optInt("selectedItemMax", 1),
         morningProgress = json.optString("morningProgress"),
         eveningProgress = json.optString("eveningProgress"),
         dates = if (dates == null) emptyList() else (0 until dates.length()).map {

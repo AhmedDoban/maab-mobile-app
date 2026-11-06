@@ -28,6 +28,11 @@ export type WidgetPayload = {
   dhikr: string[];
   morningDhikr: string[];
   eveningDhikr: string[];
+  morningSelectedText: string;
+  eveningSelectedText: string;
+  selectedCategory: string;
+  selectedItemId: number;
+  selectedItemMax: number;
   morningProgress: string;
   eveningProgress: string;
   dates: WidgetDate[];

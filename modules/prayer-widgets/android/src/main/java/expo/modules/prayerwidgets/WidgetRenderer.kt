@@ -114,7 +114,10 @@ object WidgetRenderer {
         kind == Kind.MORNING_EVENING
       )
     )
-    views.setOnClickPendingIntent(R.id.root, openApp(context))
+    views.setOnClickPendingIntent(
+      R.id.root,
+      openApp(context, payload, kind == Kind.MORNING_EVENING)
+    )
     return views
   }
 
@@ -176,14 +179,27 @@ object WidgetRenderer {
   private fun ids(context: Context, manager: AppWidgetManager, type: Class<*>) =
     manager.getAppWidgetIds(ComponentName(context, type))
 
-  private fun openApp(context: Context): PendingIntent {
-    val intent = Intent(Intent.ACTION_MAIN)
-      .addCategory(Intent.CATEGORY_LAUNCHER)
+  private fun openApp(
+    context: Context,
+    payload: WidgetPayload?,
+    morningEvening: Boolean
+  ): PendingIntent {
+    val uri = if (morningEvening && payload != null) {
+      android.net.Uri.parse(
+        "maab://category/${payload.selectedCategory}" +
+          "?widgetItem=${payload.selectedItemId}&widgetMax=${payload.selectedItemMax}"
+      )
+    } else null
+    val intent = if (uri != null) {
+      Intent(Intent.ACTION_VIEW, uri)
+    } else {
+      Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
+    }
       .setClassName(context, "${context.packageName}.MainActivity")
       .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     return PendingIntent.getActivity(
       context,
-      0,
+      uri?.toString()?.hashCode() ?: 0,
       intent,
       PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )

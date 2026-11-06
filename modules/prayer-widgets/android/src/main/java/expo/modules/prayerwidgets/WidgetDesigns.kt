@@ -398,7 +398,16 @@ object WidgetDesigns {
     } else {
       payload?.dhikrTitle ?: context.getString(R.string.widget_dhikr)
     }
-    val text = payload?.dhikrOf(now, morningEvening)
+    val text = if (morningEvening) {
+      val title = payload?.dhikrTitleOf(now)
+      if (title == payload?.morningDhikrTitle) {
+        payload.morningSelectedText
+      } else {
+        payload?.eveningSelectedText
+      }
+    } else {
+      payload?.dhikrOf(now, false)
+    }
       ?: context.getString(R.string.widget_dhikr_default)
     val progress = if (morningEvening) {
       val fajr = payload?.prayers?.lastOrNull { it.icon == "fajr" && it.at <= now }?.at

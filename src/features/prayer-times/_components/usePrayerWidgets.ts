@@ -70,8 +70,42 @@ export default function usePrayerWidgets(
     const eveningDhikr = getItems("evening_azkar").map(
       (item) => item[locale].text,
     );
-    const morningCategory = categories.find((item) => item.id === "morning_azkar");
-    const eveningCategory = categories.find((item) => item.id === "evening_azkar");
+    const morningItems = getItems("morning_azkar");
+    const eveningItems = getItems("evening_azkar");
+    const morningCategory = categories.find(
+      (item) => item.id === "morning_azkar",
+    );
+    const eveningCategory = categories.find(
+      (item) => item.id === "evening_azkar",
+    );
+    const selectIncomplete = (
+      categoryId: "morning_azkar" | "evening_azkar",
+      items: ReturnType<typeof getItems>,
+    ) => {
+      const category = categories.find((item) => item.id === categoryId);
+      const selected =
+        items.find((item) => {
+          const goal = category?.goals.find((entry) => entry.id === item.id);
+          return (
+            (azkarProgress[`${categoryId}:${item.id}`] ?? 0) <
+            (goal?.count ?? item.count)
+          );
+        }) ?? items[0];
+      return {
+        text: selected?.[locale].text ?? "",
+        itemId: selected?.id ?? 1,
+        max: selected?.count ?? 1,
+      };
+    };
+    const morningSelected = selectIncomplete("morning_azkar", morningItems);
+    const eveningSelected = selectIncomplete("evening_azkar", eveningItems);
+    const currentPrayerTimes = prayerDates(config, start);
+    const now = start.getTime();
+    const isMorning =
+      now >= currentPrayerTimes.Fajr.getTime() &&
+      now < currentPrayerTimes.Maghrib.getTime();
+    const selected = isMorning ? morningSelected : eveningSelected;
+    const selectedCategory = isMorning ? "morning_azkar" : "evening_azkar";
     updatePrayerWidgets({
       rtl: isRTLLocale(i18n.language),
       color: brand.main,
@@ -90,17 +124,35 @@ export default function usePrayerWidgets(
       dhikr: t("widget.dhikrList", { returnObjects: true }) as string[],
       morningDhikr,
       eveningDhikr,
+      morningSelectedText: morningSelected.text,
+      eveningSelectedText: eveningSelected.text,
+      selectedCategory,
+      selectedItemId: selected.itemId,
+      selectedItemMax: selected.max,
       morningProgress: t("widget.progress", {
-        done: morningCategory ? categoryDone(morningCategory, azkarProgress) : 0,
+        done: morningCategory
+          ? categoryDone(morningCategory, azkarProgress)
+          : 0,
         total: morningCategory ? categoryTotal(morningCategory) : 0,
       }),
       eveningProgress: t("widget.progress", {
-        done: eveningCategory ? categoryDone(eveningCategory, azkarProgress) : 0,
+        done: eveningCategory
+          ? categoryDone(eveningCategory, azkarProgress)
+          : 0,
         total: eveningCategory ? categoryTotal(eveningCategory) : 0,
       }),
       dates,
       lockScreen,
       lockChannel: t("widget.lockChannel"),
     });
-  }, [config, day, palette, city, lockScreen, i18n.language, hijriLabel]);
+  }, [
+    config,
+    day,
+    palette,
+    city,
+    lockScreen,
+    i18n.language,
+    hijriLabel,
+    azkarProgress,
+  ]);
 }

@@ -268,10 +268,26 @@ struct DhikrWidgetView: View {
   var body: some View {
     Group {
       if let payload = entry.payload, let text = payload.dhikr(at: entry.date) {
-        content(payload: payload, text: text)
-          .environment(\.layoutDirection, payload.rtl ? .rightToLeft : .leftToRight)
+        Group {
+          if showProgress, let url = widgetURL(payload: payload) {
+            Link(destination: url) {
+              content(payload: payload, text: text)
+            }
+          } else {
+            content(payload: payload, text: text)
+          }
+        }
+        .environment(\.layoutDirection, payload.rtl ? .rightToLeft : .leftToRight)
       } else {
         OpenAppHint()
+      }
+
+      private func widgetURL(payload: PrayerPayload) -> URL? {
+        guard let category = payload.selectedCategory,
+              let itemId = payload.selectedItemId,
+              let max = payload.selectedItemMax
+        else { return nil }
+        return URL(string: "maab://category/\(category)?widgetItem=\(itemId)&widgetMax=\(max)")
       }
     }
     .modifier(WidgetBackground(payload: entry.payload, solid: true))
@@ -279,10 +295,15 @@ struct DhikrWidgetView: View {
 
   @ViewBuilder
   private func content(payload: PrayerPayload, text: String) -> some View {
-    let progress = payload.dhikrProgress(at: entry.date)
+    let progress = showProgress ? payload.dhikrProgress(at: entry.date) : nil
+    let displayText = showProgress
+      ? (payload.dhikrTitle(at: entry.date) == payload.morningDhikrTitle
+        ? payload.morningSelectedText
+        : payload.eveningSelectedText) ?? text
+      : text
     switch family {
     case .accessoryInline:
-      Text(text)
+      Text(displayText)
     case .accessoryRectangular:
       VStack(alignment: .leading, spacing: 1) {
         Text(payload.dhikrTitle(at: entry.date)).font(.caption2)
