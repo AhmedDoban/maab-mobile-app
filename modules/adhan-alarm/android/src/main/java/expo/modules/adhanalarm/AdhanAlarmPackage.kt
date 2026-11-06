@@ -35,7 +35,25 @@ object AdhanLaunch {
   fun release() {
     if (!openedByAlarm) return
     openedByAlarm = false
-    activity?.get()?.moveTaskToBack(true)
+    val current = activity?.get() ?: return
+    current.runOnUiThread {
+      val keyguard = current.getSystemService(KeyguardManager::class.java)
+      if (keyguard?.isKeyguardLocked == true) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+          current.setShowWhenLocked(false)
+          current.setTurnScreenOn(false)
+        } else {
+          @Suppress("DEPRECATION")
+          current.window.clearFlags(
+            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+              WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+          )
+        }
+        current.finishAndRemoveTask()
+      } else {
+        current.moveTaskToBack(true)
+      }
+    }
   }
 
   fun finished(id: String?) {
