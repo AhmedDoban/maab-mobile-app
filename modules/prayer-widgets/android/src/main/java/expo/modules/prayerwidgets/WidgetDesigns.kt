@@ -668,26 +668,7 @@ object WidgetDesigns {
     return p.finish(radius(w, h))
   }
 
-  fun modernTall(
-    context: Context,
-    payload: WidgetPayload?,
-    now: Long,
-    w: Float,
-    h: Float,
-    scale: Float,
-    theme: CardTheme
-  ): Bitmap {
-    val p = WidgetPainter(context, w, h, scale, payload?.rtl ?: rtl(context))
-    p.fill(theme.bg)
-    val k = (w / 320f).coerceIn(0.75f, 1.5f)
-    val day = payload?.day(now).orEmpty()
-    val next = payload?.next(now)
-    if (payload == null || day.isEmpty() || next == null) {
-      empty(context, p, w / 2, h / 2, w - 28f * k, h - 28f * k, theme.ink)
-      return p.finish(radius(w, h))
-    }
-
-    fun modernMosqueCard(
+  fun modernMosqueCard(
       context: Context,
       payload: WidgetPayload?,
       now: Long,
@@ -706,7 +687,6 @@ object WidgetDesigns {
         empty(context, p, w / 2f, h / 2f, w - 28f * k, h - 28f * k, theme.ink)
         return p.finish(radius(w, h))
       }
-
       p.text(mosque.name, p.sx(pad), 28f * k, 15f * k, theme.ink, p.startAlign, bold = true, maxWidth = w - pad * 2)
       p.text(
         when (mode) {
@@ -776,6 +756,24 @@ object WidgetDesigns {
         p.text(item.label, p.sx(42f * k, pad, w - pad), y + rowH / 2 + 5f * k, 13f * k, color, p.startAlign, bold = active, maxWidth = w - 110f * k)
         p.text(item.time, if (p.rtl) pad + 12f * k else w - pad - 12f * k, y + rowH / 2 + 5f * k, 13f * k, color, p.endAlign, bold = true, maxWidth = 64f * k)
       }
+      return p.finish(radius(w, h))
+    }
+  fun modernTall(
+    context: Context,
+    payload: WidgetPayload?,
+    now: Long,
+    w: Float,
+    h: Float,
+    scale: Float,
+    theme: CardTheme
+  ): Bitmap {
+    val p = WidgetPainter(context, w, h, scale, payload?.rtl ?: rtl(context))
+    p.fill(theme.bg)
+    val k = (w / 320f).coerceIn(0.75f, 1.5f)
+    val day = payload?.day(now).orEmpty()
+    val next = payload?.next(now)
+    if (payload == null || day.isEmpty() || next == null) {
+      empty(context, p, w / 2, h / 2, w - 28f * k, h - 28f * k, theme.ink)
       return p.finish(radius(w, h))
     }
     val pad = 14f * k
