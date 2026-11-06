@@ -203,6 +203,10 @@
     "interval": "Fréquence",
     "window": "Les rappels arrivent uniquement entre 7 h et 22 h",
     "channel": "Rappels de dhikr et de Coran",
+    "time": "Heure du rappel",
+    "saveTime": "Enregistrer l'heure",
+    "morningTitle": "Adhkar du matin",
+    "eveningTitle": "Adhkar du soir",
     "dhikrTitle": "Souvenez-vous d'Allah",
     "quranTitle": "{{surah}} · Verset {{ayah}}",
     "every_one": "Toutes les heures",
@@ -219,6 +223,18 @@
       "title": "Notifications de versets",
       "hint": "Un verset du Coran à l'intervalle choisi",
       "short": "Coran"
+    },
+    "morning": {
+      "group": "Adhkar du matin",
+      "title": "Rappel des adhkar du matin",
+      "hint": "Une notification séparée à l'heure choisie",
+      "short": "Adhkar du matin"
+    },
+    "evening": {
+      "group": "Adhkar du soir",
+      "title": "Rappel des adhkar du soir",
+      "hint": "Une notification séparée à l'heure choisie",
+      "short": "Adhkar du soir"
     }
   },
   "paletteApplying": "Application de la couleur…",

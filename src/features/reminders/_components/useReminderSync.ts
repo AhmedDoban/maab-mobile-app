@@ -15,10 +15,12 @@ import {
 
 export default function useReminderSync() {
   const { t, i18n } = useTranslation(["settings", "prayer"]);
-  const { dhikr, quran } = useAppSelector(
+  const { dhikr, quran, morning, evening } = useAppSelector(
     (s) => ({
       dhikr: s.settings.reminders.dhikr,
       quran: s.settings.reminders.quran,
+      morning: s.settings.reminders.morning,
+      evening: s.settings.reminders.evening,
     }),
     shallowEqual,
   );
@@ -53,8 +55,21 @@ export default function useReminderSync() {
           ),
         });
       }
+      for (const [kind, setting, titleKey] of [
+        ["morning", morning, "morningTitle"],
+        ["evening", evening, "eveningTitle"],
+      ] as const) {
+        if (!setting.enabled) continue;
+        const [hour, minute] = setting.time.split(":").map(Number);
+        const slots = [{ hour, minute }];
+        plans.push({
+          kind,
+          slots,
+          contents: dhikrContents(1, locale, t(`reminders.${titleKey}`), []),
+        });
+      }
       syncReminderNotifications(plans, t("reminders.channel")).catch(() => {});
     });
     return () => cancelIdleCallback(task);
-  }, [dhikr, quran, locale]);
+  }, [dhikr, quran, morning, evening, locale]);
 }

@@ -203,6 +203,10 @@
     "interval": "Repeat",
     "window": "Reminders arrive only between 7 AM and 10 PM",
     "channel": "Dhikr and Quran reminders",
+    "time": "Reminder time",
+    "saveTime": "Save time",
+    "morningTitle": "Morning adhkar",
+    "eveningTitle": "Evening adhkar",
     "dhikrTitle": "Remember Allah",
     "quranTitle": "{{surah}} · Ayah {{ayah}}",
     "every_one": "Every hour",
@@ -218,6 +222,18 @@
       "title": "Verse notifications",
       "hint": "A verse from the Quran at the interval you choose",
       "short": "Quran"
+    },
+    "morning": {
+      "group": "Morning adhkar",
+      "title": "Morning adhkar reminder",
+      "hint": "A separate notification at the time you choose",
+      "short": "Morning adhkar"
+    },
+    "evening": {
+      "group": "Evening adhkar",
+      "title": "Evening adhkar reminder",
+      "hint": "A separate notification at the time you choose",
+      "short": "Evening adhkar"
     }
   },
   "paletteApplying": "Applying color…",

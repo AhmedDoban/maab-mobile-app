@@ -6,7 +6,12 @@ import { ReminderKind } from "@/store/Slices/SettingsSlice";
 const FIRST_HOUR = 7;
 const LAST_HOUR = 22;
 
-const MINUTE: Record<ReminderKind, number> = { dhikr: 0, quran: 30 };
+const MINUTE: Record<ReminderKind, number> = {
+  dhikr: 0,
+  quran: 30,
+  morning: 0,
+  evening: 0,
+};
 
 const DHIKR_CATEGORIES = [
   "prophetic_duas",

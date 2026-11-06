@@ -99,7 +99,7 @@ const DEFAULT_READING: ReadingSettings = {
   showSource: true,
 };
 
-export type ReminderKind = "dhikr" | "quran";
+export type ReminderKind = "dhikr" | "quran" | "morning" | "evening";
 
 export const REMINDER_INTERVALS = [1, 2, 3, 4, 6, 12] as const;
 
@@ -108,9 +108,14 @@ export type ReminderInterval = (typeof REMINDER_INTERVALS)[number];
 interface ReminderSetting {
   enabled: boolean;
   every: ReminderInterval;
+  time: string;
 }
 
-const DEFAULT_REMINDER: ReminderSetting = { enabled: false, every: 2 };
+const DEFAULT_REMINDER: ReminderSetting = {
+  enabled: false,
+  every: 2,
+  time: "07:00",
+};
 
 const isReminderInterval = (value: unknown): value is ReminderInterval =>
   REMINDER_INTERVALS.includes(value as ReminderInterval);
@@ -122,6 +127,7 @@ const toReminder = (
   enabled:
     typeof value?.enabled === "boolean" ? value.enabled : fallback.enabled,
   every: isReminderInterval(value?.every) ? value.every : fallback.every,
+  time: /^\d{2}:\d{2}$/.test(value?.time ?? "") ? value!.time! : fallback.time,
 });
 
 export type PrayerCardStyle = "modern" | "classic";
@@ -210,7 +216,12 @@ const defaultSettings = (locale: Locale = defaultLocale): SettingsState => ({
   prayerMethod: "auto",
   asrMethod: "auto",
   reading: { ...DEFAULT_READING },
-  reminders: { dhikr: { ...DEFAULT_REMINDER }, quran: { ...DEFAULT_REMINDER } },
+  reminders: {
+    dhikr: { ...DEFAULT_REMINDER },
+    quran: { ...DEFAULT_REMINDER },
+    morning: { ...DEFAULT_REMINDER, time: "07:00" },
+    evening: { ...DEFAULT_REMINDER, time: "18:00" },
+  },
 });
 
 const initialState: SettingsState = defaultSettings();
@@ -466,6 +477,14 @@ export const SettingsSlice = createSlice({
           quran: toReminder(
             action.payload.reminders?.quran,
             state.reminders.quran,
+          ),
+          morning: toReminder(
+            action.payload.reminders?.morning,
+            state.reminders.morning,
+          ),
+          evening: toReminder(
+            action.payload.reminders?.evening,
+            state.reminders.evening,
           ),
         },
         ayahColors: { ...state.ayahColors, ...action.payload.ayahColors },

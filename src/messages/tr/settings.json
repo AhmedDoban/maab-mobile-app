@@ -203,6 +203,10 @@
     "interval": "Tekrar",
     "window": "Hatırlatıcılar yalnızca 07:00 ile 22:00 arasında gelir",
     "channel": "Zikir ve Kur'an hatırlatıcıları",
+    "time": "Hatırlatma zamanı",
+    "saveTime": "Saati kaydet",
+    "morningTitle": "Sabah ezkarı",
+    "eveningTitle": "Akşam ezkarı",
     "dhikrTitle": "Allah'ı an",
     "quranTitle": "{{surah}} · Ayet {{ayah}}",
     "every_one": "Her saat",
@@ -218,6 +222,18 @@
       "title": "Ayet bildirimleri",
       "hint": "Seçtiğiniz aralıkta Kur'an'dan bir ayet",
       "short": "Kur'an"
+    },
+    "morning": {
+      "group": "Sabah ezkarı",
+      "title": "Sabah ezkarı hatırlatıcısı",
+      "hint": "Seçtiğiniz saatte ayrı bir bildirim",
+      "short": "Sabah ezkarı"
+    },
+    "evening": {
+      "group": "Akşam ezkarı",
+      "title": "Akşam ezkarı hatırlatıcısı",
+      "hint": "Seçtiğiniz saatte ayrı bir bildirim",
+      "short": "Akşam ezkarı"
     }
   },
   "paletteApplying": "Renk uygulanıyor…",

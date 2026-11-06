@@ -2,7 +2,7 @@
   "expo": {
     "name": "Maab",
     "slug": "maab",
-    "version": "1.8.0",
+    "version": "1.9.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "maab",
@@ -48,6 +48,7 @@
         "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
         "android.permission.SCHEDULE_EXACT_ALARM",
         "android.permission.POST_NOTIFICATIONS",
+        "android.permission.USE_FULL_SCREEN_INTENT",
         "android.permission.RECEIVE_BOOT_COMPLETED"
       ],
       "blockedPermissions": [
@@ -223,7 +224,8 @@
         }
       ],
       "@bacons/apple-targets",
-      "expo-image"
+      "expo-image",
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true,

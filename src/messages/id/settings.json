@@ -203,6 +203,10 @@
     "interval": "Ulangi",
     "window": "Pengingat hanya muncul antara pukul 07.00 dan 22.00",
     "channel": "Pengingat zikir dan Al-Qur'an",
+    "time": "Waktu pengingat",
+    "saveTime": "Simpan waktu",
+    "morningTitle": "Zikir pagi",
+    "eveningTitle": "Zikir petang",
     "dhikrTitle": "Ingatlah Allah",
     "quranTitle": "{{surah}} · Ayat {{ayah}}",
     "every_other": "Setiap {{n}} jam",
@@ -217,6 +221,18 @@
       "title": "Notifikasi ayat",
       "hint": "Satu ayat Al-Qur'an sesuai interval pilihan Anda",
       "short": "Al-Qur'an"
+    },
+    "morning": {
+      "group": "Zikir pagi",
+      "title": "Pengingat zikir pagi",
+      "hint": "Notifikasi terpisah pada waktu yang Anda pilih",
+      "short": "Zikir pagi"
+    },
+    "evening": {
+      "group": "Zikir petang",
+      "title": "Pengingat zikir petang",
+      "hint": "Notifikasi terpisah pada waktu yang Anda pilih",
+      "short": "Zikir petang"
     }
   },
   "paletteApplying": "Menerapkan warna…",

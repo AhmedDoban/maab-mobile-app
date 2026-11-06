@@ -203,6 +203,10 @@
     "interval": "Ulang",
     "window": "Peringatan hanya dihantar antara 7 PG hingga 10 MLM",
     "channel": "Peringatan zikir dan al-Quran",
+    "time": "Masa peringatan",
+    "saveTime": "Simpan masa",
+    "morningTitle": "Zikir pagi",
+    "eveningTitle": "Zikir petang",
     "dhikrTitle": "Ingatlah Allah",
     "quranTitle": "{{surah}} · Ayat {{ayah}}",
     "every_other": "Setiap {{n}} jam",
@@ -217,6 +221,18 @@
       "title": "Pemberitahuan ayat",
       "hint": "Satu ayat al-Quran pada selang masa pilihan anda",
       "short": "Al-Quran"
+    },
+    "morning": {
+      "group": "Zikir pagi",
+      "title": "Peringatan zikir pagi",
+      "hint": "Pemberitahuan berasingan pada masa yang anda pilih",
+      "short": "Zikir pagi"
+    },
+    "evening": {
+      "group": "Zikir petang",
+      "title": "Peringatan zikir petang",
+      "hint": "Pemberitahuan berasingan pada masa yang anda pilih",
+      "short": "Zikir petang"
     }
   },
   "paletteApplying": "Menukar warna…",
