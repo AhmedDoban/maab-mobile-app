@@ -47,7 +47,7 @@ function IqamaRow({
         onChangeText={update}
         keyboardType="number-pad"
         className="w-20 rounded-xl border border-line bg-surface px-2 text-center text-ink"
-        style={{ color: colors.ink, height: 40 }}
+        style={{ color: colors.ink, height: 40, paddingHorizontal: 8 }}
       />
       <AppText className="text-main-gray">دقيقة بعد الأذان</AppText>
     </View>

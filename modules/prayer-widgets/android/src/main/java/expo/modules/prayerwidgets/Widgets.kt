@@ -39,6 +39,9 @@ class NextPrayerSmallWidget : PrayerWidgetProvider()
 class TodayWidget : PrayerWidgetProvider()
 
 class ModernPrayerWidget : PrayerWidgetProvider()
+class MosqueNextWidget : PrayerWidgetProvider()
+class MosqueTimesWidget : PrayerWidgetProvider()
+class MosqueDistanceWidget : PrayerWidgetProvider()
 
 class WidgetRefreshReceiver : BroadcastReceiver() {
   override fun onReceive(context: Context, intent: Intent) {

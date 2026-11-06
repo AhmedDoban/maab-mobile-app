@@ -100,7 +100,12 @@ export default function MosquesSection() {
           placeholder={t("mosqueName")}
           placeholderTextColor={colors.gray}
           className="rounded-2xl border border-line bg-main-bg px-4 text-ink"
-          style={{ writingDirection: "rtl", height: 52 }}
+          style={{
+            writingDirection: "rtl",
+            textAlign: "right",
+            paddingHorizontal: 16,
+            height: 52,
+          }}
         />
         <PressableScale
           onPress={addCurrent}
@@ -109,6 +114,7 @@ export default function MosquesSection() {
           style={{
             backgroundColor: colors.main,
             opacity: name.trim() ? 1 : 0.5,
+            paddingHorizontal: 16,
             height: 52,
           }}
         >
@@ -174,6 +180,7 @@ export default function MosquesSection() {
             <PressableScale
               onPress={() => setPendingDeleteId(mosque.id)}
               className="flex-row items-center justify-center gap-2 rounded-2xl border border-error/30 px-3 py-3"
+              style={{ paddingHorizontal: 12, paddingVertical: 12 }}
             >
               <Icon name="resetAll" size={18} tintColor={colors.error} />
               <AppText className="text-error">{t("deleteMosque")}</AppText>

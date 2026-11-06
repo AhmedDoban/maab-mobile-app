@@ -34,6 +34,9 @@ object WidgetRenderer {
     val small = ids(context, manager, NextPrayerSmallWidget::class.java)
     val today = ids(context, manager, TodayWidget::class.java)
     val modern = ids(context, manager, ModernPrayerWidget::class.java)
+    val mosqueNext = ids(context, manager, MosqueNextWidget::class.java)
+    val mosqueTimes = ids(context, manager, MosqueTimesWidget::class.java)
+    val mosqueDistance = ids(context, manager, MosqueDistanceWidget::class.java)
     next.forEach { update(context, manager, it, Kind.NEXT, payload, now) }
     times.forEach { update(context, manager, it, Kind.TIMES, payload, now) }
     dhikr.forEach { update(context, manager, it, Kind.DHIKR, payload, now) }
@@ -41,6 +44,9 @@ object WidgetRenderer {
     small.forEach { update(context, manager, it, Kind.SMALL, payload, now) }
     today.forEach { update(context, manager, it, Kind.TODAY, payload, now) }
     modern.forEach { update(context, manager, it, Kind.MODERN, payload, now) }
+    mosqueNext.forEach { update(context, manager, it, Kind.MOSQUE_NEXT, payload, now) }
+    mosqueTimes.forEach { update(context, manager, it, Kind.MOSQUE_TIMES, payload, now) }
+    mosqueDistance.forEach { update(context, manager, it, Kind.MOSQUE_DISTANCE, payload, now) }
     LockScreenPrayer.update(context, payload, now)
     val lockScreen = payload?.lockScreen == true
     val timed = next.isNotEmpty() || times.isNotEmpty() || small.isNotEmpty() ||
@@ -52,7 +58,10 @@ object WidgetRenderer {
     }
   }
 
-  private enum class Kind { NEXT, TIMES, SMALL, TODAY, MODERN, DHIKR, MORNING_EVENING }
+  private enum class Kind {
+    NEXT, TIMES, SMALL, TODAY, MODERN, DHIKR, MORNING_EVENING,
+    MOSQUE_NEXT, MOSQUE_TIMES, MOSQUE_DISTANCE
+  }
 
   private const val COMPACT_WIDTH = 200f
   private const val TALL_HEIGHT = 230f
@@ -101,7 +110,30 @@ object WidgetRenderer {
       }
     } else {
       RemoteViews(context.packageName, R.layout.widget_canvas).apply {
-        setImageViewBitmap(R.id.canvas, classic(context, kind, payload, now, w, h, scale))
+        setImageViewBitmap(
+          R.id.canvas,
+          if (kind == Kind.MOSQUE_NEXT || kind == Kind.MOSQUE_TIMES || kind == Kind.MOSQUE_DISTANCE) {
+            WidgetDesigns.mosque(
+              context,
+              payload,
+              now,
+              w,
+              h,
+              scale,
+              when (kind) {
+                Kind.MOSQUE_NEXT -> 0
+                Kind.MOSQUE_TIMES -> 1
+                else -> 2
+              },
+              payload?.mosques?.find {
+                it.id == context.getSharedPreferences("maab_widgets", Context.MODE_PRIVATE)
+                  .getString("mosque_$id", null)
+              } ?: payload?.mosques?.firstOrNull()
+            )
+          } else {
+            classic(context, kind, payload, now, w, h, scale)
+          }
+        )
       }
     }
     views.setContentDescription(

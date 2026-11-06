@@ -158,6 +158,43 @@ object WidgetDesigns {
       empty(context, p, w / 2, h / 2, w - 32f * k, h - 24f * k, WHITE)
       return p.finish(radius(w, h))
     }
+
+    fun mosque(
+      context: Context,
+      payload: WidgetPayload?,
+      now: Long,
+      w: Float,
+      h: Float,
+      scale: Float,
+      mode: Int,
+      selected: WidgetMosque? = payload?.mosques?.firstOrNull()
+    ): Bitmap {
+      val p = classic(context, payload, w, h, scale)
+      val mosque = selected
+      val k = min(w / 320f, h / 170f).coerceIn(0.8f, 1.5f)
+      if (mosque == null) {
+        empty(context, p, w / 2f, h / 2f, w - 32f * k, h - 24f * k, WHITE)
+        return p.finish(radius(w, h))
+      }
+      val left = 18f * k
+      val right = w - left
+      p.text(mosque.name, p.sx(0f, left, right), 30f * k, 18f * k, WHITE, p.startAlign, bold = true, maxWidth = w - 36f * k)
+      val next = mosque.next
+      if (mode == 0 && next != null) {
+        p.text(next.label, p.sx(0f, left, right), 74f * k, 24f * k, WHITE, p.startAlign, bold = true, maxWidth = w * 0.55f)
+        p.text(next.time, p.sx(0f, left, right), 104f * k, 20f * k, WHITE, p.startAlign, maxWidth = w * 0.55f)
+      } else if (mode == 1) {
+        mosque.schedule.filter { it.at > now }.take(5).forEachIndexed { index, item ->
+          val y = (64f + index * 23f) * k
+          p.text(item.label, p.sx(0f, left, right), y, 13f * k, WHITE, p.startAlign, maxWidth = w * 0.55f)
+          p.text(item.time, p.sx(0f, left, right), y, 13f * k, WHITE, p.endAlign, bold = true, maxWidth = w * 0.35f)
+        }
+      } else {
+        p.icon(R.drawable.widget_ic_location, left, 66f * k, 20f * k, WHITE, 0.9f)
+        p.text(context.getString(R.string.widget_mosque_location), left + 28f * k, 81f * k, 16f * k, WHITE, Paint.Align.LEFT, maxWidth = w - 56f * k)
+      }
+      return p.finish(radius(w, h))
+    }
     val chipText = "${next.label}${separator(p.rtl)}${payload.leftTitle} ${countdown(payload, now)}"
     val chipW = min(p.measureText(chipText, 12f * k, true) + 20f * k, w * 0.5f)
     p.text(

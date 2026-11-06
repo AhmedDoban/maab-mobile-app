@@ -8,6 +8,15 @@ import java.util.Calendar
 data class WidgetPrayer(val label: String, val at: Long, val time: String, val icon: String)
 
 data class WidgetDate(val at: Long, val text: String)
+data class WidgetIqama(val label: String, val at: Long, val time: String)
+data class WidgetMosque(
+  val id: String,
+  val name: String,
+  val latitude: Double,
+  val longitude: Double,
+  val next: WidgetIqama?,
+  val schedule: List<WidgetIqama>
+)
 
 data class WidgetPayload(
   val color: Int,
@@ -37,6 +46,7 @@ data class WidgetPayload(
   val dates: List<WidgetDate>,
   val lockScreen: Boolean,
   val lockChannel: String
+  val mosques: List<WidgetMosque>
 ) {
   fun next(now: Long) = prayers.firstOrNull { it.at > now && it.icon != "sunrise" }
 
@@ -111,6 +121,7 @@ data class WidgetPayload(
       val prayers = json.getJSONArray("prayers")
       val dhikr = json.getJSONArray("dhikr")
       val dates = json.optJSONArray("dates")
+      val mosques = json.optJSONArray("mosques")
       return WidgetPayload(
         color = Color.parseColor(json.getString("color")),
         mid = Color.parseColor(json.optString("mid", json.getString("color"))),
@@ -154,6 +165,24 @@ data class WidgetPayload(
         }.sortedBy { it.at },
         lockScreen = json.optBoolean("lockScreen"),
         lockChannel = json.optString("lockChannel", json.getString("nextTitle"))
+        mosques = if (mosques == null) emptyList() else (0 until mosques.length()).map {
+          val mosque = mosques.getJSONObject(it)
+          val schedule = mosque.optJSONArray("schedule")
+          val next = mosque.optJSONObject("next")
+          WidgetMosque(
+            id = mosque.getString("id"),
+            name = mosque.getString("name"),
+            latitude = mosque.optDouble("latitude"),
+            longitude = mosque.optDouble("longitude"),
+            next = next?.let { item ->
+              WidgetIqama(item.getString("label"), item.getLong("at"), item.getString("time"))
+            },
+            schedule = if (schedule == null) emptyList() else (0 until schedule.length()).map { index ->
+              val item = schedule.getJSONObject(index)
+              WidgetIqama(item.getString("label"), item.getLong("at"), item.getString("time"))
+            }
+          )
+        }
       )
     }
   }

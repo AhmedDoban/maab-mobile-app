@@ -9,6 +9,15 @@ type WidgetPrayer = {
 };
 
 type WidgetDate = { at: number; text: string };
+type WidgetIqama = { label: string; at: number; time: string };
+type WidgetMosque = {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+  next: WidgetIqama | null;
+  schedule: WidgetIqama[];
+};
 
 export type WidgetPayload = {
   rtl: boolean;
@@ -38,6 +47,7 @@ export type WidgetPayload = {
   dates: WidgetDate[];
   lockScreen: boolean;
   lockChannel: string;
+  mosques: WidgetMosque[];
 };
 
 type NativePrayerWidgets = { update(payload: string): void };

@@ -15,4 +15,8 @@
   <string name="widget_today_hint">Every prayer of the day in a list, with the next one highlighted</string>
   <string name="widget_modern">Prayer times modern</string>
   <string name="widget_modern_hint">A light card with the next prayer, time left and all five prayers</string>
+  <string name="widget_mosque_next">Next iqama</string>
+  <string name="widget_mosque_times">Mosque iqama times</string>
+  <string name="widget_mosque_distance">Mosque location</string>
+  <string name="widget_mosque_location">Saved mosque</string>
 </resources>

@@ -131,16 +131,16 @@ struct PrayerPayload: Decodable {
     if let fajr, let maghrib, fajr > maghrib {
       return morningDhikrTitle ?? dhikrTitle ?? ""
     }
-
-    func dhikrProgress(at date: Date) -> String? {
-      let fajr = prayers.last { $0.icon == "fajr" && $0.date <= date }?.date
-      let maghrib = prayers.last { $0.icon == "maghrib" && $0.date <= date }?.date
-      if let fajr, let maghrib, fajr > maghrib {
-        return morningProgress
-      }
-      return eveningProgress
-    }
     return eveningDhikrTitle ?? dhikrTitle ?? ""
+  }
+
+  func dhikrProgress(at date: Date) -> String? {
+    let fajr = prayers.last { $0.icon == "fajr" && $0.date <= date }?.date
+    let maghrib = prayers.last { $0.icon == "maghrib" && $0.date <= date }?.date
+    if let fajr, let maghrib, fajr > maghrib {
+      return morningProgress
+    }
+    return eveningProgress
   }
 
   private func dhikrList(at date: Date) -> [String] {

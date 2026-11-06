@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
   <application>
+    <activity android:name="expo.modules.prayerwidgets.MosqueWidgetConfigActivity" android:exported="false" />
     <receiver android:name="expo.modules.prayerwidgets.NextPrayerWidget" android:label="@string/widget_next_prayer" android:exported="false">
       <intent-filter>
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -41,6 +42,18 @@
         <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
       </intent-filter>
       <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_modern_info" />
+    </receiver>
+    <receiver android:name="expo.modules.prayerwidgets.MosqueNextWidget" android:label="@string/widget_mosque_next" android:exported="false">
+      <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+      <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_mosque_next_info" />
+    </receiver>
+    <receiver android:name="expo.modules.prayerwidgets.MosqueTimesWidget" android:label="@string/widget_mosque_times" android:exported="false">
+      <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+      <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_mosque_times_info" />
+    </receiver>
+    <receiver android:name="expo.modules.prayerwidgets.MosqueDistanceWidget" android:label="@string/widget_mosque_distance" android:exported="false">
+      <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+      <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_mosque_distance_info" />
     </receiver>
     <receiver android:name="expo.modules.prayerwidgets.WidgetRefreshReceiver" android:exported="false">
       <intent-filter>

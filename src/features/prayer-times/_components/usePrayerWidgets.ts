@@ -18,6 +18,7 @@ import { toHijri } from "../_data/hijri";
 import { shortTime } from "../_data/time";
 import { PrayerDay } from "../_data/schedule";
 import { DISPLAY_PRAYERS, PRAYER_ICONS } from "../_data/types";
+import { IQAMA_PRAYERS, type Mosque } from "../_data/mosques";
 import useCityName from "./useCityName";
 import useHijriLabel from "./useHijriLabel";
 import usePrayerLabels from "./usePrayerLabels";
@@ -35,6 +36,7 @@ export default function usePrayerWidgets(
   const lockScreen = useAppSelector((s) => s.settings.lockScreenPrayer);
   const azkarProgress = useAppSelector((s) => s.azkar.progress);
   const city = useCityName(day?.city);
+  const mosques = useAppSelector((s) => s.mosques.items);
 
   useEffect(() => {
     if (!config) return;
@@ -101,6 +103,38 @@ export default function usePrayerWidgets(
     const eveningSelected = selectIncomplete("evening_azkar", eveningItems);
     const currentPrayerTimes = prayerDates(config, start);
     const now = start.getTime();
+    const mosquePayload = mosques.map((mosque: Mosque) => {
+      const schedule = [0, 1].flatMap((offset) => {
+        const date = addDays(start, offset);
+        const moments = prayerDates(config, date);
+        return IQAMA_PRAYERS.map((prayer) => {
+          const setting = mosque.iqama[prayer];
+          const at = new Date(moments[prayer]);
+          if (setting.kind === "offset") {
+            at.setMinutes(at.getMinutes() + setting.minutes);
+          } else {
+            const [hours, minutes] = setting.time.split(":").map(Number);
+            at.setHours(hours || 0, minutes || 0, 0, 0);
+          }
+          const clock = `${String(at.getHours()).padStart(2, "0")}:${String(
+            at.getMinutes(),
+          ).padStart(2, "0")}`;
+          return {
+            label: label(prayer, date.getDay() === 5),
+            at: at.getTime(),
+            time: shortTime(clock),
+          };
+        });
+      });
+      return {
+        id: mosque.id,
+        name: mosque.name,
+        latitude: mosque.latitude,
+        longitude: mosque.longitude,
+        next: schedule.find((item) => item.at > now) ?? null,
+        schedule,
+      };
+    });
     const isMorning =
       now >= currentPrayerTimes.Fajr.getTime() &&
       now < currentPrayerTimes.Maghrib.getTime();
@@ -144,6 +178,7 @@ export default function usePrayerWidgets(
       dates,
       lockScreen,
       lockChannel: t("widget.lockChannel"),
+      mosques: mosquePayload,
     });
   }, [
     config,
@@ -154,5 +189,6 @@ export default function usePrayerWidgets(
     i18n.language,
     hijriLabel,
     azkarProgress,
+    mosques,
   ]);
 }
