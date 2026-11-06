@@ -532,6 +532,23 @@ object WidgetDesigns {
       WHITE,
       true
     )
+    if (morningEvening) {
+      p.text(
+        title,
+        w / 2,
+        56f * k,
+        12f * k,
+        WHITE,
+        Paint.Align.CENTER,
+        alpha = 0.8f,
+        maxWidth = w - 32f * k
+      )
+      p.draw(layout, w / 2, 72f * k)
+      if (!progress.isNullOrEmpty()) {
+        p.text(progress, w / 2, h - 10f * k, 10f * k, WHITE, Paint.Align.CENTER, alpha = 0.8f)
+      }
+      return p.finish(radius(w, h))
+    }
     val progressH = if (progress.isNullOrEmpty()) 0f else 16f * k
     val top = (h - titleH - gap - layout.height - progressH) / 2
     p.text(title, w / 2, top + 12f * k, 12f * k, WHITE, Paint.Align.CENTER, alpha = 0.8f, maxWidth = w - 32f * k)
@@ -592,7 +609,7 @@ object WidgetDesigns {
       if (mode == 2) {
         val cy = h * 0.62f
         p.circle(p.sx(34f * k), cy, 20f * k, accent)
-        p.icon(R.drawable.widget_ic_location, p.sx(24f * k) - 10f * k, cy - 10f * k, 20f * k, WHITE)
+        p.icon(R.drawable.widget_ic_location, p.sx(34f * k) - 10f * k, cy - 10f * k, 20f * k, WHITE)
         p.text(context.getString(R.string.widget_mosque_location), p.sx(66f * k), cy + 5f * k, 18f * k, theme.ink, p.startAlign, bold = true, maxWidth = w - 84f * k)
         return p.finish(radius(w, h))
       }
@@ -707,7 +724,7 @@ object WidgetDesigns {
         val cardH = h - cardY - pad
         p.rect(pad, cardY, w - pad * 2, cardH, 18f * k, theme.line, 0.35f)
         p.circle(p.sx(pad + 30f * k), cardY + cardH / 2, 20f * k, payload?.color ?: DEFAULT_MID)
-        p.icon(R.drawable.widget_ic_location, p.sx(pad + 20f * k) - 10f * k, cardY + cardH / 2 - 10f * k, 20f * k, WHITE)
+        p.icon(R.drawable.widget_ic_location, p.sx(pad + 30f * k) - 10f * k, cardY + cardH / 2 - 10f * k, 20f * k, WHITE)
         p.text(
           context.getString(R.string.widget_mosque_location),
           p.sx(pad + 62f * k),

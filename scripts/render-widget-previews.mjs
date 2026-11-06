@@ -35,7 +35,10 @@ const COPY = {
     minute: "min",
     city: "Cairo",
     date: "Wednesday, 3 Jumada al-Ula 1448",
-    dhikrText: ["I seek forgiveness from Allah", "and turn to Him in repentance"],
+    dhikrText: [
+      "I seek forgiveness from Allah",
+      "and turn to Him in repentance",
+    ],
     names: ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"],
   },
   ar: {
@@ -64,18 +67,25 @@ const ICONS = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
 const NEXT = 2;
 
 const iconPaths = Object.fromEntries(
-  ["fajr", "dhuhr", "asr", "maghrib", "isha", "calendar", "location", "person_praying"].map(
-    (name) => {
-      const xml = fs.readFileSync(
-        path.join(RES, `drawable/widget_ic_${name}.xml`),
-        "utf8",
-      );
-      const paths = [...xml.matchAll(/android:pathData="([^"]+)"/g)].map(
-        (m) => m[1],
-      );
-      return [name, paths];
-    },
-  ),
+  [
+    "fajr",
+    "dhuhr",
+    "asr",
+    "maghrib",
+    "isha",
+    "calendar",
+    "location",
+    "person_praying",
+  ].map((name) => {
+    const xml = fs.readFileSync(
+      path.join(RES, `drawable/widget_ic_${name}.xml`),
+      "utf8",
+    );
+    const paths = [...xml.matchAll(/android:pathData="([^"]+)"/g)].map(
+      (m) => m[1],
+    );
+    return [name, paths];
+  }),
 );
 
 const dataUri = (file, type) =>
@@ -287,15 +297,7 @@ function prayerTimes(copy) {
     bold: true,
     anchor,
   });
-  icon(
-    c,
-    "location",
-    copy.rtl ? c.w - 16 - 12 : 16,
-    38,
-    12,
-    "#fff",
-    0.8,
-  );
+  icon(c, "location", copy.rtl ? c.w - 16 - 12 : 16, 38, 12, "#fff", 0.8);
   text(c, copy, copy.city, startX(c, copy, 32), 48, {
     size: 11,
     opacity: 0.8,
@@ -338,25 +340,22 @@ function dhikr(copy) {
 
 function morningEvening(copy) {
   const c = canvas(320, 170);
-  c.add(`<rect width="320" height="170" fill="#ffffff"/>`);
-  c.add(`<circle cx="${copy.rtl ? 278 : 42}" cy="42" r="20" fill="${MID}"/>`);
-  icon(c, "person_praying", (copy.rtl ? 278 : 42) - 10, 32, 20, "#fff");
-  text(c, copy, copy.morningEvening, copy.rtl ? 250 : 70, 38, {
-    size: 13,
-    bold: true,
-    color: "#092B38",
-    anchor: copy.rtl ? "end" : "start",
-  });
-  c.add(`<rect x="18" y="72" width="284" height="76" rx="18" fill="#DFF3EA"/>`);
-  text(c, copy, copy.rtl ? "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ" : "I seek forgiveness from Allah", 160, 105, {
-    size: copy.rtl ? 17 : 16,
-    bold: true,
-    color: "#0E3A33",
+  background(c, true);
+  text(c, copy, copy.morningEvening, 160, 56, {
+    size: 12,
+    opacity: 0.8,
     anchor: "middle",
   });
-  text(c, copy, copy.rtl ? "أذكار اليوم" : "Your daily remembrance", 160, 132, {
-    size: 11,
-    color: "#667176",
+  copy.dhikrText.forEach((line, i) =>
+    text(c, copy, line, 160, 92 + i * 26, {
+      size: 18,
+      bold: true,
+      anchor: "middle",
+    }),
+  );
+  text(c, copy, copy.rtl ? "أذكار اليوم" : "Your daily remembrance", 160, 158, {
+    size: 10,
+    opacity: 0.8,
     anchor: "middle",
   });
   return c;
@@ -373,14 +372,29 @@ function mosquePreview(copy, mode) {
     color: ink,
     anchor: copy.rtl ? "end" : "start",
   });
-  text(c, copy, mode === "next" ? copy.iqama : mode === "times" ? copy.mosqueTimes : copy.mosqueLocation, copy.rtl ? 306 : 14, 47, {
-    size: 11,
-    color: gray,
-    anchor: copy.rtl ? "end" : "start",
-  });
+  text(
+    c,
+    copy,
+    mode === "next"
+      ? copy.iqama
+      : mode === "times"
+        ? copy.mosqueTimes
+        : copy.mosqueLocation,
+    copy.rtl ? 306 : 14,
+    47,
+    {
+      size: 11,
+      color: gray,
+      anchor: copy.rtl ? "end" : "start",
+    },
+  );
   if (mode === "location") {
-    c.add(`<rect x="14" y="62" width="292" height="94" rx="18" fill="#E5E7EB" fill-opacity="0.55"/>`);
-    c.add(`<circle cx="${copy.rtl ? 270 : 50}" cy="109" r="20" fill="${MID}"/>`);
+    c.add(
+      `<rect x="14" y="62" width="292" height="94" rx="18" fill="#E5E7EB" fill-opacity="0.55"/>`,
+    );
+    c.add(
+      `<circle cx="${copy.rtl ? 270 : 50}" cy="109" r="20" fill="${MID}"/>`,
+    );
     icon(c, "location", (copy.rtl ? 270 : 50) - 10, 99, 20, "#fff");
     text(c, copy, copy.mosqueLocation, copy.rtl ? 234 : 86, 115, {
       size: 17,
@@ -389,24 +403,49 @@ function mosquePreview(copy, mode) {
       anchor: copy.rtl ? "end" : "start",
     });
   } else {
-    const items = mode === "next" ? [["Maghrib", "5:38"]] : [["Fajr", "4:52"], ["Dhuhr", "11:52"], ["Asr", "3:12"]];
-    c.add(`<rect x="8" y="52" width="304" height="112" rx="22" fill="#E5E7EB" fill-opacity="0.22"/>`);
+    const items =
+      mode === "next"
+        ? [["Maghrib", "5:38"]]
+        : [
+            ["Fajr", "4:52"],
+            ["Dhuhr", "11:52"],
+            ["Asr", "3:12"],
+          ];
+    c.add(
+      `<rect x="8" y="52" width="304" height="112" rx="22" fill="#E5E7EB" fill-opacity="0.22"/>`,
+    );
     items.forEach(([label, time], i) => {
       const y = mode === "next" ? 58 + i * 78 : 58 + i * 36;
       const active = i === 0;
-      c.add(`<rect x="14" y="${y}" width="292" height="${mode === "next" ? 74 : 32}" rx="16" fill="${active ? MID : "#E5E7EB"}" fill-opacity="${active ? 1 : 0.6}"/>`);
-      text(c, copy, copy.rtl ? label : label, copy.rtl ? 286 : 42, y + (mode === "next" ? 32 : 22), {
-        size: mode === "next" ? 21 : 14,
-        bold: true,
-        color: active ? "#fff" : ink,
-        anchor: copy.rtl ? "end" : "start",
-      });
-      text(c, copy, time, copy.rtl ? 34 : 286, y + (mode === "next" ? 32 : 22), {
-        size: mode === "next" ? 21 : 14,
-        bold: true,
-        color: active ? "#fff" : ink,
-        anchor: copy.rtl ? "start" : "end",
-      });
+      c.add(
+        `<rect x="14" y="${y}" width="292" height="${mode === "next" ? 74 : 32}" rx="16" fill="${active ? MID : "#E5E7EB"}" fill-opacity="${active ? 1 : 0.6}"/>`,
+      );
+      text(
+        c,
+        copy,
+        copy.rtl ? label : label,
+        copy.rtl ? 286 : 42,
+        y + (mode === "next" ? 32 : 22),
+        {
+          size: mode === "next" ? 21 : 14,
+          bold: true,
+          color: active ? "#fff" : ink,
+          anchor: copy.rtl ? "end" : "start",
+        },
+      );
+      text(
+        c,
+        copy,
+        time,
+        copy.rtl ? 34 : 286,
+        y + (mode === "next" ? 32 : 22),
+        {
+          size: mode === "next" ? 21 : 14,
+          bold: true,
+          color: active ? "#fff" : ink,
+          anchor: copy.rtl ? "start" : "end",
+        },
+      );
     });
   }
   return c;
@@ -511,9 +550,7 @@ function modern(copy) {
     anchor,
   });
   const divider = sx(136);
-  c.add(
-    `<rect x="${divider}" y="16" width="1" height="36" fill="#E5E7EB"/>`,
-  );
+  c.add(`<rect x="${divider}" y="16" width="1" height="36" fill="#E5E7EB"/>`);
   const mid = sx(178);
   text(c, copy, copy.left, mid, 28, {
     size: 11,
@@ -616,7 +653,10 @@ for (const [lang, dir] of [
       path.join(out, `widget_preview_${name}.webp`),
     ]);
     if (process.env.KEEP_PNG) {
-      fs.copyFileSync(tmp, path.join(process.env.KEEP_PNG, `${lang}_${name}.png`));
+      fs.copyFileSync(
+        tmp,
+        path.join(process.env.KEEP_PNG, `${lang}_${name}.png`),
+      );
     }
     fs.rmSync(tmp);
   }
