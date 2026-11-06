@@ -1,6 +1,6 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
   android:description="@string/widget_prayer_times_hint"
-  android:initialLayout="@layout/widget_prayer_times"
+  android:initialLayout="@layout/widget_canvas"
   android:previewImage="@drawable/widget_preview_prayer_times"
   android:minWidth="250dp"
   android:minHeight="110dp"

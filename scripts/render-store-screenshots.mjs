@@ -1,5 +1,7 @@
 import { Resvg } from "@resvg/resvg-js";
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 
 const ROOT = path.resolve(
@@ -9,6 +11,8 @@ const ROOT = path.resolve(
 const RAW = process.env.STORE_SCREENS ?? path.join(ROOT, "store-screens");
 const OUT = process.env.STORE_OUT ?? ROOT;
 const FONTS = path.join(ROOT, "assets/fonts");
+const SUPERSAMPLE = 2;
+const TMP = fs.mkdtempSync(path.join(os.tmpdir(), "maab-store-"));
 
 const SLIDES = [
   {
@@ -17,9 +21,9 @@ const SLIDES = [
     phones: ["home-ar"],
   },
   {
-    ar: "المصحف الشريف",
-    en: "The Madinah Mushaf, page by page",
-    phones: ["mushaf-ar"],
+    ar: "المصحف وورد الختمة",
+    en: "The Mushaf & your khatma plan",
+    phones: ["mushaf-ar", "quran-ar"],
   },
   { ar: "حديث كل يوم", en: "A hadith every day", phones: ["hadith-ar"] },
   { ar: "اتجاه القبلة", en: "Find the qibla anywhere", phones: ["qibla-ar"] },
@@ -50,6 +54,9 @@ const SCREENS = [...new Set(SLIDES.flatMap((slide) => slide.phones))];
 
 const STORES = [{ dir: "google-play-screenshots", slideW: 1080, slideH: 1920 }];
 
+const PHONE_RATIO = 2340 / 1080;
+const NAV_BAND = 0.2;
+
 const INK = "#0e3a33";
 const GRAY = "#4b5a57";
 const GOLD = "#b8924f";
@@ -69,6 +76,29 @@ const rawFile = (name) => {
 const dataUri = (file) => {
   const type = file.endsWith(".png") ? "image/png" : "image/jpeg";
   return `data:${type};base64,${fs.readFileSync(file).toString("base64")}`;
+};
+
+const scaled = new Map();
+
+const scaledFile = (file, width) => {
+  const target = Math.round(width * SUPERSAMPLE);
+  if (target >= imageSize(file).w) return file;
+  const key = `${file}@${target}`;
+  if (!scaled.has(key)) {
+    const out = path.join(TMP, `${scaled.size}.png`);
+    execFileSync("sips", [
+      "-s",
+      "format",
+      "png",
+      "--resampleWidth",
+      String(target),
+      file,
+      "--out",
+      out,
+    ]);
+    scaled.set(key, out);
+  }
+  return scaled.get(key);
 };
 
 const imageSize = (file) => {
@@ -94,9 +124,26 @@ const arabicText = (str, x, y, size, color) =>
 const latinText = (str, x, y, size, color, weight = 400) =>
   `<text x="${x}" y="${y}" font-family="Space Grotesk" font-size="${size}" font-weight="${weight}" fill="${color}" text-anchor="middle" letter-spacing="${size * 0.02}">${esc(str)}</text>`;
 
-function phone(file, x, y, w, tilt, id) {
+function screen(file, x, y, w, ph, r, id) {
   const size = imageSize(file);
-  const ph = w * (size.h / size.w);
+  const imgH = w * (size.h / size.w);
+  const href = dataUri(scaledFile(file, w));
+  const clip = `<clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${ph}" rx="${r}"/></clipPath>`;
+  if (imgH <= ph * 1.02) {
+    return `${clip}
+<image href="${href}" x="${x}" y="${y}" width="${w}" height="${ph}" preserveAspectRatio="xMidYMin slice" clip-path="url(#${id})"/>`;
+  }
+  const band = w * NAV_BAND;
+  return `${clip}
+<clipPath id="${id}n"><rect x="${x}" y="${y + ph - band}" width="${w}" height="${band}"/></clipPath>
+<g clip-path="url(#${id})">
+<image href="${href}" x="${x}" y="${y}" width="${w}" height="${imgH}"/>
+<image href="${href}" x="${x}" y="${y + ph - imgH}" width="${w}" height="${imgH}" clip-path="url(#${id}n)"/>
+</g>`;
+}
+
+function phone(file, x, y, w, tilt, id) {
+  const ph = w * PHONE_RATIO;
   const bezel = w * 0.032;
   const r = w * 0.12;
   const cx = x + w / 2;
@@ -104,8 +151,7 @@ function phone(file, x, y, w, tilt, id) {
   return `<g transform="rotate(${tilt} ${cx} ${cy})">
 <rect x="${x - bezel}" y="${y - bezel}" width="${w + bezel * 2}" height="${ph + bezel * 2}" rx="${r + bezel}" fill="#0b100f"/>
 <rect x="${x - bezel * 0.6}" y="${y - bezel * 0.6}" width="${w + bezel * 1.2}" height="${ph + bezel * 1.2}" rx="${r + bezel * 0.6}" fill="none" stroke="#2f3a37" stroke-width="${bezel * 0.25}"/>
-<clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${ph}" rx="${r}"/></clipPath>
-<image href="${dataUri(file)}" x="${x}" y="${y}" width="${w}" height="${ph}" preserveAspectRatio="xMidYMid slice" clip-path="url(#${id})"/>
+${screen(file, x, y, w, ph, r, id)}
 </g>`;
 }
 
@@ -133,11 +179,11 @@ function slideSvg(store, slide, files) {
   }
   const room = H - top - 60 * s;
   if (slide.phones.length === 1) {
-    const w = Math.min(640 * s, room / (2340 / 1080));
+    const w = Math.min(640 * s, room / PHONE_RATIO);
     parts.push(phone(files[slide.phones[0]], cx - w / 2, top, w, 0, "p0"));
   } else {
-    const w = Math.min(470 * s, room / (2340 / 1080));
-    const y = top + Math.max(0, (room - w * (2340 / 1080) - 80 * s) / 2);
+    const w = Math.min(470 * s, room / PHONE_RATIO);
+    const y = top + Math.max(0, (room - w * PHONE_RATIO - 80 * s) / 2);
     parts.push(
       phone(files[slide.phones[1]], cx - w * 0.02, y + 80 * s, w, 6, "p1"),
       phone(files[slide.phones[0]], cx - w * 0.92, y, w, -4, "p0"),
@@ -157,8 +203,8 @@ ${arabicText("راحة للقلب", 250, 205, 64, INK)}
 ${arabicText("وطمأنينة للروح", 250, 290, 64, INK)}
 <rect x="60" y="322" width="90" height="5" rx="2.5" fill="${GOLD}"/>
 ${latinText("Adhkar · Quran · Hadith · Prayer · Qibla", 260, 380, 26, GRAY)}
-${phone(files["home-ar"], 590, 115, 168, 5, "f0")}
-${phone(files["mushaf-ar"], 790, 45, 196, 5, "f1")}
+${phone(files["mushaf-ar"], 716, 40, 244, 7, "f1")}
+${phone(files["home-ar"], 540, 52, 300, -5, "f0")}
 </svg>`;
 }
 
@@ -173,8 +219,21 @@ const fontOptions = {
   defaultFontFamily: "Space Grotesk",
 };
 
-const renderPng = (svg) =>
-  new Resvg(svg, { font: fontOptions }).render().asPng();
+const renderPng = (svg, width) => {
+  const big = path.join(TMP, "slide.png");
+  const out = path.join(TMP, "slide-out.png");
+  fs.writeFileSync(
+    big,
+    new Resvg(svg, {
+      font: fontOptions,
+      fitTo: { mode: "width", value: width * SUPERSAMPLE },
+    })
+      .render()
+      .asPng(),
+  );
+  execFileSync("sips", ["--resampleWidth", String(width), big, "--out", out]);
+  return fs.readFileSync(out);
+};
 
 const files = Object.fromEntries(SCREENS.map((name) => [name, rawFile(name)]));
 const missing = SCREENS.filter((name) => !files[name]);
@@ -192,7 +251,7 @@ for (const store of STORES) {
   SLIDES.forEach((slide, i) => {
     fs.writeFileSync(
       path.join(out, `${String(i + 1).padStart(2, "0")}.png`),
-      renderPng(slideSvg(store, slide, files)),
+      renderPng(slideSvg(store, slide, files), store.slideW),
     );
   });
   console.log(
@@ -202,6 +261,7 @@ for (const store of STORES) {
 
 fs.writeFileSync(
   path.join(OUT, "google-play-screenshots/feature-graphic.png"),
-  renderPng(featureGraphic(files)),
+  renderPng(featureGraphic(files), 1024),
 );
+fs.rmSync(TMP, { recursive: true, force: true });
 console.log("feature graphic 1024x500");

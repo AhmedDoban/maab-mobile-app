@@ -5,5 +5,5 @@
 "widget.dhikr.name" = "ذكر اليوم";
 "widget.dhikr.description" = "ذكر قصير يتغير كل يوم";
 "widget.openApp" = "افتح مآب لتحميل المواقيت";
-"widget.modern.name" = "مواقيت الصلاة (التصميم الجديد)";
+"widget.modern.name" = "مواقيت الصلاة";
 "widget.modern.description" = "بطاقة فاتحة بالصلاة القادمة والوقت المتبقي والصلوات الخمس";

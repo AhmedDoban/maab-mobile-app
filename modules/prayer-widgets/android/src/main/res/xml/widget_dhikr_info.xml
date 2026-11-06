@@ -1,6 +1,6 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
   android:description="@string/widget_dhikr_hint"
-  android:initialLayout="@layout/widget_dhikr"
+  android:initialLayout="@layout/widget_canvas"
   android:previewImage="@drawable/widget_preview_dhikr"
   android:minWidth="250dp"
   android:minHeight="110dp"
