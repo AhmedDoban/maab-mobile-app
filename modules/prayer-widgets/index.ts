@@ -42,6 +42,12 @@ export type WidgetPayload = {
   selectedCategory: string;
   selectedItemId: number;
   selectedItemMax: number;
+  morningSelectedCategory: string;
+  morningSelectedItemId: number;
+  morningSelectedItemMax: number;
+  eveningSelectedCategory: string;
+  eveningSelectedItemId: number;
+  eveningSelectedItemMax: number;
   morningProgress: string;
   eveningProgress: string;
   dates: WidgetDate[];

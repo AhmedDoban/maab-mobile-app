@@ -2,7 +2,7 @@ import useContentColumn from "@/hooks/useContentColumn";
 import useFloatingTabBarSpace from "@/hooks/useFloatingTabBarSpace";
 import useThemeColors from "@/hooks/useThemeColors";
 import { ListRenderItem, Platform } from "react-native";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { shallowEqual } from "react-redux";
 import { Stack } from "expo-router";
 import useDirection from "@/hooks/useDirection";
@@ -36,9 +36,13 @@ const keyExtractor = (zikr: Zikr) => String(zikr.id);
 export default function CategoryContent({
   categoryId,
   title,
+  widgetItem,
+  onWidgetReady,
 }: {
   categoryId: string;
   title: string;
+  widgetItem?: string;
+  onWidgetReady?: () => void;
 }) {
   const dispatch = useAppDispatch();
   const category = getCategory(categoryId)!;
@@ -103,6 +107,23 @@ export default function CategoryContent({
     () => ({ gap: 16, paddingTop: 16, paddingBottom: 32 + tabBarSpace }),
     [tabBarSpace],
   );
+  const listRef = useRef<Animated.FlatList<Zikr>>(null);
+  const widgetHandled = useRef(false);
+  const widgetTarget = Number(widgetItem);
+  const widgetIndex = allItems.findIndex((item) => item.id === widgetTarget);
+  const handleContentSizeChange = useCallback(() => {
+    if (
+      widgetHandled.current ||
+      !widgetItem ||
+      !Number.isInteger(widgetTarget) ||
+      widgetIndex < 0
+    ) {
+      return;
+    }
+    widgetHandled.current = true;
+    listRef.current?.scrollToIndex({ index: widgetIndex, viewPosition: 0.25 });
+    onWidgetReady?.();
+  }, [onWidgetReady, widgetIndex, widgetItem, widgetTarget]);
   const renderItem = useCallback<ListRenderItem<Zikr>>(
     ({ item: zikr }) => (
       <Animated.View
@@ -121,6 +142,7 @@ export default function CategoryContent({
     <>
       <Stack.Screen options={options} />
       <Animated.FlatList
+        ref={listRef}
         style={style}
         contentContainerStyle={contentStyle}
         contentInsetAdjustmentBehavior="automatic"
@@ -132,11 +154,22 @@ export default function CategoryContent({
         removeClippedSubviews={Platform.OS === "android"}
         itemLayoutAnimation={hideCompleted ? LAYOUT : undefined}
         ListHeaderComponent={
-          progress.complete ? (
-            CategoryCompletedBanner
-          ) : undefined
+          progress.complete ? CategoryCompletedBanner : undefined
         }
         renderItem={renderItem}
+        onContentSizeChange={handleContentSizeChange}
+        onScrollToIndexFailed={(info) => {
+          listRef.current?.scrollToOffset({
+            offset: info.averageItemLength * info.index,
+            animated: false,
+          });
+          requestAnimationFrame(() =>
+            listRef.current?.scrollToIndex({
+              index: info.index,
+              viewPosition: 0.25,
+            }),
+          );
+        }}
       />
       <TopProgressBar done={progress.done} total={progress.total} />
     </>

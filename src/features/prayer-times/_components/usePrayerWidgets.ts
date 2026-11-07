@@ -163,6 +163,12 @@ export default function usePrayerWidgets(
       selectedCategory,
       selectedItemId: selected.itemId,
       selectedItemMax: selected.max,
+      morningSelectedCategory: "morning_azkar",
+      morningSelectedItemId: morningSelected.itemId,
+      morningSelectedItemMax: morningSelected.max,
+      eveningSelectedCategory: "evening_azkar",
+      eveningSelectedItemId: eveningSelected.itemId,
+      eveningSelectedItemMax: eveningSelected.max,
       morningProgress: t("widget.progress", {
         done: morningCategory
           ? categoryDone(morningCategory, azkarProgress)

@@ -37,6 +37,12 @@ struct PrayerPayload: Decodable {
   var selectedCategory: String?
   var selectedItemId: Int?
   var selectedItemMax: Int?
+  var morningSelectedCategory: String?
+  var morningSelectedItemId: Int?
+  var morningSelectedItemMax: Int?
+  var eveningSelectedCategory: String?
+  var eveningSelectedItemId: Int?
+  var eveningSelectedItemMax: Int?
   var morningProgress: String?
   var eveningProgress: String?
   var dates: [WidgetDate]?

@@ -80,7 +80,6 @@ class AdhanAlarmModule : Module() {
 
     Function("stop") {
       AdhanService.stop(context)
-      AdhanLaunch.release()
     }
   }
 }

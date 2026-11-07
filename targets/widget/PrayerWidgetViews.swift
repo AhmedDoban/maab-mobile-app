@@ -283,11 +283,12 @@ struct DhikrWidgetView: View {
       }
 
       private func widgetURL(payload: PrayerPayload) -> URL? {
-        guard let category = payload.selectedCategory,
-              let itemId = payload.selectedItemId,
-              let max = payload.selectedItemMax
+        let morning = payload.dhikrTitle(at: Date()) == payload.morningDhikrTitle
+        guard let category = morning ? payload.morningSelectedCategory : payload.eveningSelectedCategory,
+              let itemId = morning ? payload.morningSelectedItemId : payload.eveningSelectedItemId,
+              let max = morning ? payload.morningSelectedItemMax : payload.eveningSelectedItemMax
         else { return nil }
-        return URL(string: "maab://category/\(category)?widgetItem=\(itemId)&widgetMax=\(max)")
+        return URL(string: "maab:///category/\(category)?widgetItem=\(itemId)&widgetMax=\(max)")
       }
     }
     .modifier(WidgetBackground(payload: entry.payload, solid: true))

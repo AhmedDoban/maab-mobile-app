@@ -6,7 +6,7 @@ import { getCategory } from "./_data";
 import CategoryContent from "./_ui/CategoryContent";
 import { incrementCount } from "@/store/Slices/AzkarSlice";
 import { useAppDispatch } from "@/store/Store";
-import { useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 
 export default function AzkarDetails({
   id,
@@ -22,7 +22,7 @@ export default function AzkarDetails({
   const appliedWidgetRead = useRef(false);
   const category = getCategory(id);
 
-  useEffect(() => {
+  const onWidgetReady = useCallback(() => {
     if (appliedWidgetRead.current || !widgetItem || !widgetMax) return;
     const itemId = Number(widgetItem);
     const max = Number(widgetMax);
@@ -50,6 +50,8 @@ export default function AzkarDetails({
       key={category.id}
       categoryId={category.id}
       title={category.title[contentLocale(i18n.language)]}
+      widgetItem={widgetItem}
+      onWidgetReady={onWidgetReady}
     />
   );
 }

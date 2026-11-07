@@ -254,7 +254,12 @@ export function onAdhanEnded(onEnd: () => void) {
 }
 
 export function onPrayerNotificationOpened(
-  onOpen: (prayer: unknown, nativeAudio: boolean) => void,
+  onOpen: (
+    prayer: unknown,
+    nativeAudio: boolean,
+    eventId: string,
+    at: number,
+  ) => void,
 ) {
   if (adhanAlarmAvailable) {
     const open = (
@@ -268,7 +273,7 @@ export function onPrayerNotificationOpened(
       if (!launch) return;
       if (!launch.native) dismissAdhanAlarm(launch.id);
       if (Date.now() - launch.at > 30 * 60 * 1000) return;
-      onOpen(launch.prayer, launch.native);
+      onOpen(launch.prayer, launch.native, launch.id, launch.at);
     };
     open(consumeAdhanLaunch());
     const sub = addAdhanListener(open);
@@ -281,12 +286,22 @@ export function onPrayerNotificationOpened(
       const opened = response.notification.request;
       if (!opened.identifier.startsWith(ID_PREFIX)) return;
       if (Date.now() - response.notification.date > 30 * 60 * 1000) return;
-      onOpen(opened.content.data?.prayer, false);
+      onOpen(
+        opened.content.data?.prayer,
+        true,
+        opened.identifier,
+        response.notification.date,
+      );
     })
     .catch(() => {});
   const sub = Notifications.addNotificationResponseReceivedListener(
     (response) =>
-      onOpen(response.notification.request.content.data?.prayer, false),
+      onOpen(
+        response.notification.request.content.data?.prayer,
+        true,
+        response.notification.request.identifier,
+        response.notification.date,
+      ),
   );
   return () => sub.remove();
 }

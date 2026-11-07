@@ -237,9 +237,24 @@ object WidgetRenderer {
     morningEvening: Boolean
   ): PendingIntent {
     val uri = if (morningEvening && payload != null) {
+      val category = if (payload.dhikrTitleOf(System.currentTimeMillis()) == payload.morningDhikrTitle) {
+        payload.morningSelectedCategory
+      } else {
+        payload.eveningSelectedCategory
+      }
+      val itemId = if (category == payload.morningSelectedCategory) {
+        payload.morningSelectedItemId
+      } else {
+        payload.eveningSelectedItemId
+      }
+      val max = if (category == payload.morningSelectedCategory) {
+        payload.morningSelectedItemMax
+      } else {
+        payload.eveningSelectedItemMax
+      }
       android.net.Uri.parse(
-        "maab://category/${payload.selectedCategory}" +
-          "?widgetItem=${payload.selectedItemId}&widgetMax=${payload.selectedItemMax}"
+        "maab:///category/$category" +
+          "?widgetItem=$itemId&widgetMax=$max"
       )
     } else null
     val intent = if (uri != null) {

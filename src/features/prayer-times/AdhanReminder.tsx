@@ -3,6 +3,7 @@ import { useAppSelector } from "@/store/Store";
 import * as Haptics from "expo-haptics";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   adhanPlaysNatively,
   configurePrayerNotifications,
@@ -58,9 +59,14 @@ export default function AdhanReminder({ ready }: { ready: boolean }) {
     nativeAudio: boolean;
   } | null>(null);
   const shown = useRef(new Set<string>());
+  const previousStartingPrayer = useRef<PrayerName | null>(null);
 
-  const show = (prayer: PrayerName, nativeAudio = false) => {
-    const key = `${today()}:${prayer}`;
+  const show = async (
+    prayer: PrayerName,
+    nativeAudio = false,
+    eventId = `${today()}:${prayer}`,
+  ) => {
+    const key = eventId;
     if (shown.current.has(key)) {
       if (nativeAudio) {
         setActive((current) =>
@@ -70,6 +76,8 @@ export default function AdhanReminder({ ready }: { ready: boolean }) {
       return;
     }
     shown.current.add(key);
+    if ((await AsyncStorage.getItem("maab:adhan-event")) === key) return;
+    await AsyncStorage.setItem("maab:adhan-event", key);
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setActive({ prayer, nativeAudio });
   };
@@ -90,24 +98,30 @@ export default function AdhanReminder({ ready }: { ready: boolean }) {
   }, [i18n.language]);
 
   useEffect(() => {
+    if (previousStartingPrayer.current === startingNow) return;
+    previousStartingPrayer.current = startingNow;
     if (
       startingNow &&
       !insideMosque &&
       reminders[startingNow] !== false &&
       !adhanPlaysNatively()
     ) {
-      show(startingNow);
+      void show(startingNow);
     }
   }, [startingNow, reminders, insideMosque]);
 
   useEffect(
     () =>
-      onPrayerNotificationOpened((prayer, nativeAudio) => {
+      onPrayerNotificationOpened((prayer, nativeAudio, eventId, at) => {
         if (insideMosque) return;
         if (
           REMINDER_PRAYERS.includes(prayer as (typeof REMINDER_PRAYERS)[number])
         ) {
-          show(prayer as PrayerName, nativeAudio);
+          void show(
+            prayer as PrayerName,
+            nativeAudio,
+            eventId || `${at}:${prayer}`,
+          );
         }
       }),
     [],
